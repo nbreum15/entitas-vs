@@ -1,5 +1,6 @@
 ﻿namespace EntitasVSGenerator
 {
+    using System.Diagnostics;
     using System.Management.Automation;
 
     class InvokeShellCommand
@@ -11,14 +12,25 @@
         public InvokeShellCommand(string solutionDirectory)
         {
             _solutionDirectory = solutionDirectory;
-            _shellInstance = OpenShell();
-            _shellInstance.AddScript("entitas client 3333 gen -s");
+            _shellInstance = InitializeClient();
+            StartServer();
         }
 
-        private PowerShell OpenShell()
+        private void StartServer()
         {
-            PowerShell powerShell = PowerShell.Create();
-            return powerShell;
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WorkingDirectory = _solutionDirectory;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/K entitas server";
+            process.StartInfo = startInfo;
+            process.Start();
+        }
+
+        private PowerShell InitializeClient()
+        {
+            return PowerShell.Create().AddScript("entitas client 3333 gen -s");
         }
 
         public void Generate()
