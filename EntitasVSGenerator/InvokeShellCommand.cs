@@ -8,24 +8,31 @@
         private readonly string _solutionDirectory;
         private readonly PowerShell _shellInstance;
         private bool _alreadyRunning;
+        private Process _process;
 
         public InvokeShellCommand(string solutionDirectory)
         {
             _solutionDirectory = solutionDirectory;
             _shellInstance = InitializeClient();
-            StartServer();
         }
 
-        private void StartServer()
+        public void StartServer()
         {
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.WorkingDirectory = _solutionDirectory;
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = "/K entitas server";
             process.StartInfo = startInfo;
             process.Start();
+            _process = process;
+        }
+
+        public void StopServer()
+        {
+            _process.CloseMainWindow();
+            _process.Close();
         }
 
         private PowerShell InitializeClient()

@@ -9,6 +9,8 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using MoreLinq;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio;
 
 namespace EntitasVSGenerator
 {
@@ -27,16 +29,24 @@ namespace EntitasVSGenerator
         
         private string SettingsName => "entitas-vs.cfg";
 
+        private InvokeShellCommand _invokeShellCommand;
+
         public MainWindowPackage()
         {
         }
-        
+
         protected override void Initialize()
         {
-            // Solution event loader
-            PackageLoader loader = new PackageLoader(OnSolutionClose, OnSolutionLoad);
+            // PackageLoader loads package when a solution is loaded
+            PackageLoader loader = new PackageLoader(OnSolutionLoad);
             var vsSolution = (IVsSolution)GetService(typeof(SVsSolution));
             vsSolution.AdviseSolutionEvents(loader, out uint _);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _invokeShellCommand.StopServer();
         }
 
         private void OnSolutionLoad()
@@ -50,8 +60,9 @@ namespace EntitasVSGenerator
             model.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
             PathContainer fileTrigger = new PathContainer(model.Paths);
-            InvokeShellCommand invokeCmd = new InvokeShellCommand(GetSolutionDirectory(dte));
-            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, invokeCmd);
+            _invokeShellCommand = new InvokeShellCommand(GetSolutionDirectory(dte));
+            _invokeShellCommand.StartServer();
+            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, _invokeShellCommand);
             runningDocumentTable.Advise(runGeneratorOnSave);
 
             MainWindowCommand.Initialize(this, model);
@@ -68,7 +79,7 @@ namespace EntitasVSGenerator
         private string GetSolutionDirectory(DTE dte)
         {
 #if DEBUG
-            return @"C:\Users\nickl\Desktop\extension-test";
+            return @"C:\Users\nickl\Desktop\entitas-test";
 #else
             return dte.Solution.FullName;
 #endif
@@ -87,7 +98,6 @@ namespace EntitasVSGenerator
             File.WriteAllText(GetSettingsPath(dte), pathsToWrite.ToDelimitedString("\n"));
         }
 
-        private void OnSolutionClose()
         {
 
         }

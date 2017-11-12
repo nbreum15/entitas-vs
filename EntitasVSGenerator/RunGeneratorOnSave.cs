@@ -3,7 +3,6 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.Collections.Generic;
 
 namespace EntitasVSGenerator
 {
@@ -30,6 +29,7 @@ namespace EntitasVSGenerator
             if (document == null)
                 return VSConstants.S_OK;
             
+            // checks whether the document is in list of triggers
             if (PathContainer.Contains(document.FullName) || PathContainer.Contains(document.Path))
             {
                 _invokeShellCmd.Generate();
@@ -46,7 +46,7 @@ namespace EntitasVSGenerator
             return _dte.Documents.Cast<Document>().FirstOrDefault(doc => doc.FullName == documentPath);
         }
 
-        #region Unused interface implementation
+        #region Other IVsRunningDocTableEvents3 inferface methods
         public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
             return VSConstants.S_OK;

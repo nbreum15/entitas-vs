@@ -6,24 +6,12 @@ namespace EntitasVSGenerator
 {
     class PackageLoader : IVsSolutionEvents
     {
-        private Action _solutionCloseCallback;
         private Action _solutionOpenCallback;
         private bool _solutionOpened;
-        private bool _solutionClosed;
 
-        public PackageLoader(Action solutionCloseCallback, Action solutionOpenCallback)
+        public PackageLoader(Action solutionOpenCallback)
         {
-            _solutionCloseCallback = solutionCloseCallback;
             _solutionOpenCallback = solutionOpenCallback;
-        }
-
-        public int OnAfterCloseSolution(object pUnkReserved)
-        {
-            if (_solutionClosed)
-                return VSConstants.S_OK;
-            _solutionCloseCallback?.Invoke();
-            _solutionClosed = true;
-            return VSConstants.S_OK;
         }
 
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
@@ -35,7 +23,12 @@ namespace EntitasVSGenerator
             return VSConstants.S_OK;
         }
 
-        #region Unused interface implementation
+        public int OnAfterCloseSolution(object pUnkReserved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        #region Other IVsSolutionEvents inferface methods
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;
