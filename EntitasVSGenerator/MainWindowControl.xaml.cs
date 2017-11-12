@@ -1,5 +1,7 @@
 ﻿namespace EntitasVSGenerator
 {
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -8,22 +10,21 @@
     /// </summary>
     public partial class WindowControl : UserControl
     {
-        PathContainer _pathContainer; 
+        private MainWindowModel _model;
+        public MainWindowModel Model { get => _model; set
+            {
+                LstBoxPaths.ItemsSource = value.Paths;
+                _model = value;
+            }
+        }
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowControl"/> class.
         /// </summary>
         public WindowControl()
         {
             this.InitializeComponent();
-            _pathContainer = MainWindowCommand.Instance.PathContainer;
-            LstBoxPaths.ItemsSource = _pathContainer.AllPaths;
-            _pathContainer.Changed += FileTrigger_Changed;
-        }
-
-        private void FileTrigger_Changed(string[] obj)
-        {
-            LstBoxPaths.ItemsSource = obj;
-            _pathContainer.SavePaths(obj);
+            LstBoxPaths.ItemsSource = Model?.Paths;
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -33,7 +34,7 @@
             {
                 if (string.IsNullOrEmpty(dialog.Path))
                     return;
-                _pathContainer.Add(dialog.Path);
+                Model?.Add(dialog.Path);
             }
         }
 
@@ -46,8 +47,8 @@
                 dialog.txtBoxPath.Text = path;
                 if (dialog.ShowDialog().Value)
                 {
-                    _pathContainer.Remove(path);
-                    _pathContainer.Add(dialog.Path);
+                    Model?.Remove(path);
+                    Model?.Add(dialog.Path);
                 }
             }            
         }
@@ -57,8 +58,28 @@
             if(LstBoxPaths.SelectedItem != null)
             {
                 string path = (string)LstBoxPaths.SelectedItem;
-                _pathContainer.Remove(path);
+                Model?.Remove(path);
             }
+        }
+    }
+
+    public class MainWindowModel
+    {
+        public MainWindowModel(IEnumerable<string> paths)
+        {
+            Paths = new ObservableCollection<string>(paths);
+        }
+
+        public ObservableCollection<string> Paths { get; set; } = new ObservableCollection<string>();
+
+        public void Add(string path)
+        {
+            Paths.Add(path);
+        }
+
+        public void Remove(string path)
+        {
+            Paths.Remove(path);
         }
     }
 }

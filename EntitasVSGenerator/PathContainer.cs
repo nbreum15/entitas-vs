@@ -1,64 +1,22 @@
-﻿using EnvDTE;
-using MoreLinq;
-using System;
+﻿using MoreLinq;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace EntitasVSGenerator
 {
     public class PathContainer
     {
-        private string SettingsName => "entitas-vs.cfg";
-        private string SettingsPath => $@"{SolutionDirectory}\{SettingsName}";
-
         readonly HashSet<string> _paths = new HashSet<string>();
-        public string SolutionDirectory { get; }
 
-        public event Action<string[]> Changed;
+        private IEnumerable<string> _pathsFromModel;
 
-        public PathContainer(string solutionFilePath)
+        public PathContainer(IEnumerable<string> pathsFromModel)
         {
-            SolutionDirectory = Path.GetDirectoryName(solutionFilePath);
-        }
-
-        public string[] AllPaths => _paths.ToArray();
-
-        public void Add(string path)
-        {
-            _paths.Add(path);
-            OnChanged(AllPaths);
-        }
-
-        public void Remove(string path)
-        {
-            if (_paths.Contains(path))
-            {
-                _paths.Remove(path);
-                OnChanged(AllPaths);
-            }
-        }
-
-        public void LoadPaths()
-        {
-            if (!File.Exists(SettingsPath))
-                return;
-            File.ReadAllLines(SettingsPath).ForEach(path => Add(path));
-        }
-
-        public void SavePaths(string[] contentPaths)
-        {
-            File.WriteAllText(SettingsPath, contentPaths.ToDelimitedString("\n"));
+            _pathsFromModel = pathsFromModel;
         }
 
         public bool Contains(string path)
         {
-            return _paths.Contains(path);
-        }
-
-        protected void OnChanged(string[] paths)
-        {
-            Changed?.Invoke(paths);
+            return _pathsFromModel.ToHashSet().Contains(path);
         }
     }
 }
