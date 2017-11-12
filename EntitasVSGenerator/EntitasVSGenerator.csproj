@@ -109,6 +109,7 @@
       <DependentUpon>MainWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowPackage.cs" />
+    <Compile Include="PackageLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
