@@ -2,7 +2,6 @@
 using MoreLinq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -54,21 +53,7 @@ namespace EntitasVSGenerator
 
         public bool Contains(string path)
         {
-            // if path is a file.
-            if (_paths.Contains(path))
-            {
-                return true;
-            }
-            else // if path is file in a directory.
-            {
-                if (File.Exists(path))
-                {
-                    string directory = Path.GetDirectoryName(path);
-                    if (_paths.Contains(directory))
-                        return true;
-                }
-            }
-            return false;
+            return _paths.Contains(path);
         }
 
         protected void OnChanged(string[] paths)

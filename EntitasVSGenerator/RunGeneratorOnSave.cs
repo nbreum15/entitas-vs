@@ -29,7 +29,7 @@ namespace EntitasVSGenerator
             if (document == null)
                 return VSConstants.S_OK;
             
-            if (PathContainer.Contains(document.FullName))
+            if (PathContainer.Contains(document.FullName) || PathContainer.Contains(document.Path))
             {
                 _invokeShellCmd.Generate();
             }
