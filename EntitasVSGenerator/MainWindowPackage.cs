@@ -46,7 +46,7 @@ namespace EntitasVSGenerator
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _invokeShellCommand.StopServer();
+            _invokeShellCommand?.StopServer();
         }
 
         private void OnSolutionLoad()
