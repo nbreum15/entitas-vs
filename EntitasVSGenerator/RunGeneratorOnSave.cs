@@ -11,15 +11,17 @@ namespace EntitasVSGenerator
         private readonly DTE _dte;
         private readonly RunningDocumentTable _runningDocumentTable;
         private readonly InvokeShellCommand _invokeShellCmd;
+        private readonly ProjectReloader _reloader;
 
         public PathContainer PathContainer { get; }
 
-        public RunGeneratorOnSave(DTE dte, RunningDocumentTable runningDocumentTable, PathContainer fileTrigger,  InvokeShellCommand invokeShellCmd)
+        public RunGeneratorOnSave(DTE dte, RunningDocumentTable runningDocumentTable, PathContainer fileTrigger,  InvokeShellCommand invokeShellCmd, ProjectReloader reloader)
         {
             _dte = dte;
             _runningDocumentTable = runningDocumentTable;
             PathContainer = fileTrigger;
             _invokeShellCmd = invokeShellCmd;
+            _reloader = reloader;
         }
         
         public int OnAfterSave(uint docCookie)
@@ -32,6 +34,7 @@ namespace EntitasVSGenerator
             // checks whether the document is in list of triggers
             if (PathContainer.Contains(document.FullName) || PathContainer.Contains(document.Path))
             {
+                _reloader.IgnoreProjectFileChanges();
                 _invokeShellCmd.Generate();
             }
 

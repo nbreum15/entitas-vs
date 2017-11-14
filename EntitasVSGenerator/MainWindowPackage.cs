@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using MoreLinq;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
+using System.Collections.Specialized;
 
 namespace EntitasVSGenerator
 {
@@ -23,7 +24,7 @@ namespace EntitasVSGenerator
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject)]
     [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    sealed class MainWindowPackage : Package
+    sealed class MainWindowPackage : Package, IVsPersistSolutionProps
     {
         public const string PackageGuidString = "9f4d054c-8bcc-4a90-ab81-3e1d00ff8a08";
         
@@ -52,23 +53,30 @@ namespace EntitasVSGenerator
         private void OnSolutionLoad()
         {
             base.Initialize();
+            // Services
             var dte = (DTE)GetService(typeof(DTE));
             var runningDocumentTable = new RunningDocumentTable(this);
+            var sVsSolution = GetService(typeof(SVsSolution));
+            var vsSolution = (IVsSolution)sVsSolution;
+            var vsSolution4 = (IVsSolution4)sVsSolution;
+            var vsFileChangeEx = (IVsFileChangeEx)GetService(typeof(SVsFileChangeEx));
 
             // ViewModel that contains the paths
             var model = new MainWindowModel(LoadPaths(dte));
             model.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
+            // Logic
+            ProjectReloader reloader = new ProjectReloader(vsSolution, vsSolution4, dte, vsFileChangeEx);
             PathContainer fileTrigger = new PathContainer(model.Paths);
             _invokeShellCommand = new InvokeShellCommand(GetSolutionDirectory(dte));
             _invokeShellCommand.StartServer();
-            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, _invokeShellCommand);
+            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, _invokeShellCommand, reloader);
             runningDocumentTable.Advise(runGeneratorOnSave);
 
             MainWindowCommand.Initialize(this, model);
         }
 
-        private void OnPathCollectionChanged(DTE dte, object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnPathCollectionChanged(DTE dte, object sender, NotifyCollectionChangedEventArgs e)
         {
             IEnumerable<string> paths = (IEnumerable<string>)sender;
             SavePaths(dte, paths);
@@ -98,8 +106,53 @@ namespace EntitasVSGenerator
             File.WriteAllText(GetSettingsPath(dte), pathsToWrite.ToDelimitedString("\n"));
         }
 
-        {
+        #region IVsPersistSolutionProps interface methods
 
+        public int SaveUserOptions(IVsSolutionPersistence pPersistence)
+        {
+            return VSConstants.S_OK;
         }
+
+        public int LoadUserOptions(IVsSolutionPersistence pPersistence, uint grfLoadOpts)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int WriteUserOptions(IStream pOptionsStream, string pszKey)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int ReadUserOptions(IStream pOptionsStream, string pszKey)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int QuerySaveSolutionProps(IVsHierarchy pHierarchy, VSQUERYSAVESLNPROPS[] pqsspSave)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int SaveSolutionProps(IVsHierarchy pHierarchy, IVsSolutionPersistence pPersistence)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int WriteSolutionProps(IVsHierarchy pHierarchy, string pszKey, IPropertyBag pPropBag)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int ReadSolutionProps(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, string pszKey, int fPreLoad, IPropertyBag pPropBag)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnProjectLoadFailure(IVsHierarchy pStubHierarchy, string pszProjectName, string pszProjectMk, string pszKey)
+        {
+            return VSConstants.S_OK;
+        }
+
+        #endregion
     }
 }

@@ -31,8 +31,11 @@
 
         public void StopServer()
         {
-            _process.CloseMainWindow();
-            _process.Close();
+            if (!_process.HasExited)
+            {
+                _process.CloseMainWindow();
+                _process.Close();
+            }
         }
 
         private PowerShell InitializeClient()
