@@ -99,6 +99,8 @@
     <Compile Include="AddPathDialog.xaml.cs">
       <DependentUpon>AddPathDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\EntitasFactory.cs" />
+    <Compile Include="Extensions\PathUtil.cs" />
     <Compile Include="InvokeShellCommand.cs" />
     <Compile Include="PathContainer.cs" />
     <Compile Include="ProjectReloader.cs" />
@@ -140,6 +142,30 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Entitas">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.CodeGeneration">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.CodeGeneration.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.CodeGeneration.Attributes">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.CodeGeneration.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.CodeGeneration.CodeGenerator">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.CodeGeneration.CodeGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.CodeGeneration.Plugins">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.CodeGeneration.Plugins.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.Roslyn">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.Roslyn.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.Roslyn.CodeGeneration.Plugins">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.Roslyn.CodeGeneration.Plugins.dll</HintPath>
+    </Reference>
+    <Reference Include="Entitas.Utils">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Entitas.Utils.dll</HintPath>
+    </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -151,6 +177,12 @@
     </Reference>
     <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="fabl">
+      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Plugins\Entitas.Roslyn\fabl.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
