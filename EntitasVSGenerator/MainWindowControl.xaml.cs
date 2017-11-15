@@ -56,7 +56,8 @@
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if(LstBoxPaths.SelectedItem != null)
+            Model.DebugAction();
+            if (LstBoxPaths.SelectedItem != null)
             {
                 string path = (string)LstBoxPaths.SelectedItem;
                 Model?.Remove(path);
@@ -72,6 +73,7 @@
         }
 
         public ObservableCollection<string> Paths { get; set; } = new ObservableCollection<string>();
+        public Action DebugAction { get; set; }
 
         public void Add(string path)
         {

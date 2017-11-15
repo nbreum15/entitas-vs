@@ -5,13 +5,13 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
-using System.Linq;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using MoreLinq;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
 using System.Collections.Specialized;
+using EntitasVSGenerator.Extensions;
+using Entitas.CodeGeneration.CodeGenerator;
 
 namespace EntitasVSGenerator
 {
@@ -27,8 +27,6 @@ namespace EntitasVSGenerator
     sealed class MainWindowPackage : Package, IVsPersistSolutionProps
     {
         public const string PackageGuidString = "9f4d054c-8bcc-4a90-ab81-3e1d00ff8a08";
-        
-        private string SettingsName => "entitas-vs.cfg";
 
         private InvokeShellCommand _invokeShellCommand;
 
@@ -56,19 +54,21 @@ namespace EntitasVSGenerator
             // Services
             var dte = (DTE)GetService(typeof(DTE));
             var runningDocumentTable = new RunningDocumentTable(this);
-            var sVsSolution = GetService(typeof(SVsSolution));
-            var vsSolution = (IVsSolution)sVsSolution;
-            var vsSolution4 = (IVsSolution4)sVsSolution;
             var vsFileChangeEx = (IVsFileChangeEx)GetService(typeof(SVsFileChangeEx));
+            string solutionDirectory = PathUtil.GetSolutionDirectory(dte);
 
             // ViewModel that contains the paths
             var model = new MainWindowModel(LoadPaths(dte));
             model.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
+            // Entitas generation instantiations
+            //CodeGenerator codeGenerator = EntitasFactory.GetCodeGenerator(solutionDirectory);
+            //codeGenerator.Generate();
+
             // Logic
-            ProjectReloader reloader = new ProjectReloader(vsSolution, vsSolution4, dte, vsFileChangeEx);
+            ProjectReloader reloader = new ProjectReloader(dte, vsFileChangeEx);
             PathContainer fileTrigger = new PathContainer(model.Paths);
-            _invokeShellCommand = new InvokeShellCommand(GetSolutionDirectory(dte));
+            _invokeShellCommand = new InvokeShellCommand(solutionDirectory);
             _invokeShellCommand.StartServer();
             var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, _invokeShellCommand, reloader);
             runningDocumentTable.Advise(runGeneratorOnSave);
@@ -82,20 +82,9 @@ namespace EntitasVSGenerator
             SavePaths(dte, paths);
         }
 
-        private string GetSettingsPath(DTE dte) => $@"{GetSolutionDirectory(dte)}\{SettingsName}";
-
-        private string GetSolutionDirectory(DTE dte)
-        {
-#if DEBUG
-            return @"C:\Users\nickl\Desktop\entitas-test";
-#else
-            return dte.Solution.FullName;
-#endif
-        }
-
         private string[] LoadPaths(DTE dte)
         {
-            string settingsPath = GetSettingsPath(dte);
+            string settingsPath = PathUtil.GetSettingsPath(dte);
             if (!File.Exists(settingsPath))
                 return null;
             return File.ReadAllLines(settingsPath);
@@ -103,7 +92,7 @@ namespace EntitasVSGenerator
 
         private void SavePaths(DTE dte, IEnumerable<string> pathsToWrite)
         {
-            File.WriteAllText(GetSettingsPath(dte), pathsToWrite.ToDelimitedString("\n"));
+            File.WriteAllText(PathUtil.GetSettingsPath(dte), pathsToWrite.ToDelimitedString("\n"));
         }
 
         #region IVsPersistSolutionProps interface methods
