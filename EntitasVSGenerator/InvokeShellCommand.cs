@@ -8,7 +8,19 @@
         private readonly string _solutionDirectory;
         private readonly PowerShell _shellInstance;
         private bool _alreadyRunning;
+        private bool _startUpComplete;
         private Process _process;
+        private PowerShell _initShellInstance;
+
+        public bool StartUpComplete
+        {
+            get => _startUpComplete;
+            set
+            {
+                _initShellInstance.Dispose();
+                _startUpComplete = value;
+            }
+        }
 
         public InvokeShellCommand(string solutionDirectory)
         {
@@ -27,6 +39,7 @@
             process.StartInfo = startInfo;
             process.Start();
             _process = process;
+            SendInitialize();
         }
 
         public void StopServer()
@@ -38,6 +51,12 @@
             }
         }
 
+        private void SendInitialize()
+        {
+            _initShellInstance = PowerShell.Create().AddScript("entitas client 3333 dry -s");
+            _initShellInstance.BeginInvoke<object>(null, null, ar => StartUpComplete = true, null);
+        }
+
         private PowerShell InitializeClient()
         {
             return PowerShell.Create().AddScript("entitas client 3333 gen -s");
@@ -45,7 +64,7 @@
 
         public void Generate()
         {
-            if (_alreadyRunning)
+            if (_alreadyRunning || !StartUpComplete)
                 return;
             _alreadyRunning = true;
             _shellInstance.BeginInvoke<object>(null, null, ar => _alreadyRunning = false, null);
