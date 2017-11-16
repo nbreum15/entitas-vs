@@ -7,8 +7,8 @@ namespace EntitasVSGenerator.Extensions
     {
         public static Preferences GetPreferences(string solutionDirectory)
         {
-            string propertiesPath = solutionDirectory + Preferences.DEFAULT_PROPERTIES_PATH;
-            string userPropertiesPath = solutionDirectory + Preferences.DEFAULT_USER_PROPERTIES_PATH;
+            string propertiesPath = solutionDirectory + "\\" + Preferences.DEFAULT_PROPERTIES_PATH;
+            string userPropertiesPath = solutionDirectory + "\\" + Preferences.DEFAULT_USER_PROPERTIES_PATH;
             return new Preferences(propertiesPath, userPropertiesPath);
         }
 

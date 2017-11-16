@@ -14,13 +14,12 @@ namespace EntitasVSGenerator
         private IVsFileChangeEx _vsFileChangeEx;
         private FileSystemWatcher _watcher;
         private HashSet<string> _alreadyLoadedFiles = new HashSet<string>();
-        private int _changeCount = 0;
 
         public ProjectReloader(DTE dte, IVsFileChangeEx vsFileChangeEx)
         {
             _dte = dte;
             _vsFileChangeEx = vsFileChangeEx;
-            SetupFileWatchers();
+            SetupGeneratedFolderWatcher();
             AddAlreadyLoadedGeneratedFiles();
         }
 
@@ -30,34 +29,53 @@ namespace EntitasVSGenerator
             IgnoreProjectFileChanges(true);
         }
 
-        public void UnignoreProjectFileChanges()
+        public void UnignoreProjectFileChanges() // TODO: call this somewhere after csproj is saved
         {
             IgnoreProjectFileChanges(false);
         }
 
         private Project Project => _dte.Solution.Projects.Item(1); // TODO: change this to a config
 
-        private void SetupFileWatchers()
+        private void SetupGeneratedFolderWatcher()
         {
-            _watcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName), "*.csproj");
-            _watcher.Changed += CsprojChanged;
+            _watcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName) + "\\" + @"Assets\Sources\Generated", "*.cs");
+            _watcher.IncludeSubdirectories = true;
+            _watcher.Changed += GeneratedFilesChanged;
             _watcher.NotifyFilter = NotifyFilters.Size;
         }
 
-        private void CsprojChanged(object sender, FileSystemEventArgs e)
+        private void GeneratedFilesChanged(object sender, FileSystemEventArgs e)
         {
-            if (_changeCount == 1)
+            if (!_alreadyLoadedFiles.Contains(e.FullPath))
             {
-                _watcher.EnableRaisingEvents = false;
-                string[] filePaths = LoadGeneratedFilePathsFromCsproj();
-                string[] filesToLoad = GetFilesToLoad(filePaths);
-                SelectPreviousSelectedItems(filesToLoad);
-                UnignoreProjectFileChanges();
-                _changeCount = 0;
+                AddItemToProject(e.FullPath);
             }
-            else
+        }
+
+        private void IgnoreFile(string path, bool shouldIgnore)
+        {
+            _vsFileChangeEx.IgnoreFile(0, path, shouldIgnore ? 1 : 0);
+        }
+
+        private void IgnoreProjectFileChanges(bool shouldIgnore)
+        {
+            string projectFile = Project.FileName;
+            IgnoreFile(projectFile, true);
+        }
+
+        public void AddItemToProject(string filePath)
+        {
+            if (filePath == null)
+                return;
+            Project.ProjectItems.AddFromFile(filePath);
+        }
+
+        private void AddAlreadyLoadedGeneratedFiles()
+        {
+            string[] filesFromCsproj = LoadGeneratedFilePathsFromCsproj();
+            foreach (string fileFromCsproj in filesFromCsproj)
             {
-                _changeCount++;
+                _alreadyLoadedFiles.Add(fileFromCsproj);
             }
         }
 
@@ -80,51 +98,6 @@ namespace EntitasVSGenerator
                 }
             }
             return generatedFiles.ToArray();
-        }
-
-        private string[] GetFilesToLoad(string[] newlyAddedFiles)
-        {
-            List<string> filesToLoad = new List<string>();
-            foreach (string newlyAddedFile in newlyAddedFiles)
-            {
-                if (!_alreadyLoadedFiles.Contains(newlyAddedFile))
-                {
-                    filesToLoad.Add(newlyAddedFile);
-                    _alreadyLoadedFiles.Add(newlyAddedFile);
-                }
-            }
-            return filesToLoad.ToArray();
-        }
-
-        private void AddAlreadyLoadedGeneratedFiles()
-        {
-            string[] filesFromCsproj = LoadGeneratedFilePathsFromCsproj();
-            foreach (string fileFromCsproj in filesFromCsproj)
-            {
-                _alreadyLoadedFiles.Add(fileFromCsproj);
-            }
-        }
-
-        private void IgnoreFile(string path, bool shouldIgnore)
-        {
-            _vsFileChangeEx.IgnoreFile(0, path, shouldIgnore ? 1 : 0);
-        }
-
-        private void IgnoreProjectFileChanges(bool shouldIgnore)
-        {
-            string projectFile = Project.FileName;
-            IgnoreFile(projectFile, true);
-        }
-
-        public void SelectPreviousSelectedItems(string[] filePaths)
-        {
-            if (filePaths == null)
-                return;
-
-            foreach (string filePath in filePaths)
-            {
-                Project.ProjectItems.AddFromFile(filePath);
-            }
         }
     }
 }
