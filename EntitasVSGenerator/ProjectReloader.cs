@@ -12,7 +12,8 @@ namespace EntitasVSGenerator
     {
         private DTE _dte;
         private IVsFileChangeEx _vsFileChangeEx;
-        private FileSystemWatcher _watcher;
+        private FileSystemWatcher _genFolderWatcher;
+        private FileSystemWatcher _csprojWatcher;
         private HashSet<string> _alreadyLoadedFiles = new HashSet<string>();
 
         public ProjectReloader(DTE dte, IVsFileChangeEx vsFileChangeEx)
@@ -20,28 +21,50 @@ namespace EntitasVSGenerator
             _dte = dte;
             _vsFileChangeEx = vsFileChangeEx;
             SetupGeneratedFolderWatcher();
+            SetupCsprojWatcher();
             AddAlreadyLoadedGeneratedFiles();
         }
 
         public void IgnoreProjectFileChanges()
         {
-            _watcher.EnableRaisingEvents = true;
+            _genFolderWatcher.EnableRaisingEvents = true;
+            _csprojWatcher.EnableRaisingEvents = true;
             IgnoreProjectFileChanges(true);
         }
 
-        public void UnignoreProjectFileChanges() // TODO: call this somewhere after csproj is saved
+        public void UnignoreProjectFileChanges()
         {
+            _csprojWatcher.EnableRaisingEvents = false;
             IgnoreProjectFileChanges(false);
+        }
+
+        private void AddItemToProject(string filePath)
+        {
+            if (filePath == null)
+                return;
+            Project.ProjectItems.AddFromFile(filePath);
         }
 
         private Project Project => _dte.Solution.Projects.Item(1); // TODO: change this to a config
 
         private void SetupGeneratedFolderWatcher()
         {
-            _watcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName) + "\\" + @"Assets\Sources\Generated", "*.cs");
-            _watcher.IncludeSubdirectories = true;
-            _watcher.Changed += GeneratedFilesChanged;
-            _watcher.NotifyFilter = NotifyFilters.Size;
+            _genFolderWatcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName) + "\\" + @"Assets\Sources\Generated", "*.cs");
+            _genFolderWatcher.IncludeSubdirectories = true;
+            _genFolderWatcher.Changed += GeneratedFilesChanged;
+            _genFolderWatcher.NotifyFilter = NotifyFilters.Size;
+        }
+
+        private void SetupCsprojWatcher()
+        {
+            _csprojWatcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName), "*.csproj");
+            _csprojWatcher.Changed += CsprojChanged;
+            _csprojWatcher.NotifyFilter = NotifyFilters.Size;
+        }
+
+        private void CsprojChanged(object sender, FileSystemEventArgs e)
+        {
+            UnignoreProjectFileChanges();
         }
 
         private void GeneratedFilesChanged(object sender, FileSystemEventArgs e)
@@ -59,15 +82,7 @@ namespace EntitasVSGenerator
 
         private void IgnoreProjectFileChanges(bool shouldIgnore)
         {
-            string projectFile = Project.FileName;
-            IgnoreFile(projectFile, true);
-        }
-
-        public void AddItemToProject(string filePath)
-        {
-            if (filePath == null)
-                return;
-            Project.ProjectItems.AddFromFile(filePath);
+            IgnoreFile(Project.FileName, true);
         }
 
         private void AddAlreadyLoadedGeneratedFiles()
