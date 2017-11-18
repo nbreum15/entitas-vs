@@ -58,7 +58,7 @@ namespace EntitasVSGenerator
             string solutionDirectory = PathUtil.GetSolutionDirectory(dte);
 
             // ViewModel that contains the paths
-            var model = new MainWindowModel(LoadPaths(dte));
+            var model = new ConfigureWindowModel(LoadPaths(dte));
             model.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
             // Entitas generation instantiations

@@ -7,7 +7,7 @@ namespace EntitasVSGenerator
     /// <summary>
     /// Interaction logic for AddPathDialog.xaml
     /// </summary>
-    public partial class AddPathDialog : System.Windows.Window
+    public partial class AddPathDialog : Window
     {
         public string Path { get; set; }
 

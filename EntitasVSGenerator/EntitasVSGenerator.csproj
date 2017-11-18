@@ -96,23 +96,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AddPathDialog.xaml.cs">
+    <Compile Include="ViewViewLogic\AddPathDialog.xaml.cs">
       <DependentUpon>AddPathDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewViewLogic\ConfigureWindow.xaml.cs">
+      <DependentUpon>ConfigureWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\EntitasFactory.cs" />
     <Compile Include="Extensions\PathUtil.cs" />
-    <Compile Include="InvokeShellCommand.cs" />
-    <Compile Include="PathContainer.cs" />
-    <Compile Include="ProjectReloader.cs" />
+    <Compile Include="Logic\InvokeShellCommand.cs" />
+    <Compile Include="Logic\PathContainer.cs" />
+    <Compile Include="Logic\ProjectReloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunGeneratorOnSave.cs" />
+    <Compile Include="Logic\RunGeneratorOnSave.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="MainWindowCommand.cs" />
-    <Compile Include="MainWindowControl.xaml.cs">
+    <Compile Include="ViewViewLogic\MainWindowControl.xaml.cs">
       <DependentUpon>MainWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindowPackage.cs" />
-    <Compile Include="PackageLoader.cs" />
+    <Compile Include="Logic\PackageLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -122,21 +125,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
     <Content Include="Resources\WindowCommand.png" />
     <Content Include="Resources\WindowPackage.ico" />
-    <Content Include="stylesheet.css" />
     <VSCTCompile Include="MainWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AddPathDialog.xaml">
+    <Page Include="ViewViewLogic\AddPathDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindowControl.xaml">
+    <Page Include="ViewViewLogic\ConfigureWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewViewLogic\MainWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

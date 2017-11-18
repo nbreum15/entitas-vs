@@ -9,10 +9,12 @@
     /// <summary>
     /// Interaction logic for WindowControl.
     /// </summary>
-    public partial class WindowControl : UserControl
+    public partial class ConfigureWindow : UserControl
     {
-        private MainWindowModel _model;
-        public MainWindowModel Model { get => _model; set
+        private ConfigureWindowModel _model;
+        public ConfigureWindowModel Model
+        {
+            get => _model; set
             {
                 LstBoxPaths.ItemsSource = value.Paths;
                 _model = value;
@@ -22,7 +24,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowControl"/> class.
         /// </summary>
-        public WindowControl()
+        public ConfigureWindow()
         {
             this.InitializeComponent();
             LstBoxPaths.ItemsSource = Model?.Paths;
@@ -51,7 +53,7 @@
                     Model?.Remove(path);
                     Model?.Add(dialog.Path);
                 }
-            }            
+            }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -65,9 +67,9 @@
         }
     }
 
-    public class MainWindowModel
+    public class ConfigureWindowModel
     {
-        public MainWindowModel(IEnumerable<string> paths)
+        public ConfigureWindowModel(IEnumerable<string> paths)
         {
             Paths = new ObservableCollection<string>(paths);
         }
@@ -85,4 +87,3 @@
             Paths.Remove(path);
         }
     }
-}
