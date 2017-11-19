@@ -5,12 +5,12 @@ namespace EntitasVSGenerator.Logic
 {
     class ProjectReloader
     {
-        private DTE _dte;
+        private Project _project;
         private IVsFileChangeEx _vsFileChangeEx;
 
-        public ProjectReloader(DTE dte, IVsFileChangeEx vsFileChangeEx)
+        public ProjectReloader(Project project, IVsFileChangeEx vsFileChangeEx)
         {
-            _dte = dte;
+            _project = project;
             _vsFileChangeEx = vsFileChangeEx;
         }
 
@@ -32,7 +32,7 @@ namespace EntitasVSGenerator.Logic
             }
         }
 
-        private Project Project => _dte.Solution.Projects.Item(1); // TODO: change this to a config
+        private Project Project { get; }
 
         private void AddItemToProject(string filePath)
         {

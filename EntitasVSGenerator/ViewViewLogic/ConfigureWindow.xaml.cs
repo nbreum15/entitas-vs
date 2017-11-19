@@ -64,7 +64,9 @@
     {
         public ConfigureTabModel(IEnumerable<string> paths)
         {
-            Paths = new ObservableCollection<string>(paths);
+            Paths = paths == null 
+                ? new ObservableCollection<string>() 
+                : new ObservableCollection<string>(paths);
         }
 
         public ObservableCollection<string> Paths { get; set; } = new ObservableCollection<string>();

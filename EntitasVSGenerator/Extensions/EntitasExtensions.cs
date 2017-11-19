@@ -23,7 +23,7 @@ namespace EntitasVSGenerator.Extensions
 
         public static string[] GetFullPaths(this CodeGenFile[] codeGenFiles, string targetDirectory)
         {
-            return codeGenFiles.Select(file => $"{targetDirectory}\\{file.fileName}").ToArray();
+            return codeGenFiles.Select(file => file.fileName).ToAbsolutePaths(targetDirectory).ToArray();
         }
 
         private static Preferences AppendProjectPath(this Preferences preferences, string preferenceKey, string projectPath)

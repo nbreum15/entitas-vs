@@ -1,22 +1,24 @@
-﻿using MoreLinq;
+﻿using EntitasVSGenerator.Extensions;
+using MoreLinq;
 using System.Collections.Generic;
 
 namespace EntitasVSGenerator.Logic
 {
     public class PathContainer
     {
-        readonly HashSet<string> _paths = new HashSet<string>();
+        private HashSet<string> _pathTriggers;
 
-        private IEnumerable<string> _pathsFromModel;
-
-        public PathContainer(IEnumerable<string> pathsFromModel)
+        public PathContainer(IEnumerable<string> paths, string projectDirectory)
         {
-            _pathsFromModel = pathsFromModel;
+            if (paths == null)
+                _pathTriggers = new HashSet<string>();
+            else
+                _pathTriggers = paths.ToAbsolutePaths(projectDirectory).ToHashSet();
         }
 
         public bool Contains(string path)
         {
-            return _pathsFromModel.ToHashSet().Contains(path);
+            return _pathTriggers.ToHashSet().Contains(path);
         }
     }
 }

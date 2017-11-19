@@ -25,9 +25,11 @@ namespace EntitasVSGenerator
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject)]
     [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    sealed class MainWindowPackage : Package, IVsPersistSolutionProps
+    sealed class MainWindowPackage : Package//, IVsPersistSolutionProps
     {
         public const string PackageGuidString = "9f4d054c-8bcc-4a90-ab81-3e1d00ff8a08";
+        public static Project CurrentProject { get; private set; }
+        public string ProjectDirectory => PathUtil.GetProjectDirectory(CurrentProject);
 
         public MainWindowPackage()
         {
@@ -41,30 +43,24 @@ namespace EntitasVSGenerator
             vsSolution.AdviseSolutionEvents(loader, out uint _);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
-
         private void OnSolutionLoad()
         {
             base.Initialize();
-            // Services
             var dte = (DTE)GetService(typeof(DTE));
+            SelectProject(dte);
             var runningDocumentTable = new RunningDocumentTable(this);
             var vsFileChangeEx = (IVsFileChangeEx)GetService(typeof(SVsFileChangeEx));
-            string solutionDirectory = PathUtil.GetSolutionDirectory(dte);
 
             try
             {
                 // ViewModel that contains the paths
-                var model = new MainWindowModel(new ConfigureTabModel(LoadPaths(dte)), new OverviewTabModel());
-                model.ConfigureModel.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
+                var model = new MainWindowModel(new ConfigureTabModel(LoadPaths(ProjectDirectory)), new OverviewTabModel());
+                model.ConfigureModel.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(ProjectDirectory, sender, e);
 
                 // Logic
-                var reloader = new ProjectReloader(dte, vsFileChangeEx);
-                var pathContainer = new PathContainer(model.ConfigureModel.Paths);
-                var codeGeneratorInvoker = new CodeGeneratorInvoker($@"{solutionDirectory}\");
+                var reloader = new ProjectReloader(CurrentProject, vsFileChangeEx);
+                var pathContainer = new PathContainer(model.ConfigureModel.Paths, ProjectDirectory);
+                var codeGeneratorInvoker = new CodeGeneratorInvoker($@"{ProjectDirectory}\");
                 var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader);
                 runningDocumentTable.Advise(runGeneratorOnSave);
 
@@ -72,77 +68,33 @@ namespace EntitasVSGenerator
             }
             catch (Exception e)
             {
-                File.WriteAllLines($@"{solutionDirectory}\entitas-vs.log", new[] { e.ToString() });
+                File.WriteAllLines($@"{ProjectDirectory}\entitas-vs.log", new[] { e.ToString() });
                 throw;
             }
         }
 
-        private void OnPathCollectionChanged(DTE dte, object sender, NotifyCollectionChangedEventArgs e)
+        private void OnPathCollectionChanged(string projectDirectory, object sender, NotifyCollectionChangedEventArgs e)
         {
             IEnumerable<string> paths = (IEnumerable<string>)sender;
-            SavePaths(dte, paths);
+            SavePaths(projectDirectory, paths);
         }
 
-        private string[] LoadPaths(DTE dte)
+        private string[] LoadPaths(string projectDirectory)
         {
-            string settingsPath = PathUtil.GetSettingsPath(dte);
+            string settingsPath = PathUtil.GetSettingsPath(projectDirectory);
             if (!File.Exists(settingsPath))
                 return null;
             return File.ReadAllLines(settingsPath);
         }
 
-        private void SavePaths(DTE dte, IEnumerable<string> pathsToWrite)
+        private void SavePaths(string projectDirectory, IEnumerable<string> pathsToWrite)
         {
-            File.WriteAllText(PathUtil.GetSettingsPath(dte), pathsToWrite.ToDelimitedString("\n"));
+            File.WriteAllText(PathUtil.GetSettingsPath(projectDirectory), pathsToWrite.ToDelimitedString("\n"));
         }
 
-        #region IVsPersistSolutionProps interface methods
-
-        public int SaveUserOptions(IVsSolutionPersistence pPersistence)
+        private void SelectProject(DTE dte)
         {
-            return VSConstants.S_OK;
+            CurrentProject = dte.Solution.Projects.Item(1);
         }
-
-        public int LoadUserOptions(IVsSolutionPersistence pPersistence, uint grfLoadOpts)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int WriteUserOptions(IStream pOptionsStream, string pszKey)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int ReadUserOptions(IStream pOptionsStream, string pszKey)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int QuerySaveSolutionProps(IVsHierarchy pHierarchy, VSQUERYSAVESLNPROPS[] pqsspSave)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int SaveSolutionProps(IVsHierarchy pHierarchy, IVsSolutionPersistence pPersistence)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int WriteSolutionProps(IVsHierarchy pHierarchy, string pszKey, IPropertyBag pPropBag)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int ReadSolutionProps(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, string pszKey, int fPreLoad, IPropertyBag pPropBag)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnProjectLoadFailure(IVsHierarchy pStubHierarchy, string pszProjectName, string pszProjectMk, string pszKey)
-        {
-            return VSConstants.S_OK;
-        }
-
-        #endregion
     }
 }
