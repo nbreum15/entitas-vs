@@ -4,15 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="250"
              Name="MyToolWindow"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
         <DockPanel>
-        <ComboBox DockPanel.Dock="Top">
+        <ComboBox x:Name="TabSelect" DockPanel.Dock="Top" SelectedIndex="0" SelectionChanged="TabSelectionChanged">
                 <ComboBoxItem Content="Overview"/>
                 <ComboBoxItem Content="Configure"/>
             </ComboBox>
-            <DockPanel >
+            <DockPanel x:Name="ViewContainer">
             </DockPanel>
     </DockPanel>
 </UserControl>

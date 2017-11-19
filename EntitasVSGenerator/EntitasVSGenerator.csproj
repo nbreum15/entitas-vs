@@ -116,6 +116,9 @@
     </Compile>
     <Compile Include="MainWindowPackage.cs" />
     <Compile Include="Logic\PackageLoader.cs" />
+    <Compile Include="ViewViewLogic\OverviewTab.xaml.cs">
+      <DependentUpon>OverviewTab.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -142,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ViewViewLogic\MainWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewViewLogic\OverviewTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -58,8 +58,8 @@ namespace EntitasVSGenerator
             string solutionDirectory = PathUtil.GetSolutionDirectory(dte);
 
             // ViewModel that contains the paths
-            var model = new ConfigureWindowModel(LoadPaths(dte));
-            model.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
+            var model = new MainWindowModel(new ConfigureTabModel(LoadPaths(dte)), new OverviewTabModel());
+            model.ConfigureModel.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
             // Entitas generation instantiations
             //CodeGenerator codeGenerator = EntitasFactory.GetCodeGenerator(solutionDirectory);
@@ -67,7 +67,7 @@ namespace EntitasVSGenerator
 
             // Logic
             ProjectReloader reloader = new ProjectReloader(dte, vsFileChangeEx);
-            PathContainer fileTrigger = new PathContainer(model.Paths);
+            PathContainer fileTrigger = new PathContainer(model.ConfigureModel.Paths);
             _invokeShellCommand = new InvokeShellCommand(solutionDirectory);
             _invokeShellCommand.StartServer();
             var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, _invokeShellCommand, reloader);

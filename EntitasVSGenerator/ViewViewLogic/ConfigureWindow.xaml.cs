@@ -9,24 +9,17 @@
     /// <summary>
     /// Interaction logic for WindowControl.
     /// </summary>
-    public partial class ConfigureWindow : UserControl
+    public partial class ConfigureTab : UserControl
     {
-        private ConfigureWindowModel _model;
-        public ConfigureWindowModel Model
-        {
-            get => _model; set
-            {
-                LstBoxPaths.ItemsSource = value.Paths;
-                _model = value;
-            }
-        }
-        
+        public ConfigureTabModel Model { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowControl"/> class.
         /// </summary>
-        public ConfigureWindow()
+        public ConfigureTab(ConfigureTabModel model)
         {
             this.InitializeComponent();
+            Model = model;
             LstBoxPaths.ItemsSource = Model?.Paths;
         }
 
@@ -67,9 +60,9 @@
         }
     }
 
-    public class ConfigureWindowModel
+    public class ConfigureTabModel
     {
-        public ConfigureWindowModel(IEnumerable<string> paths)
+        public ConfigureTabModel(IEnumerable<string> paths)
         {
             Paths = new ObservableCollection<string>(paths);
         }
@@ -87,3 +80,4 @@
             Paths.Remove(path);
         }
     }
+}

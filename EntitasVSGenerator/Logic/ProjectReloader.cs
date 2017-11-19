@@ -35,11 +35,13 @@ namespace EntitasVSGenerator
 
         private void SetupGeneratedFolderWatcher()
         {
-            _genFolderWatcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName) + "\\" + @"Assets\Sources\Generated", "*.cs");
-            _genFolderWatcher.IncludeSubdirectories = true;
-            _genFolderWatcher.EnableRaisingEvents = true;
+            _genFolderWatcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName) + "\\" + @"Assets\Sources\Generated", "*.cs")
+            {
+                IncludeSubdirectories = true,
+                EnableRaisingEvents = true,
+                NotifyFilter = NotifyFilters.Size // find better filter
+            };
             _genFolderWatcher.Changed += GeneratedFilesChanged;
-            _genFolderWatcher.NotifyFilter = NotifyFilters.Size; // find better filter
         }
 
         private void SetupCsprojWatcher()

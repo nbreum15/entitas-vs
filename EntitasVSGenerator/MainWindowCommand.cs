@@ -33,7 +33,7 @@ namespace EntitasVSGenerator
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private MainWindowCommand(Package package, ConfigureWindowModel model)
+        private MainWindowCommand(Package package, MainWindowModel model)
         {
             this.package = package ?? throw new ArgumentNullException("package");
             Model = model ?? throw new ArgumentNullException(nameof(model));
@@ -67,7 +67,7 @@ namespace EntitasVSGenerator
             }
         }
 
-        private ConfigureWindowModel Model { get; }
+        private MainWindowModel Model { get; }
 
         private WindowControl WindowControl => (WindowControl)WindowPane.Content;
 
@@ -77,7 +77,7 @@ namespace EntitasVSGenerator
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static void Initialize(Package package, ConfigureWindowModel model)
+        public static void Initialize(Package package, MainWindowModel model)
         {
             Instance = new MainWindowCommand(package, model);
         }
