@@ -1,65 +1,38 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.IO;
 
-namespace EntitasVSGenerator
+namespace EntitasVSGenerator.Logic
 {
     class ProjectReloader
     {
         private DTE _dte;
         private IVsFileChangeEx _vsFileChangeEx;
-        private FileSystemWatcher _genFolderWatcher;
-        private FileSystemWatcher _csprojWatcher;
 
         public ProjectReloader(DTE dte, IVsFileChangeEx vsFileChangeEx)
         {
             _dte = dte;
             _vsFileChangeEx = vsFileChangeEx;
-            SetupGeneratedFolderWatcher();
-            SetupCsprojWatcher();
         }
 
         public void IgnoreProjectFileChanges()
         {
-            _csprojWatcher.EnableRaisingEvents = true;
             IgnoreProjectFileChanges(true);
         }
 
         public void UnignoreProjectFileChanges()
         {
-            _csprojWatcher.EnableRaisingEvents = false;
             IgnoreProjectFileChanges(false);
         }
 
-        private Project Project => _dte.Solution.Projects.Item(1); // TODO: change this to a config
-
-        private void SetupGeneratedFolderWatcher()
+        public void AddItems(string[] paths)
         {
-            _genFolderWatcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName) + "\\" + @"Assets\Sources\Generated", "*.cs")
+            foreach (string path in paths)
             {
-                IncludeSubdirectories = true,
-                EnableRaisingEvents = true,
-                NotifyFilter = NotifyFilters.Size // find better filter
-            };
-            _genFolderWatcher.Changed += GeneratedFilesChanged;
+                AddItemToProject(path);
+            }
         }
 
-        private void SetupCsprojWatcher()
-        {
-            _csprojWatcher = new FileSystemWatcher(Path.GetDirectoryName(Project.FileName), "*.csproj");
-            _csprojWatcher.Changed += CsprojChanged;
-            _csprojWatcher.NotifyFilter = NotifyFilters.Size;
-        }
-
-        private void CsprojChanged(object sender, FileSystemEventArgs e)
-        {
-            UnignoreProjectFileChanges();
-        }
-
-        private void GeneratedFilesChanged(object sender, FileSystemEventArgs e)
-        {
-            AddItemToProject(e.FullPath);
-        }
+        private Project Project => _dte.Solution.Projects.Item(1); // TODO: change this to a config
 
         private void AddItemToProject(string filePath)
         {

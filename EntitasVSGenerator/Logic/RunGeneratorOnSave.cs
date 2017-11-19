@@ -4,24 +4,24 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace EntitasVSGenerator
+namespace EntitasVSGenerator.Logic
 {
     class RunGeneratorOnSave : IVsRunningDocTableEvents3
     {
         private readonly DTE _dte;
         private readonly RunningDocumentTable _runningDocumentTable;
-        private readonly InvokeShellCommand _invokeShellCmd;
         private readonly ProjectReloader _reloader;
+        private readonly CodeGeneratorInvoker _codeGeneratorInvoker;
 
         public PathContainer PathContainer { get; }
 
-        public RunGeneratorOnSave(DTE dte, RunningDocumentTable runningDocumentTable, PathContainer fileTrigger,  InvokeShellCommand invokeShellCmd, ProjectReloader reloader)
+        public RunGeneratorOnSave(DTE dte, RunningDocumentTable runningDocumentTable, CodeGeneratorInvoker codeGeneratorInvoker, PathContainer fileTrigger, ProjectReloader reloader)
         {
             _dte = dte;
             _runningDocumentTable = runningDocumentTable;
             PathContainer = fileTrigger;
-            _invokeShellCmd = invokeShellCmd;
             _reloader = reloader;
+            _codeGeneratorInvoker = codeGeneratorInvoker;
         }
         
         public int OnAfterSave(uint docCookie)
@@ -34,8 +34,10 @@ namespace EntitasVSGenerator
             // checks whether the document is in list of triggers
             if (PathContainer.Contains(document.FullName) || PathContainer.Contains(document.Path))
             {
-                _reloader.IgnoreProjectFileChanges();
-                _invokeShellCmd.Generate();
+                //_reloader.IgnoreProjectFileChanges();
+                string[] generatedFiles = _codeGeneratorInvoker.Generate();
+                //_reloader.AddItems(generatedFiles);
+                //_reloader.UnignoreProjectFileChanges();
             }
 
             return VSConstants.S_OK;

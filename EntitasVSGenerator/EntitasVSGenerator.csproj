@@ -96,15 +96,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Extensions\EntitasExtensions.cs" />
+    <Compile Include="Logic\CodeGeneratorInvoker.cs" />
     <Compile Include="ViewViewLogic\AddPathDialog.xaml.cs">
       <DependentUpon>AddPathDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewViewLogic\ConfigureWindow.xaml.cs">
       <DependentUpon>ConfigureWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\EntitasFactory.cs" />
     <Compile Include="Extensions\PathUtil.cs" />
-    <Compile Include="Logic\InvokeShellCommand.cs" />
     <Compile Include="Logic\PathContainer.cs" />
     <Compile Include="Logic\ProjectReloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

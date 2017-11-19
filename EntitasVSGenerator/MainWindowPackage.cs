@@ -12,6 +12,7 @@ using Microsoft.VisualStudio;
 using System.Collections.Specialized;
 using EntitasVSGenerator.Extensions;
 using Entitas.CodeGeneration.CodeGenerator;
+using EntitasVSGenerator.Logic;
 
 namespace EntitasVSGenerator
 {
@@ -28,8 +29,6 @@ namespace EntitasVSGenerator
     {
         public const string PackageGuidString = "9f4d054c-8bcc-4a90-ab81-3e1d00ff8a08";
 
-        private InvokeShellCommand _invokeShellCommand;
-
         public MainWindowPackage()
         {
         }
@@ -45,7 +44,6 @@ namespace EntitasVSGenerator
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _invokeShellCommand?.StopServer();
         }
 
         private void OnSolutionLoad()
@@ -61,16 +59,11 @@ namespace EntitasVSGenerator
             var model = new MainWindowModel(new ConfigureTabModel(LoadPaths(dte)), new OverviewTabModel());
             model.ConfigureModel.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
-            // Entitas generation instantiations
-            //CodeGenerator codeGenerator = EntitasFactory.GetCodeGenerator(solutionDirectory);
-            //codeGenerator.Generate();
-
             // Logic
-            ProjectReloader reloader = new ProjectReloader(dte, vsFileChangeEx);
-            PathContainer fileTrigger = new PathContainer(model.ConfigureModel.Paths);
-            _invokeShellCommand = new InvokeShellCommand(solutionDirectory);
-            _invokeShellCommand.StartServer();
-            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, fileTrigger, _invokeShellCommand, reloader);
+            var reloader = new ProjectReloader(dte, vsFileChangeEx);
+            var pathContainer = new PathContainer(model.ConfigureModel.Paths);
+            var codeGeneratorInvoker = new CodeGeneratorInvoker($"{solutionDirectory}\\");
+            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader);
             runningDocumentTable.Advise(runGeneratorOnSave);
 
             MainWindowCommand.Initialize(this, model);

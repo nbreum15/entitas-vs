@@ -1,7 +1,7 @@
 ﻿using MoreLinq;
 using System.Collections.Generic;
 
-namespace EntitasVSGenerator
+namespace EntitasVSGenerator.Logic
 {
     public class PathContainer
     {
