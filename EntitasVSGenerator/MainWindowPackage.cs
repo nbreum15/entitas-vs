@@ -72,7 +72,7 @@ namespace EntitasVSGenerator
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show($"Solution Directory: {solutionDirectory}\n" + e.ToString());
+                File.WriteAllLines($@"{solutionDirectory}\entitas-vs.log", new[] { e.ToString() });
                 throw;
             }
         }
