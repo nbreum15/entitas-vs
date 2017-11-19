@@ -55,18 +55,26 @@ namespace EntitasVSGenerator
             var vsFileChangeEx = (IVsFileChangeEx)GetService(typeof(SVsFileChangeEx));
             string solutionDirectory = PathUtil.GetSolutionDirectory(dte);
 
-            // ViewModel that contains the paths
-            var model = new MainWindowModel(new ConfigureTabModel(LoadPaths(dte)), new OverviewTabModel());
-            model.ConfigureModel.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
+            try
+            {
+                // ViewModel that contains the paths
+                var model = new MainWindowModel(new ConfigureTabModel(LoadPaths(dte)), new OverviewTabModel());
+                model.ConfigureModel.Paths.CollectionChanged += (sender, e) => OnPathCollectionChanged(dte, sender, e);
 
-            // Logic
-            var reloader = new ProjectReloader(dte, vsFileChangeEx);
-            var pathContainer = new PathContainer(model.ConfigureModel.Paths);
-            var codeGeneratorInvoker = new CodeGeneratorInvoker($"{solutionDirectory}\\");
-            var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader);
-            runningDocumentTable.Advise(runGeneratorOnSave);
+                // Logic
+                var reloader = new ProjectReloader(dte, vsFileChangeEx);
+                var pathContainer = new PathContainer(model.ConfigureModel.Paths);
+                var codeGeneratorInvoker = new CodeGeneratorInvoker($@"{solutionDirectory}\");
+                var runGeneratorOnSave = new RunGeneratorOnSave(dte, runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader);
+                runningDocumentTable.Advise(runGeneratorOnSave);
 
-            MainWindowCommand.Initialize(this, model);
+                MainWindowCommand.Initialize(this, model);
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show($"Solution Directory: {solutionDirectory}\n" + e.ToString());
+                throw;
+            }
         }
 
         private void OnPathCollectionChanged(DTE dte, object sender, NotifyCollectionChangedEventArgs e)

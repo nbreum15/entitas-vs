@@ -17,13 +17,13 @@ namespace EntitasVSGenerator.Extensions
                 .AppendProjectPath("Entitas.CodeGeneration.Plugins.ProjectPath", projectPath)
                 .AppendProjectPath("Entitas.CodeGeneration.Plugins.Assemblies", projectPath)
                 .AppendProjectPath("Entitas.CodeGeneration.Plugins.TargetDirectory", projectPath);
-            targetDir = $"{preferences["Entitas.CodeGeneration.Plugins.TargetDirectory"]}/Generated";
+            targetDir = $"{preferences["Entitas.CodeGeneration.Plugins.TargetDirectory"]}/Generated".Replace("/","\\");
             return CodeGeneratorUtil.CodeGeneratorFromPreferences(preferences);
         }
 
         public static string[] GetFullPaths(this CodeGenFile[] codeGenFiles, string targetDirectory)
         {
-            return codeGenFiles.Select(file => $"{targetDirectory}/{file.fileName}".Replace("\\", "/")).ToArray();
+            return codeGenFiles.Select(file => $"{targetDirectory}\\{file.fileName}").ToArray();
         }
 
         private static Preferences AppendProjectPath(this Preferences preferences, string preferenceKey, string projectPath)

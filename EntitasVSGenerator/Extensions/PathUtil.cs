@@ -1,4 +1,5 @@
 ﻿using EnvDTE;
+using System.IO;
 
 namespace EntitasVSGenerator.Extensions
 {
@@ -11,7 +12,7 @@ namespace EntitasVSGenerator.Extensions
 #if DEBUG
             return @"C:\Users\nickl\Desktop\entitas-test";
 #else
-            return dte.Solution.FullName;
+            return Path.GetDirectoryName(dte.Solution.FullName);
 #endif
         }
 

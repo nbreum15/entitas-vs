@@ -34,10 +34,10 @@ namespace EntitasVSGenerator.Logic
             // checks whether the document is in list of triggers
             if (PathContainer.Contains(document.FullName) || PathContainer.Contains(document.Path))
             {
-                //_reloader.IgnoreProjectFileChanges();
+                _reloader.IgnoreProjectFileChanges();
                 string[] generatedFiles = _codeGeneratorInvoker.Generate();
-                //_reloader.AddItems(generatedFiles);
-                //_reloader.UnignoreProjectFileChanges();
+                _reloader.AddItems(generatedFiles);
+                _reloader.UnignoreProjectFileChanges();
             }
 
             return VSConstants.S_OK;
