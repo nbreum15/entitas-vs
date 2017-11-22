@@ -5,12 +5,11 @@ namespace EntitasVSGenerator.Logic
 {
     class ProjectReloader
     {
-        private Project _project;
         private IVsFileChangeEx _vsFileChangeEx;
 
         public ProjectReloader(Project project, IVsFileChangeEx vsFileChangeEx)
         {
-            _project = project;
+            Project = project;
             _vsFileChangeEx = vsFileChangeEx;
         }
 

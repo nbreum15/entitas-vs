@@ -3,10 +3,11 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.IO;
 
 namespace EntitasVSGenerator.Logic
 {
-    class RunGeneratorOnSave : IVsRunningDocTableEvents3
+    class GeneratorRunner : IVsRunningDocTableEvents3
     {
         private readonly DTE _dte;
         private readonly RunningDocumentTable _runningDocumentTable;
@@ -15,13 +16,14 @@ namespace EntitasVSGenerator.Logic
 
         public PathContainer PathContainer { get; }
 
-        public RunGeneratorOnSave(DTE dte, RunningDocumentTable runningDocumentTable, CodeGeneratorInvoker codeGeneratorInvoker, PathContainer fileTrigger, ProjectReloader reloader)
+        public GeneratorRunner(DTE dte, RunningDocumentTable runningDocumentTable, CodeGeneratorInvoker codeGeneratorInvoker, PathContainer fileTrigger, ProjectReloader reloader)
         {
             _dte = dte;
             _runningDocumentTable = runningDocumentTable;
             PathContainer = fileTrigger;
             _reloader = reloader;
             _codeGeneratorInvoker = codeGeneratorInvoker;
+            _runningDocumentTable.Advise(this);
         }
         
         public int OnAfterSave(uint docCookie)
@@ -31,8 +33,7 @@ namespace EntitasVSGenerator.Logic
             if (document == null)
                 return VSConstants.S_OK;
             
-            // checks whether the document is in list of triggers
-            if (PathContainer.Contains(document.FullName) || PathContainer.Contains(document.Path))
+            if (PathContainer.Contains(document.FullName))
             {
                 _reloader.IgnoreProjectFileChanges();
                 string[] generatedFiles = _codeGeneratorInvoker.Generate();

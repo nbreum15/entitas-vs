@@ -63,10 +63,8 @@
         public ConfigureTabModel ConfigureModel { get; set; }
         public OverviewTabModel OverviewModel { get; set; }
 
-        public MainWindowModel(ConfigureTabModel configureModel, OverviewTabModel overviewModel)
+        public MainWindowModel()
         {
-            ConfigureModel = configureModel;
-            OverviewModel = overviewModel;
         }
     }
 

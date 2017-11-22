@@ -10,8 +10,19 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
     <DockPanel HorizontalAlignment="Stretch">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25">
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25">
+                </RowDefinition>
+            </Grid.RowDefinitions>
+            <Button ToolTip="Add project"/>
+        </Grid>
         <TextBlock Foreground="White" Text="Triggers" DockPanel.Dock="Top" />
-        <TextBlock Foreground="Gray" DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" Text="Add triggers to tell which folder/file has to change to run the code generator. Relative paths from project directory is recommended."/>
+        <TextBlock Foreground="Gray" DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" Text="Add triggers to tell which folder/file has to change to run the code generator. Relative paths from project directory are recommended."/>
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

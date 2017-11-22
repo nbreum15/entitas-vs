@@ -99,6 +99,8 @@
     <Compile Include="Extensions\EntitasExtensions.cs" />
     <Compile Include="Logic\CodeGeneratorInvoker.cs" />
     <Compile Include="Logic\ConfigFile.cs" />
+    <Compile Include="Logic\GeneratorRunner.cs" />
+    <Compile Include="Logic\LogicController.cs" />
     <Compile Include="ViewViewLogic\AddPathDialog.xaml.cs">
       <DependentUpon>AddPathDialog.xaml</DependentUpon>
     </Compile>
@@ -109,7 +111,6 @@
     <Compile Include="Logic\PathContainer.cs" />
     <Compile Include="Logic\ProjectReloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Logic\RunGeneratorOnSave.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="MainWindowCommand.cs" />
     <Compile Include="ViewViewLogic\MainWindowControl.xaml.cs">
