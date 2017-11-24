@@ -34,7 +34,7 @@ namespace EntitasVSGenerator.Logic
                 var reloader = new ProjectReloader(project, _vsFileChangeEx);
                 var pathContainer = new PathContainer(projectItem.Triggers, project.GetDirectory());
                 var codeGeneratorInvoker = new CodeGeneratorInvoker(project.GetDirectory());
-                var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader);
+                var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader, project);
             }
 
             MainWindowModel model = new MainWindowModel

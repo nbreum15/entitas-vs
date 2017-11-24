@@ -11,16 +11,22 @@ namespace EntitasVSGenerator.Logic
         private readonly DTE _dte;
         private readonly RunningDocumentTable _runningDocumentTable;
         private readonly ProjectReloader _reloader;
+        private readonly Project _project;
         private readonly CodeGeneratorInvoker _codeGeneratorInvoker;
+        private readonly PathContainer _pathContainer;
 
-        public PathContainer PathContainer { get; }
-
-        public GeneratorRunner(DTE dte, RunningDocumentTable runningDocumentTable, CodeGeneratorInvoker codeGeneratorInvoker, PathContainer fileTrigger, ProjectReloader reloader)
+        public GeneratorRunner(DTE dte, 
+            RunningDocumentTable runningDocumentTable, 
+            CodeGeneratorInvoker codeGeneratorInvoker, 
+            PathContainer fileTrigger, 
+            ProjectReloader reloader,
+            Project project)
         {
             _dte = dte;
             _runningDocumentTable = runningDocumentTable;
-            PathContainer = fileTrigger;
+            _pathContainer = fileTrigger;
             _reloader = reloader;
+            _project = project;
             _codeGeneratorInvoker = codeGeneratorInvoker;
             _runningDocumentTable.Advise(this);
         }
@@ -28,11 +34,11 @@ namespace EntitasVSGenerator.Logic
         public int OnAfterSave(uint docCookie)
         {
             Document document = FindDocument(docCookie);
-
-            if (document == null)
+            
+            if (document == null || document.ProjectItem.ContainingProject == _project)
                 return VSConstants.S_OK;
             
-            if (PathContainer.Contains(document.FullName))
+            if (_pathContainer.Contains(document.FullName))
             {
                 _reloader.IgnoreProjectFileChanges();
                 string[] generatedFiles = _codeGeneratorInvoker.Generate();
