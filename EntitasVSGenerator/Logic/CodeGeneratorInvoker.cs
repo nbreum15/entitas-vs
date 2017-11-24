@@ -10,7 +10,7 @@ namespace EntitasVSGenerator.Logic
 
         public CodeGeneratorInvoker(string projectDirectory)
         {
-            _codeGenerator = EntitasExtensions.GetCodeGenerator(projectDirectory, out _targetDirectory);
+            _codeGenerator = EntitasExtensions.GetCodeGenerator($@"{projectDirectory}\", out _targetDirectory);
         }
 
         public string[] Generate()

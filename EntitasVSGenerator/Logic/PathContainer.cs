@@ -2,6 +2,7 @@
 using MoreLinq;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -17,7 +18,10 @@ namespace EntitasVSGenerator.Logic
                 if (value == null)
                     _pathTriggers = new HashSet<string>();
                 else
-                    _pathTriggers = value.ToAbsolutePaths(_projectDirectory).ToHashSet();
+                    _pathTriggers = value
+                        .ToAbsolutePaths(_projectDirectory)
+                        .Select(path => path.ToLower())
+                        .ToHashSet();
             }
         }
 
@@ -29,8 +33,9 @@ namespace EntitasVSGenerator.Logic
 
         public bool Contains(string filePath)
         {
-            string directory = Path.GetDirectoryName(filePath);
-            return _pathTriggers.Contains(filePath) || _pathTriggers.Contains(directory);
+            string filePathLower = filePath.ToLower();
+            string directory = Path.GetDirectoryName(filePathLower);
+            return _pathTriggers.Contains(filePathLower) || _pathTriggers.Contains(directory);
         }
     }
 }

@@ -3,6 +3,7 @@ using Entitas.CodeGeneration.CodeGenerator;
 using Entitas.Utils;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 
 namespace EntitasVSGenerator.Extensions
 {
@@ -31,11 +32,13 @@ namespace EntitasVSGenerator.Extensions
 
         private static Preferences AppendProjectPath(this Preferences preferences, string preferenceKey, string projectPath)
         {
+            //Debug.WriteLine($"Preferencekey: {preferenceKey}, ProjectPath: {projectPath}", "General");
             string[] value = preferences[preferenceKey].ArrayFromCSV();
             for (int index = 0; index < value.Length; index++)
             {
                 value[index] = $"{projectPath}{value[index]}".Replace("\\", "/");
             }
+            //Debug.WriteLine(value.ToCSV(), "General");
             preferences[preferenceKey] = value.ToCSV();
             return preferences;
         }

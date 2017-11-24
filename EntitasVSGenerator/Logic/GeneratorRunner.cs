@@ -35,9 +35,9 @@ namespace EntitasVSGenerator.Logic
         {
             Document document = FindDocument(docCookie);
             
-            if (document == null || document.ProjectItem.ContainingProject == _project)
+            if (document == null || document.ProjectItem.ContainingProject != _project)
                 return VSConstants.S_OK;
-            
+
             if (_pathContainer.Contains(document.FullName))
             {
                 _reloader.IgnoreProjectFileChanges();
