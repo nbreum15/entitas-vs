@@ -10,7 +10,10 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
     <DockPanel HorizontalAlignment="Stretch">
-        <TextBlock Foreground="White" x:Name="TxtBxProjectName" DockPanel.Dock="Top"/>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock Foreground="White" Text="Project: " DockPanel.Dock="Left"/>
+            <TextBlock Foreground="White" x:Name="TxtBxProjectName" DockPanel.Dock="Left"/>
+        </DockPanel>
         <TextBlock Foreground="White" Text="Triggers" DockPanel.Dock="Top" />
         <TextBlock Foreground="Gray" DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" Text="Add triggers to tell which folder/file has to change to run the code generator. Relative paths from project directory are recommended."/>
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
