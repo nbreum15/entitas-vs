@@ -15,9 +15,6 @@ Nice right?
 # Important: Requirements
 The [paid Roslyn Generator](https://www.assetstore.unity3d.com/en/#!/content/87638) is strongly recommand when using this extension because it is able to generator with compiler errors. The Normal Generator from [Entitas](https://github.com/sschmid/Entitas-CSharp/releases) will also work, but because the Normal Generator is reflection-based, compiler errors will block it from generating (which makes it very cumbersome to work with).
 
-# How it works
-Entitas-vs looks for when the user saves a file in a specified location and generates code accordingly.
-
 # Setup
 To use Entitas-vs you need to:
 1. Setup Entitas as you normally would (follow one of these guides by the author of Entitas: [video guide](https://www.youtube.com/watch?v=C9PSYVLvikM), [text guide](https://github.com/sschmid/Entitas-CSharp/issues/476))
@@ -27,4 +24,10 @@ To use Entitas-vs you need to:
     
     ![](https://i.imgur.com/uzo4Ibn.png)
     
-    1. 
+    2. Choose Configure from the dropbox menu
+    
+    ![](https://i.imgur.com/70sbW1w.png)
+    
+    3. 
+    
+    
