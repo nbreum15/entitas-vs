@@ -69,7 +69,7 @@ namespace EntitasVSGenerator
 
         private MainWindowModel Model { get; }
 
-        private WindowControl WindowControl => (WindowControl)WindowPane.Content;
+        private MainWindowControl WindowControl => (MainWindowControl)WindowPane.Content;
 
         private ToolWindowPane WindowPane => package.FindToolWindow(typeof(MainWindow), 0, true);
 

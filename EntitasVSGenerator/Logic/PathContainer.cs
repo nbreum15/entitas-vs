@@ -9,11 +9,9 @@ namespace EntitasVSGenerator.Logic
     {
         private HashSet<string> _pathTriggers;
         private readonly string _projectDirectory;
-
-        private IEnumerable<string> _paths;
+        
         public IEnumerable<string> Paths
         {
-            get => _paths;
             set
             {
                 if (value == null)
@@ -31,7 +29,6 @@ namespace EntitasVSGenerator.Logic
 
         public bool Contains(string filePath)
         {
-            // check if file or folder which file rests in is in triggers
             string directory = Path.GetDirectoryName(filePath);
             return _pathTriggers.Contains(filePath) || _pathTriggers.Contains(directory);
         }

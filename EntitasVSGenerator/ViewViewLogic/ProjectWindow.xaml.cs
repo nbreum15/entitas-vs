@@ -1,26 +1,32 @@
 ﻿namespace EntitasVSGenerator
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using EntitasVSGenerator.Logic;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for WindowControl.
     /// </summary>
-    public partial class ConfigureTab : UserControl
+    public partial class ProjectWindow : UserControl
     {
-        public ConfigureTabModel Model { get; set; }
+        public ProjectItem Model { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WindowControl"/> class.
+        /// Initializes a new instance of the <see cref="MainWindowControl"/> class.
         /// </summary>
-        public ConfigureTab(ConfigureTabModel model)
+        public ProjectWindow(ProjectItem model)
         {
             this.InitializeComponent();
             Model = model;
-            LstBoxPaths.ItemsSource = Model?.Paths;
+            LstBoxPaths.ItemsSource = Model.Triggers;
+            TxtBxProjectName.Text = model.ProjectName;
+            model.Changed += ProjectItem_Changed;
+        }
+
+        private void ProjectItem_Changed(ProjectItem item, string oldProjectName)
+        {
+            LstBoxPaths.ItemsSource = Model.Triggers.ToArray();
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -30,7 +36,7 @@
             {
                 if (string.IsNullOrEmpty(dialog.Path))
                     return;
-                Model?.Add(dialog.Path);
+                Model.AddTrigger(dialog.Path);
             }
         }
 
@@ -43,43 +49,24 @@
                 dialog.txtBoxPath.Text = path;
                 if (dialog.ShowDialog().Value)
                 {
-                    Model?.Remove(path);
-                    Model?.Add(dialog.Path);
+                    RemoveCurrentSelectedItem();
+                    Model.AddTrigger(dialog.Path);
                 }
             }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            Model.DebugAction();
             if (LstBoxPaths.SelectedItem != null)
             {
-                string path = (string)LstBoxPaths.SelectedItem;
-                Model?.Remove(path);
+                RemoveCurrentSelectedItem();
             }
         }
-    }
 
-    public class ConfigureTabModel
-    {
-        public ConfigureTabModel(IEnumerable<string> paths)
+        private void RemoveCurrentSelectedItem()
         {
-            Paths = paths == null 
-                ? new ObservableCollection<string>() 
-                : new ObservableCollection<string>(paths);
-        }
-
-        public ObservableCollection<string> Paths { get; set; } = new ObservableCollection<string>();
-        public Action DebugAction { get; set; }
-
-        public void Add(string path)
-        {
-            Paths.Add(path);
-        }
-
-        public void Remove(string path)
-        {
-            Paths.Remove(path);
+            int index = LstBoxPaths.SelectedIndex;
+            Model.RemoveTrigger(LstBoxPaths.SelectedIndex);
         }
     }
 }

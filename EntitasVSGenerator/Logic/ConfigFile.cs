@@ -2,6 +2,8 @@
 using System.Linq;
 using EntitasVSGenerator.Extensions;
 using System.IO;
+using System.Xml.XPath;
+using System.Collections.Generic;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -19,49 +21,64 @@ $@"
 ";
         private XmlDocument _document;
 
-        public ConfigFile(string projectDirectory) : this(projectDirectory, PathUtil.GetSettingsPath(projectDirectory))
+        public ConfigFile(string directory) : this(directory, PathUtil.GetSettingsPath(directory))
         { }
 
-        public ConfigFile(string projectDirectory, string settingsPath)
+        public ConfigFile(string directory, string settingsPath)
         {
-            ProjectDirectory = projectDirectory;
+            Directory = directory;
             SettingsPath = settingsPath;
             _document = new XmlDocument();
             LoadXmlFile();
         }
         
-        public string ProjectDirectory { get; }
+        public string Directory { get; }
         public string SettingsPath { get; }
-
-        public void AddTrigger(string path)
+        public List<ProjectItem> ProjectItems => GetProjectItems();
+        
+        public void Refresh(ProjectItem item, string oldProjectName) 
         {
-            if (string.IsNullOrWhiteSpace(path))
-                return;
-            XmlElement item = _document.CreateElement(TriggerElement);
-            item.SetAttribute(PathAttribute, path);
-            XmlNode triggers = _document.SelectSingleNode($"{RootElement}/{ProjectElement}");
-            triggers.AppendChild(item);
+            string xpath_projectNode = $"{RootElement}/{ProjectElement}[@{NameAttribute}=\"{oldProjectName}\"]";
+            XmlNode projectElement = _document.SelectSingleNode(xpath_projectNode);
+
+            if(projectElement == null) // not found in xml i.e. new project created in settings ui
+            {
+                projectElement = _document.CreateElement(ProjectElement);
+                _document.FirstChild.AppendChild(projectElement);
+                XmlAttribute nameAttribute = _document.CreateAttribute(NameAttribute);
+                projectElement.Attributes.Append(nameAttribute);
+            }
+
+            projectElement.Attributes[NameAttribute].Value = item.ProjectName;
+            projectElement.InnerText = "";
+
+            foreach (string trigger in item.Triggers)
+            {
+                XmlElement triggerElement = _document.CreateElement(TriggerElement);
+                XmlAttribute pathAttribute = _document.CreateAttribute(PathAttribute);
+                pathAttribute.Value = trigger;
+                triggerElement.Attributes.Append(pathAttribute);
+                projectElement.AppendChild(triggerElement);
+            }
             Save();
         }
 
-        public void ChangeProject(string name)
+        private List<ProjectItem> GetProjectItems()
         {
-            if (string.IsNullOrWhiteSpace(name))
-                return;
-            XmlElement item = _document.CreateElement(ProjectElement);
-            item.SetAttribute(NameAttribute, name);
-            XmlNode project = _document.SelectSingleNode(RootElement);
-            project.AppendChild(item);
-            Save();
+            List<ProjectItem> projectItems = new List<ProjectItem>();
+            foreach (string projectName in GetProjectNames())
+            {
+                projectItems.Add(new ProjectItem(projectName, GetTriggers(projectName)));
+            }
+            return projectItems;
         }
 
-        public string[] GetTriggers(string projectName)
+        public IEnumerable<string> GetTriggers(string projectName)
         {
             string xpath = $"{RootElement}/{ProjectElement}[@{NameAttribute}=\"{projectName}\"]/{TriggerElement}";
-            string[] triggers = _document.SelectNodes(xpath)
+            IEnumerable<string> triggers = _document.SelectNodes(xpath)
                 .Cast<XmlNode>()
-                .Select(trigger => trigger.Attributes[PathAttribute].Value)
-                .ToArray();
+                .Select(trigger => trigger.Attributes[PathAttribute].Value);
             return triggers;
         }
 

@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="EntitasVSGenerator.ViewViewLogic.OverviewTab"
+﻿<UserControl x:Class="EntitasVSGenerator.ViewViewLogic.ConfigureTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="250">
-    <DockPanel>
-        <TextBlock Foreground="White" Text="Status: "/>
+    <DockPanel x:Name="ProjectTabContainer">
+        
     </DockPanel>
 </UserControl>

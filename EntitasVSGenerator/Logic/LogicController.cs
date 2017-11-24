@@ -3,6 +3,8 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -24,23 +26,40 @@ namespace EntitasVSGenerator.Logic
 
         public void Run()
         {
-            List<string> triggersAll = new List<string>();
-            foreach (Project project in _dte.Solution.Projects)
+            var projectItems = GetProjectItems();
+
+            foreach ((Project project, ProjectItem projectItem) in projectItems)
             {
-                string[] triggers = _configFile.GetTriggers(project.GetFileNameOnly());
-                triggersAll.AddRange(triggers);
+                projectItem.Changed += ProjectItem_Changed;
                 var reloader = new ProjectReloader(project, _vsFileChangeEx);
-                var pathContainer = new PathContainer(triggers, _configFile.ProjectDirectory);
-                var codeGeneratorInvoker = new CodeGeneratorInvoker($@"{_configFile.ProjectDirectory}\");
+                var pathContainer = new PathContainer(projectItem.Triggers, project.GetDirectory());
+                var codeGeneratorInvoker = new CodeGeneratorInvoker(project.GetDirectory());
                 var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGeneratorInvoker, pathContainer, reloader);
             }
 
             MainWindowModel model = new MainWindowModel
             {
-                ConfigureModel = new ConfigureTabModel(triggersAll),
-                OverviewModel = new OverviewTabModel()
+                OverviewTabModel = new OverviewTabModel(),
+                ConfigureTabModel = new ConfigureTabModel(projectItems.Select(tuple => tuple.Item2).ToArray())
             };
             Model = model;
+        }
+
+        private void ProjectItem_Changed(ProjectItem item, string oldProjectName)
+        {
+            _configFile.Refresh(item, oldProjectName);
+        }
+
+        private List<(Project, ProjectItem)> GetProjectItems()
+        {
+            var projectItems = new List<(Project, ProjectItem)>();
+            foreach (Project project in _dte.Solution.Projects)
+            {
+                var triggers = _configFile.GetTriggers(project.GetFileNameOnly());
+                ProjectItem item = new ProjectItem(project.GetFileNameOnly(), triggers.ToList());
+                projectItems.Add((project, item)); // valuetuple
+            }
+            return projectItems;
         }
     }
 }

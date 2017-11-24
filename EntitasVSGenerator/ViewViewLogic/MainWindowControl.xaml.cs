@@ -7,8 +7,11 @@
     /// <summary>
     /// Interaction logic for WindowControl.
     /// </summary>
-    public partial class WindowControl : UserControl
+    public partial class MainWindowControl : UserControl
     {
+        private const int OverviewTab = 0;
+        private const int ConfigureTab = 1;
+
         private MainWindowModel _model;
         public MainWindowModel Model
         {
@@ -21,12 +24,12 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WindowControl"/> class.
+        /// Initializes a new instance of the <see cref="MainWindowControl"/> class.
         /// </summary>
-        public WindowControl()
+        public MainWindowControl()
         {
             this.InitializeComponent();
-            ShowTab(new OverviewTab(Model?.OverviewModel));
+            ShowTabAtIndex(OverviewTab);
         }
 
         private void TabSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -36,16 +39,18 @@
 
         private void ShowTabAtIndex(int selectedIndex)
         {
+            if (Model == null)
+                return;
             switch (selectedIndex)
             {
-                case 0: // overview
-                    ShowTab(new OverviewTab(Model?.OverviewModel));
+                case OverviewTab: // overview
+                    ShowTab(new OverviewTab(Model.OverviewTabModel));
                     break;
-                case 1: // configure
-                    ShowTab(new ConfigureTab(Model?.ConfigureModel));
+                case ConfigureTab: // configure
+                    ShowTab(new ConfigureTab(Model.ConfigureTabModel));
                     break;
-                default:
-                    ShowTab(new OverviewTab(Model?.OverviewModel));
+                default: // default to overview tab if something goes wrong
+                    ShowTab(new OverviewTab(Model.OverviewTabModel));
                     break;
             }
         }
@@ -56,20 +61,5 @@
             viewContainer?.Children.Clear();
             viewContainer?.Children.Add(toShow);
         }
-    }
-
-    public class MainWindowModel
-    {
-        public ConfigureTabModel ConfigureModel { get; set; }
-        public OverviewTabModel OverviewModel { get; set; }
-
-        public MainWindowModel()
-        {
-        }
-    }
-
-    public class OverviewTabModel
-    {
-
     }
 }
