@@ -20,7 +20,7 @@
             this.InitializeComponent();
             Model = model;
             LstBoxPaths.ItemsSource = Model.Triggers;
-            TxtBxProjectName.Text = model.ProjectName;
+            BtnProjectName.Content = model.ProjectName;
             model.Changed += ProjectItem_Changed;
         }
 
@@ -67,6 +67,18 @@
         {
             int index = LstBoxPaths.SelectedIndex;
             Model.RemoveTrigger(LstBoxPaths.SelectedIndex);
+        }
+
+        private void BtnProjectName_Click(object sender, RoutedEventArgs e)
+        {
+            if(ItemContent.Visibility == Visibility.Collapsed)
+            {
+                ItemContent.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ItemContent.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

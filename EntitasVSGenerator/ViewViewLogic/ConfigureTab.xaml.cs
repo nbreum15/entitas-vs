@@ -1,5 +1,4 @@
 ﻿using EntitasVSGenerator.Logic;
-using System;
 using System.Windows.Controls;
 
 namespace EntitasVSGenerator.ViewViewLogic

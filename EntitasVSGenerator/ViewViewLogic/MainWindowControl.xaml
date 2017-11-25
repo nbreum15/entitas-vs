@@ -9,8 +9,12 @@
              Name="MyToolWindow"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
+    
         <DockPanel>
-        <ComboBox x:Name="TabSelect" DockPanel.Dock="Top" SelectedIndex="0" SelectionChanged="TabSelectionChanged">
+        <ComboBox x:Name="TabSelect" 
+                  DockPanel.Dock="Top" 
+                  SelectedIndex="0" 
+                  SelectionChanged="TabSelectionChanged">
                 <ComboBoxItem Content="Overview"/>
                 <ComboBoxItem Content="Configure"/>
             </ComboBox>
