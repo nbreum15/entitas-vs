@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace EntitasVSGenerator.Logic
@@ -13,9 +12,10 @@ namespace EntitasVSGenerator.Logic
         private string _projectName;
         private string _previousProjectName;
 
-        public ProjectItem(string projectName, IEnumerable<string> triggers)
+        public ProjectItem(string projectName, IEnumerable<string> triggers, string directory)
         {
             ProjectName = projectName;
+            Directory = directory;
             TriggersInternal = triggers.ToList();
             _previousProjectName = ProjectName;
         }
@@ -34,6 +34,8 @@ namespace EntitasVSGenerator.Logic
                 _projectName = value;
             }
         }
+
+        public string Directory { get; }
 
         public void AddTrigger(string path)
         {

@@ -10,7 +10,7 @@
     <DockPanel>
         <Button x:Name="BtnProjectName" Content="" DockPanel.Dock="Top" HorizontalContentAlignment="Left" Click="BtnProjectName_Click"/>
         <DockPanel x:Name="ItemContent">
-            <TextBlock Foreground="White" Text="Triggers" DockPanel.Dock="Top" Margin="5,3,0,3" />
+            <TextBlock Foreground="White" Text="Triggers:" DockPanel.Dock="Top" Margin="5,3,0,3" />
             <Grid Margin="5,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

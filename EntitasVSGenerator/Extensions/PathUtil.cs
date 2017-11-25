@@ -10,15 +10,6 @@ namespace EntitasVSGenerator.Extensions
     {
         public const string SettingsName = "entitas-vs.cfg";
 
-        public static string GetProjectDirectory(Project project)
-        {
-#if DEBUG
-            return @"C:\Users\nickl\Desktop\entitas-test";
-#else
-            return Path.GetDirectoryName(project.FullName);
-#endif
-        }
-
         public static string GetSettingsPath(string directory)
         {
             return $@"{directory}\{SettingsName}";
@@ -38,5 +29,14 @@ namespace EntitasVSGenerator.Extensions
         public static string GetDirectory(this Solution solution) => Path.GetDirectoryName(solution.FullName);
 
         public static string GetFileNameOnly(this Project project) => Path.GetFileName(project.FullName);
+
+        public static string AbsoluteToRelativePath(string subPath, string fullPath)
+        {
+            if (subPath == null)
+                throw new ArgumentNullException(nameof(subPath));
+            if (fullPath == null)
+                throw new ArgumentNullException(nameof(fullPath));
+            return fullPath.Replace($@"{subPath}\", "");
+        }
     }
 }

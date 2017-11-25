@@ -97,21 +97,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\DialogUtil.cs" />
     <Compile Include="Logic\ConfigFile.cs" />
     <Compile Include="Logic\GeneratorRunner.cs" />
     <Compile Include="Logic\LogicController.cs" />
     <Compile Include="Logic\ProjectItem.cs" />
-    <Compile Include="ViewViewLogic\AddPathDialog.xaml.cs">
-      <DependentUpon>AddPathDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewViewLogic\ConfigureTab.xaml.cs">
+    <Compile Include="ViewLogic\ConfigureTab.xaml.cs">
       <DependentUpon>ConfigureTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewViewLogic\Models\ConfigureTabModel.cs" />
-    <Compile Include="ViewViewLogic\MainWindowControl.xaml.cs" />
-    <Compile Include="ViewViewLogic\Models\MainWindowModel.cs" />
-    <Compile Include="ViewViewLogic\Models\OverviewTabModel.cs" />
-    <Compile Include="ViewViewLogic\ProjectWindow.xaml.cs">
+    <Compile Include="ViewLogic\Models\ConfigureTabModel.cs" />
+    <Compile Include="ViewLogic\MainWindowControl.xaml.cs" />
+    <Compile Include="ViewLogic\Models\MainWindowModel.cs" />
+    <Compile Include="ViewLogic\Models\OverviewTabModel.cs" />
+    <Compile Include="ViewLogic\ProjectWindow.xaml.cs">
       <DependentUpon>ProjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\PathUtil.cs" />
@@ -122,7 +120,7 @@
     <Compile Include="MainWindowCommand.cs" />
     <Compile Include="MainWindowPackage.cs" />
     <Compile Include="Logic\PackageLoader.cs" />
-    <Compile Include="ViewViewLogic\OverviewTab.xaml.cs">
+    <Compile Include="ViewLogic\OverviewTab.xaml.cs">
       <DependentUpon>OverviewTab.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -142,23 +140,19 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ViewViewLogic\AddPathDialog.xaml">
+    <Page Include="ViewLogic\ConfigureTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ViewViewLogic\ConfigureTab.xaml">
+    <Page Include="ViewLogic\ProjectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ViewViewLogic\ProjectWindow.xaml">
+    <Page Include="ViewLogic\MainWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ViewViewLogic\MainWindowControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ViewViewLogic\OverviewTab.xaml">
+    <Page Include="ViewLogic\OverviewTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,6 +245,12 @@
     <Reference Include="Microsoft.VisualStudio.Validation, Version=15.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.15.3.15\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq, Version=2.8.21218.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>..\packages\morelinq.2.8.0\lib\net40\MoreLinq.dll</HintPath>

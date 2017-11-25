@@ -1,5 +1,6 @@
 ﻿namespace EntitasVSGenerator
 {
+    using EntitasVSGenerator.Extensions;
     using EntitasVSGenerator.Logic;
     using System.Linq;
     using System.Windows;
@@ -31,26 +32,21 @@
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            AddPathDialog dialog = new AddPathDialog();
-            if (dialog.ShowDialog().Value)
-            {
-                if (string.IsNullOrEmpty(dialog.Path))
-                    return;
-                Model.AddTrigger(dialog.Path);
-            }
+            string selectedFile = DialogUtil.ShowOpenFileDialog(Model.Directory, true);
+            if (string.IsNullOrEmpty(selectedFile))
+                return;
+            Model.AddTrigger(PathUtil.AbsoluteToRelativePath(Model.Directory, selectedFile));
         }
 
         private void Modify_Click(object sender, RoutedEventArgs e)
         {
             if (LstBoxPaths.SelectedItem != null)
             {
-                string path = (string)LstBoxPaths.SelectedItem;
-                AddPathDialog dialog = new AddPathDialog();
-                dialog.txtBoxPath.Text = path;
-                if (dialog.ShowDialog().Value)
+                string selectedFile = DialogUtil.ShowOpenFileDialog(Model.Directory, true);
+                if (selectedFile != null)
                 {
                     RemoveCurrentSelectedItem();
-                    Model.AddTrigger(dialog.Path);
+                    Model.AddTrigger(PathUtil.AbsoluteToRelativePath(Model.Directory, selectedFile));
                 }
             }
         }
