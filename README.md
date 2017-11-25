@@ -13,7 +13,7 @@ This extension removes the last two steps, leaving only:
 Nice right?
 
 # Important: Requirements
-The [paid Roslyn Generator](https://www.assetstore.unity3d.com/en/#!/content/87638) is strongly recommand when using this extension because it is able to generator with compiler errors. The Normal Generator from [Entitas](https://github.com/sschmid/Entitas-CSharp/releases) will also work, but because the Normal Generator is reflection-based, compiler errors will block it from generating (which makes it very cumbersome to work with).
+The [paid Roslyn Generator](https://www.assetstore.unity3d.com/en/#!/content/87638) is strongly recommand when using this extension because it is able to generate with compiler errors. The Normal Generator from [Entitas](https://github.com/sschmid/Entitas-CSharp/releases) will also work, but because the Normal Generator is reflection-based, compiler errors will block it from generating (which makes it very cumbersome to work with).
 
 # Setup
 To use Entitas-vs you need to:
@@ -28,6 +28,12 @@ To use Entitas-vs you need to:
     
     ![](https://i.imgur.com/70sbW1w.png)
     
-    3. 
+    3. All projects in the solution will be shown, this allows for generation with multiple projects with different Entitas.properties and User.properties files. For example, here is shown two projects:
     
+    ![](https://i.imgur.com/n2P24ad.png)
     
+    4. Add the folders that trigger the code generation when files in the folder are saved. Or add files that trigger the code generation when the files are saved. Here the code generator is triggered when changes occur in the Sources\Assets\Components folder (recommended is to use relative paths from where the .csproj rests).
+    
+    ![](https://i.imgur.com/ABgIh5y.png)
+    
+    5. Done that is all. Create a new components, save the file, and the generation will run automatically. All these settings are saved in entitas-vs.cfg in the solution directory.
