@@ -36,7 +36,7 @@ namespace EntitasVSGenerator.Extensions
             string[] value = preferences[preferenceKey].ArrayFromCSV();
             for (int index = 0; index < value.Length; index++)
             {
-                value[index] = $"{projectPath}{value[index]}".Replace("\\", "/");
+                value[index] = $@"{projectPath}\{value[index]}".Replace("\\", "/");
             }
             preferences[preferenceKey] = value.ToCSV();
             return preferences;
