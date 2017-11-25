@@ -17,7 +17,7 @@ The [paid Roslyn Generator](https://www.assetstore.unity3d.com/en/#!/content/876
 
 # Setup
 To use Entitas-vs you need to:
-1. Setup Entitas as you normally would (follow one of these guides by the author of Entitas: [video guide](https://www.youtube.com/watch?v=C9PSYVLvikM), [text guide](https://github.com/sschmid/Entitas-CSharp/issues/476))
+1. Setup Entitas as you normally would (follow one of these guides by the author of Entitas: [video guide](https://www.youtube.com/watch?v=LGKsqSg5FHg), [text guide](https://github.com/sschmid/Entitas-CSharp/issues/476))
 1. Make sure that the commandline generator works correctly. Try generating some files before using Entitas-vs.
 1. Specify the folders/files that, when saved, triggers the code generation (the solution has to be open).
     1. Open Entitas-vs in View -> Other Windows -> Entitas - Visual Studio
@@ -36,4 +36,4 @@ To use Entitas-vs you need to:
     
     ![](https://i.imgur.com/ABgIh5y.png)
     
-    5. Done that is all. Create a new components, save the file, and the generation will run automatically. All these settings are saved in entitas-vs.cfg in the solution directory.
+    5. That is all. Create a new component, save the file, and the generation will run automatically. All these settings are saved in entitas-vs.cfg, in the solution directory.
