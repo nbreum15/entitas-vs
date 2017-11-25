@@ -1,6 +1,8 @@
 ﻿using Entitas.CodeGeneration;
 using Entitas.CodeGeneration.CodeGenerator;
 using Entitas.Utils;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -38,6 +40,15 @@ namespace EntitasVSGenerator.Extensions
             }
             preferences[preferenceKey] = value.ToCSV();
             return preferences;
+        }
+
+        public static IEnumerable<string> ToAbsolutePaths(this IEnumerable<string> paths, string appendDirectory)
+        {
+            if (appendDirectory == null)
+                throw new ArgumentNullException(nameof(appendDirectory));
+            if (paths == null)
+                throw new ArgumentNullException(nameof(paths));
+            return paths.Select(path => Path.IsPathRooted(path) ? path : $@"{appendDirectory}\{path}");
         }
     }
 }

@@ -3,6 +3,7 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Entitas_vs.Contract;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -12,12 +13,12 @@ namespace EntitasVSGenerator.Logic
         private readonly RunningDocumentTable _runningDocumentTable;
         private readonly ProjectReloader _reloader;
         private readonly Project _project;
-        private readonly CodeGeneratorInvoker _codeGeneratorInvoker;
+        private readonly IGenerator _codeGenerator;
         private readonly PathContainer _pathContainer;
 
         public GeneratorRunner(DTE dte, 
             RunningDocumentTable runningDocumentTable, 
-            CodeGeneratorInvoker codeGeneratorInvoker, 
+            IGenerator codeGenerator, 
             PathContainer fileTrigger, 
             ProjectReloader reloader,
             Project project)
@@ -27,7 +28,7 @@ namespace EntitasVSGenerator.Logic
             _pathContainer = fileTrigger;
             _reloader = reloader;
             _project = project;
-            _codeGeneratorInvoker = codeGeneratorInvoker;
+            _codeGenerator = codeGenerator;
             _runningDocumentTable.Advise(this);
         }
         
@@ -41,7 +42,7 @@ namespace EntitasVSGenerator.Logic
             if (_pathContainer.Contains(document.FullName))
             {
                 _reloader.IgnoreProjectFileChanges();
-                string[] generatedFiles = _codeGeneratorInvoker.Generate();
+                string[] generatedFiles = _codeGenerator.Generate();
                 _reloader.AddItems(generatedFiles);
                 _reloader.UnignoreProjectFileChanges();
             }
