@@ -94,8 +94,9 @@ $@"<{RootElement}>
         private void LoadXmlFile()
         {
             if (!File.Exists(SettingsPath))
-                File.WriteAllText(SettingsPath, DefaultContent);
-            _document.Load(SettingsPath);
+                _document.LoadXml(DefaultContent);
+            else
+                _document.Load(SettingsPath);
         }
 
         private void Save()

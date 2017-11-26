@@ -3,7 +3,6 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace EntitasVSGenerator.Logic

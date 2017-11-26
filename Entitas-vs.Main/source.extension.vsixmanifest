@@ -7,7 +7,7 @@
 </Description>
         <MoreInfo>https://github.com/nbreum15/entitas-vs</MoreInfo>
         <GettingStartedGuide>https://github.com/nbreum15/entitas-vs/edit/master/README.md</GettingStartedGuide>
-        <Icon>Resources\icon.png</Icon>
+        <Icon>Resources\Icon.ico</Icon>
         <PreviewImage>Resources\preview.png</PreviewImage>
         <Tags>code generation, generator, entitas, generation, entitas visual studio</Tags>
     </Metadata>
