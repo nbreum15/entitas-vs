@@ -1,6 +1,7 @@
 ﻿using Entitas.CodeGeneration.CodeGenerator;
 using Entitas_vs.Contract;
 using EntitasVSGenerator.Extensions;
+using System.Linq;
 
 namespace Entitas_vs.Invoker
 {
@@ -16,7 +17,7 @@ namespace Entitas_vs.Invoker
 
         public string[] Generate()
         {
-            return _codeGenerator.Generate().GetFullPaths(_targetPath);
+            return _codeGenerator.Generate().GetPaths().ToAbsolutePaths(_targetPath).ToArray();
         }
     }
 }

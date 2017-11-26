@@ -4,6 +4,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Entitas_vs.Contract;
+using System.IO;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -42,7 +43,9 @@ namespace EntitasVSGenerator.Logic
             if (_pathContainer.Contains(document.FullName))
             {
                 _reloader.IgnoreProjectFileChanges();
+                string csprojContent = File.ReadAllText(_project.FullName);
                 string[] generatedFiles = _codeGenerator.Generate();
+                File.WriteAllText(_project.FullName, csprojContent);
                 _reloader.AddItems(generatedFiles);
                 _reloader.UnignoreProjectFileChanges();
             }
