@@ -18,5 +18,7 @@
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="DllToCopy\Entitas-vs.Invoker.dll" AssemblyName="Entitas-vs.Invoker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" d:VsixSubPath="DllToCopy" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="DllToCopy\Entitas-vs.Contract.dll" AssemblyName="Entitas-vs.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" d:VsixSubPath="DllToCopy" />
     </Assets>
 </PackageManifest>

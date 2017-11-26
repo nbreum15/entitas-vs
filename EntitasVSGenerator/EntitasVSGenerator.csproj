@@ -132,6 +132,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DllToCopy\Entitas-vs.Contract.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="DllToCopy\Entitas-vs.Invoker.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Entitas-vs.Contract.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\WindowCommand.png" />
     <Content Include="Resources\WindowPackage.ico" />
     <VSCTCompile Include="MainWindowPackage.vsct">
