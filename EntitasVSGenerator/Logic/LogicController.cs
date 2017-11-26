@@ -35,6 +35,7 @@ namespace EntitasVSGenerator.Logic
                     projectItem.Changed += ProjectItem_Changed;
                     var reloader = new ProjectReloader(project, _vsFileChangeEx);
                     var pathContainer = new PathContainer(projectItem.Triggers, projectItem.Directory);
+                    AssemblyExtensions.CopyDllsToGeneratorDirectory(generatorPath, _dte.Solution.GetDirectory());
                     var codeGenerator = AssemblyExtensions.GetGenerator(_configFile.GeneratorPath, projectItem.Directory, _dte.Solution.GetDirectory());
                     var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGenerator, pathContainer, reloader, project);
                 }
