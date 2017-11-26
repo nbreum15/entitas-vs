@@ -22,7 +22,8 @@ namespace EntitasVSGenerator.Extensions
         public static void CopyDllsToGeneratorDirectory(string codeGeneratorPath, string solutionDirectory)
         {
             string fullGeneratorPath = $@"{solutionDirectory}\{codeGeneratorPath}";
-            foreach(string dllFilePath in Directory.GetFiles(DllsFolder))
+            string dllToCopyFolder = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\{DllsFolder}";
+            foreach(string dllFilePath in Directory.GetFiles(dllToCopyFolder))
             {
                 var fullNameDestination = $@"{fullGeneratorPath}\{Path.GetFileName(dllFilePath)}";
                 string fullNameSource = Path.GetFullPath(dllFilePath);
