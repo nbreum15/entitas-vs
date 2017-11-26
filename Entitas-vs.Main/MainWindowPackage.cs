@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
 using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.Logic;
+using System.Reflection;
 
 namespace EntitasVSGenerator
 {
@@ -55,7 +56,7 @@ namespace EntitasVSGenerator
             }
             catch (Exception e)
             {
-                File.WriteAllLines($@"{dte.Solution.GetDirectory()}\entitas-vs.log", new[] { e.ToString() });
+                File.WriteAllLines($@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\entitas-vs.log", new[] { e.ToString() });
                 throw;
             }
         }
