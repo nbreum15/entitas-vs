@@ -7,7 +7,11 @@
              d:DesignHeight="600" d:DesignWidth="250">
     <DockPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
         <TextBlock Foreground="White" Text="Generator Path:" DockPanel.Dock="Top" Margin="5,3,0,3" />
-            <Grid DockPanel.Dock="Top">
+        <TextBlock Foreground="White" Visibility="Collapsed" TextWrapping="WrapWithOverflow" x:Name="TxtBlckGeneratorNotice" Text="" DockPanel.Dock="Top" Margin="5,3,0,3" />
+        <DockPanel x:Name="BtnGeneratorLoadYes" Visibility="Collapsed" DockPanel.Dock="Top" LastChildFill="False" Margin="5,3,0,3">
+            <Button Content="Yes" Click="Yes_Click"/>
+        </DockPanel>
+        <Grid DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition  Width="Auto"/>

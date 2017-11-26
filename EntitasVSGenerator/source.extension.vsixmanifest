@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="EntitasVSGenerator.fcf8b3ce-7be2-4dc2-82e5-84d4f0612822" Version="1.01" Language="en-US" Publisher="Nicklas Breum" />
-        <DisplayName>EntitasVSGenerator</DisplayName>
-        <Description>Empty VSIX Project.</Description>
+        <Identity Id="Entitas-vs.fcf8b3ce-7be2-4dc2-82e5-84d4f0612822" Version="1.0" Language="en-US" Publisher="Nicklas Breum" />
+        <DisplayName>Entitas Visual Studio</DisplayName>
+        <Description xml:space="preserve">Entitas-vs is an extension for Visual Studio that makes all code generation purely automatic without any manual intervention from the user.
+</Description>
+        <MoreInfo>https://github.com/nbreum15/entitas-vs</MoreInfo>
+        <GettingStartedGuide>https://github.com/nbreum15/entitas-vs/edit/master/README.md</GettingStartedGuide>
+        <Icon>Resources\icon.png</Icon>
+        <PreviewImage>Resources\preview.png</PreviewImage>
+        <Tags>code generation, generator, entitas, generation, entitas visual studio</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0]" />

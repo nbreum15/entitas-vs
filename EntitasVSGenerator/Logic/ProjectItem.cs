@@ -5,19 +5,17 @@ namespace EntitasVSGenerator.Logic
 {
     public class ProjectItem
     {
-        public delegate void ChangedEvent(ProjectItem item, string oldProjectName);
+        public delegate void ChangedEvent(ProjectItem item);
 
         public event ChangedEvent Changed;
 
         private string _projectName;
-        private string _previousProjectName;
 
         public ProjectItem(string projectName, IEnumerable<string> triggers, string directory)
         {
             ProjectName = projectName;
             Directory = directory;
             TriggersInternal = triggers.ToList();
-            _previousProjectName = ProjectName;
         }
 
         public IEnumerable<string> Triggers => TriggersInternal;
@@ -29,9 +27,8 @@ namespace EntitasVSGenerator.Logic
             get => _projectName;
             set
             {
-                _previousProjectName = _projectName;
-                OnChanged();
                 _projectName = value;
+                OnChanged();
             }
         }
 
@@ -41,7 +38,7 @@ namespace EntitasVSGenerator.Logic
         {
             if (string.IsNullOrWhiteSpace(path))
                 return;
-            TriggersInternal.Add(path);
+            TriggersInternal.Add(path.ToLower());
             OnChanged();
         }
 
@@ -53,7 +50,7 @@ namespace EntitasVSGenerator.Logic
 
         protected void OnChanged()
         {
-            Changed?.Invoke(this, _previousProjectName);
+            Changed?.Invoke(this);
         }
     }
 }

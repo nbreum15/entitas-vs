@@ -1,6 +1,7 @@
 ﻿using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.Logic;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace EntitasVSGenerator.ViewViewLogic
 {
@@ -18,11 +19,26 @@ namespace EntitasVSGenerator.ViewViewLogic
             CreateProjectTabs();
             TxtBxGenPath.Text = Model.GeneratorPath;
             Model.GeneratePathChanged += GeneratePathChanged;
+            if (!Model.IsGeneratorLoaded)
+            {
+                TxtBlckGeneratorNotice.Text = "Generator not started because generator path is not set.";
+                TxtBlckGeneratorNotice.Visibility = Visibility.Visible;
+            }
         }
 
         private void GeneratePathChanged(string path)
         {
             TxtBxGenPath.Text = path;
+            if (!Model.IsGeneratorLoaded)
+            {
+                TxtBlckGeneratorNotice.Text = "Do you want to start the generator? (generator will start automatically on next launch)";
+                BtnGeneratorLoadYes.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                TxtBlckGeneratorNotice.Text = "Change will take effect after Visual Studio restart.";
+                BtnGeneratorLoadYes.Visibility = Visibility.Visible;
+            }
         }
 
         private void CreateProjectTabs()
@@ -42,6 +58,13 @@ namespace EntitasVSGenerator.ViewViewLogic
             {
                 Model.GeneratorPath = PathUtil.AbsoluteToRelativePath(Model.SolutionDirectory, selectedFile);
             }
+        }
+
+        private void Yes_Click(object sender, RoutedEventArgs e)
+        {
+            Model.LoadGenerator();
+            BtnGeneratorLoadYes.Visibility = Visibility.Collapsed;
+            TxtBlckGeneratorNotice.Visibility = Visibility.Collapsed;
         }
     }
 }

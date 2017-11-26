@@ -25,7 +25,7 @@
             model.Changed += ProjectItem_Changed;
         }
 
-        private void ProjectItem_Changed(ProjectItem item, string oldProjectName)
+        private void ProjectItem_Changed(ProjectItem item)
         {
             LstBoxPaths.ItemsSource = Model.Triggers.ToArray();
         }

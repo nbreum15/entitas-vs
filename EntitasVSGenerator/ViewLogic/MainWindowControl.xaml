@@ -13,7 +13,7 @@
         <DockPanel>
         <ComboBox x:Name="TabSelect" 
                   DockPanel.Dock="Top" 
-                  SelectedIndex="0" 
+                  SelectedIndex="1" 
                   SelectionChanged="TabSelectionChanged">
                 <ComboBoxItem Content="Overview"/>
                 <ComboBoxItem Content="Configure"/>

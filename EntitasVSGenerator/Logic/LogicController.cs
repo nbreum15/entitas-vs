@@ -15,6 +15,8 @@ namespace EntitasVSGenerator.Logic
         private readonly RunningDocumentTable _runningDocumentTable;
         private readonly IVsFileChangeEx _vsFileChangeEx;
         public MainWindowModel Model { get; private set; }
+        private bool _generatorLoaded;
+        private Dictionary<string, PathContainer> _pathContainers = new Dictionary<string, PathContainer>();
 
         public LogicController(ConfigFile configFile, DTE dte, RunningDocumentTable runningDocumentTable, IVsFileChangeEx vsFileChangeEx)
         {
@@ -28,17 +30,19 @@ namespace EntitasVSGenerator.Logic
         {
             var projectItems = GetProjectItems();
             var generatorPath = _configFile.GeneratorPath;
+            foreach ((Project project, ProjectItem projectItem) in projectItems)
+            {
+                projectItem.Changed += ProjectItem_Changed;
+            }
+
             if (generatorPath != null)
             {
-                foreach ((Project project, ProjectItem projectItem) in projectItems)
-                {
-                    projectItem.Changed += ProjectItem_Changed;
-                    var reloader = new ProjectReloader(project, _vsFileChangeEx);
-                    var pathContainer = new PathContainer(projectItem.Triggers, projectItem.Directory);
-                    AssemblyExtensions.CopyDllsToGeneratorDirectory(generatorPath, _dte.Solution.GetDirectory());
-                    var codeGenerator = AssemblyExtensions.GetGenerator(_configFile.GeneratorPath, projectItem.Directory, _dte.Solution.GetDirectory());
-                    var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGenerator, pathContainer, reloader, project);
-                }
+                LoadGeneratorLogic(generatorPath, projectItems);
+                _generatorLoaded = true;
+            }
+            else
+            {
+                _generatorLoaded = false;
             }
 
             MainWindowModel model = new MainWindowModel
@@ -51,6 +55,17 @@ namespace EntitasVSGenerator.Logic
             };
             Model = model;
             Model.ConfigureTabModel.GeneratePathChanged += GeneratePathChanged;
+            Model.ConfigureTabModel.GeneratorLoadClick += () => GeneratorLoadClick(projectItems);
+            Model.ConfigureTabModel.IsGeneratorLoaded = _generatorLoaded;
+        }
+
+        private void GeneratorLoadClick(List<(Project, ProjectItem)> projectItems)
+        {
+            if (!_generatorLoaded)
+            {
+                LoadGeneratorLogic(_configFile.GeneratorPath, projectItems);
+                _generatorLoaded = true;
+            }
         }
 
         private void GeneratePathChanged(string path)
@@ -58,9 +73,23 @@ namespace EntitasVSGenerator.Logic
             _configFile.GeneratorPath = path;
         }
 
-        private void ProjectItem_Changed(ProjectItem item, string oldProjectName)
+        private void LoadGeneratorLogic(string generatorPath, List<(Project, ProjectItem)> projectItems)
         {
-            _configFile.Refresh(item, oldProjectName);
+            AssemblyExtensions.CopyDllsToGeneratorDirectory(generatorPath, _dte.Solution.GetDirectory());
+            foreach ((Project project, ProjectItem projectItem) in projectItems)
+            {
+                var reloader = new ProjectReloader(project, _vsFileChangeEx);
+                var pathContainer = new PathContainer(projectItem.Triggers, projectItem.Directory);
+                _pathContainers.Add(projectItem.Directory, pathContainer);
+                var codeGenerator = AssemblyExtensions.GetGenerator(_configFile.GeneratorPath, projectItem.Directory, _dte.Solution.GetDirectory());
+                var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGenerator, pathContainer, reloader, project);
+            }
+        }
+
+        private void ProjectItem_Changed(ProjectItem item)
+        {
+            _configFile.Refresh(item);
+            _pathContainers[item.Directory].Triggers = item.Triggers;
         }
 
         private List<(Project, ProjectItem)> GetProjectItems()

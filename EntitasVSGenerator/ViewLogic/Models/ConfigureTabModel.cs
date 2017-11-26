@@ -6,6 +6,13 @@ namespace EntitasVSGenerator
     public class ConfigureTabModel
     {
         public event Action<string> GeneratePathChanged;
+        public event Action GeneratorLoadClick;
+
+        public bool IsGeneratorLoaded { get; set; }
+        public void LoadGenerator()
+        {
+            GeneratorLoadClick?.Invoke();
+        }
 
         public ProjectItem[] ProjectItems { get; set; }
         private string _generatorPath;

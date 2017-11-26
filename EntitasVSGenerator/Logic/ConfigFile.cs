@@ -15,8 +15,7 @@ namespace EntitasVSGenerator.Logic
         private const string GeneratorPathAttribute = "GeneratorPath";
         private const string RootElement = "Settings";
         private string DefaultContent = 
-$@"
-<{RootElement}>
+$@"<{RootElement}>
 </{RootElement}>
 ";
         private XmlDocument _document;
@@ -46,9 +45,9 @@ $@"
             }
         }
 
-        public void Refresh(ProjectItem item, string oldProjectName) 
+        public void Refresh(ProjectItem item) 
         {
-            string xpath_projectNode = $"{RootElement}/{ProjectElement}[@{NameAttribute}=\"{oldProjectName}\"]";
+            string xpath_projectNode = $"{RootElement}/{ProjectElement}[@{NameAttribute}=\"{item.ProjectName}\"]";
             XmlNode projectElement = _document.SelectSingleNode(xpath_projectNode);
 
             if(projectElement == null) // not found in xml i.e. new project created in settings ui
@@ -96,8 +95,7 @@ $@"
         {
             if (!File.Exists(SettingsPath))
                 File.WriteAllText(SettingsPath, DefaultContent);
-            else
-                _document.Load(SettingsPath);
+            _document.Load(SettingsPath);
         }
 
         private void Save()
