@@ -33,7 +33,7 @@ namespace EntitasVSGenerator.Extensions
                     FileVersionInfo versionSource = FileVersionInfo.GetVersionInfo(fullNameSource);
                     if(versionDestination.FileVersion != versionSource.FileVersion)
                     {
-                        File.Copy(dllFilePath, fullNameDestination);
+                        File.Copy(dllFilePath, fullNameDestination, true);
                     }
                 }
                 else
