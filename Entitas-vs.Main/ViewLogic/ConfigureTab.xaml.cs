@@ -43,7 +43,7 @@ namespace EntitasVSGenerator.ViewViewLogic
 
         private void CreateProjectTabs()
         {
-            foreach (ProjectItem item in Model.ProjectItems)
+            foreach (ProjectViewModel item in Model.ProjectViewModels)
             {
                 var projectWindow = new ProjectWindow(item);
                 DockPanel.SetDock(projectWindow, Dock.Top);

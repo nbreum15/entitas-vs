@@ -3,15 +3,15 @@ using System.Linq;
 
 namespace EntitasVSGenerator.Logic
 {
-    public class ProjectItem
+    public class ProjectViewModel
     {
-        public delegate void ChangedEvent(ProjectItem item);
+        public delegate void ChangedEvent(ProjectViewModel viewModel);
 
         public event ChangedEvent Changed;
 
         private string _projectName;
 
-        public ProjectItem(string projectName, IEnumerable<string> triggers, string directory)
+        public ProjectViewModel(string projectName, IEnumerable<string> triggers, string directory)
         {
             ProjectName = projectName;
             Directory = directory;

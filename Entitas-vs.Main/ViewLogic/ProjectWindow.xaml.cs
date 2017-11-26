@@ -11,12 +11,12 @@
     /// </summary>
     public partial class ProjectWindow : UserControl
     {
-        public ProjectItem Model { get; set; }
+        public ProjectViewModel Model { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowControl"/> class.
         /// </summary>
-        public ProjectWindow(ProjectItem model)
+        public ProjectWindow(ProjectViewModel model)
         {
             this.InitializeComponent();
             Model = model;
@@ -25,7 +25,7 @@
             model.Changed += ProjectItem_Changed;
         }
 
-        private void ProjectItem_Changed(ProjectItem item)
+        private void ProjectItem_Changed(ProjectViewModel viewModel)
         {
             LstBoxPaths.ItemsSource = Model.Triggers.ToArray();
         }

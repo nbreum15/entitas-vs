@@ -14,7 +14,7 @@ namespace EntitasVSGenerator
             GeneratorLoadClick?.Invoke();
         }
 
-        public ProjectItem[] ProjectItems { get; set; }
+        public ProjectViewModel[] ProjectViewModels { get; set; }
         private string _generatorPath;
         public string GeneratorPath
         {
@@ -28,9 +28,9 @@ namespace EntitasVSGenerator
 
         public string SolutionDirectory { get; }
 
-        public ConfigureTabModel(ProjectItem[] projectItems, string generatorPath, string solutionDirectory)
+        public ConfigureTabModel(ProjectViewModel[] projectViewModels, string generatorPath, string solutionDirectory)
         {
-            ProjectItems = projectItems;
+            ProjectViewModels = projectViewModels;
             GeneratorPath = generatorPath;
             SolutionDirectory = solutionDirectory;
         }

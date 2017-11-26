@@ -101,7 +101,7 @@
     <Compile Include="Logic\ConfigFile.cs" />
     <Compile Include="Logic\GeneratorRunner.cs" />
     <Compile Include="Logic\LogicController.cs" />
-    <Compile Include="Logic\ProjectItem.cs" />
+    <Compile Include="Logic\ProjectViewModel.cs" />
     <Compile Include="ViewLogic\ConfigureTab.xaml.cs">
       <DependentUpon>ConfigureTab.xaml</DependentUpon>
     </Compile>

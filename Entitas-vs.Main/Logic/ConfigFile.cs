@@ -45,9 +45,9 @@ $@"<{RootElement}>
             }
         }
 
-        public void Refresh(ProjectItem item) 
+        public void Refresh(ProjectViewModel viewModel) 
         {
-            string xpath_projectNode = $"{RootElement}/{ProjectElement}[@{NameAttribute}=\"{item.ProjectName}\"]";
+            string xpath_projectNode = $"{RootElement}/{ProjectElement}[@{NameAttribute}=\"{viewModel.ProjectName}\"]";
             XmlNode projectElement = _document.SelectSingleNode(xpath_projectNode);
 
             if(projectElement == null) // not found in xml i.e. new project created in settings ui
@@ -58,10 +58,10 @@ $@"<{RootElement}>
                 projectElement.Attributes.Append(nameAttribute);
             }
 
-            projectElement.Attributes[NameAttribute].Value = item.ProjectName;
+            projectElement.Attributes[NameAttribute].Value = viewModel.ProjectName;
             projectElement.InnerText = "";
 
-            foreach (string trigger in item.Triggers)
+            foreach (string trigger in viewModel.Triggers)
             {
                 XmlElement triggerElement = _document.CreateElement(TriggerElement);
                 XmlAttribute pathAttribute = _document.CreateAttribute(PathAttribute);

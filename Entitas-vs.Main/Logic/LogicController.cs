@@ -15,7 +15,7 @@ namespace EntitasVSGenerator.Logic
         private readonly IVsFileChangeEx _vsFileChangeEx;
         public MainWindowModel Model { get; private set; }
         private bool _generatorLoaded;
-        private Dictionary<string, PathContainer> _pathContainers = new Dictionary<string, PathContainer>();
+        private readonly Dictionary<string, PathContainer> _pathContainers = new Dictionary<string, PathContainer>();
 
         public LogicController(ConfigFile configFile, DTE dte, RunningDocumentTable runningDocumentTable, IVsFileChangeEx vsFileChangeEx)
         {
@@ -29,7 +29,7 @@ namespace EntitasVSGenerator.Logic
         {
             var projectItems = GetProjectItems();
             var generatorPath = _configFile.GeneratorPath;
-            foreach ((Project project, ProjectItem projectItem) in projectItems)
+            foreach ((Project project, ProjectViewModel projectItem) in projectItems)
             {
                 projectItem.Changed += ProjectItem_Changed;
             }
@@ -58,7 +58,7 @@ namespace EntitasVSGenerator.Logic
             Model.ConfigureTabModel.IsGeneratorLoaded = _generatorLoaded;
         }
 
-        private void GeneratorLoadClick(List<(Project, ProjectItem)> projectItems)
+        private void GeneratorLoadClick(List<(Project, ProjectViewModel)> projectItems)
         {
             if (!_generatorLoaded)
             {
@@ -72,10 +72,10 @@ namespace EntitasVSGenerator.Logic
             _configFile.GeneratorPath = path;
         }
 
-        private void LoadGeneratorLogic(string generatorPath, List<(Project, ProjectItem)> projectItems)
+        private void LoadGeneratorLogic(string generatorPath, List<(Project, ProjectViewModel)> projectItems)
         {
             AssemblyExtensions.CopyDllsToGeneratorDirectory(generatorPath, _dte.Solution.GetDirectory());
-            foreach ((Project project, ProjectItem projectItem) in projectItems)
+            foreach ((Project project, ProjectViewModel projectItem) in projectItems)
             {
                 var reloader = new ProjectReloader(project, _vsFileChangeEx);
                 var pathContainer = new PathContainer(projectItem.Triggers, projectItem.Directory);
@@ -85,20 +85,20 @@ namespace EntitasVSGenerator.Logic
             }
         }
 
-        private void ProjectItem_Changed(ProjectItem item)
+        private void ProjectItem_Changed(ProjectViewModel viewModel)
         {
-            _configFile.Refresh(item);
-            _pathContainers[item.Directory].Triggers = item.Triggers;
+            _configFile.Refresh(viewModel);
+            _pathContainers[viewModel.Directory].Triggers = viewModel.Triggers;
         }
 
-        private List<(Project, ProjectItem)> GetProjectItems()
+        private List<(Project, ProjectViewModel)> GetProjectItems()
         {
-            var projectItems = new List<(Project, ProjectItem)>();
+            var projectItems = new List<(Project, ProjectViewModel)>();
             foreach (Project project in _dte.Solution.Projects)
             {
                 var triggers = _configFile.GetTriggers(project.GetFileNameOnly());
-                ProjectItem item = new ProjectItem(project.GetFileNameOnly(), triggers.ToList(), project.GetDirectory());
-                projectItems.Add((project, item));
+                ProjectViewModel viewModel = new ProjectViewModel(project.GetFileNameOnly(), triggers.ToList(), project.GetDirectory());
+                projectItems.Add((project, viewModel));
             }
             return projectItems;
         }
