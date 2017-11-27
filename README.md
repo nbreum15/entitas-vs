@@ -1,4 +1,6 @@
 # What it is
+[Download link.](https://marketplace.visualstudio.com/items?itemName=nbreum.entitas-vs)
+
 Entitas-vs is an extension for Visual Studio that makes all code generation in [Entitas-CSharp](https://github.com/sschmid/Entitas-CSharp) purely automatic without any manual intervention from the user. 
 
 ## Motivation
