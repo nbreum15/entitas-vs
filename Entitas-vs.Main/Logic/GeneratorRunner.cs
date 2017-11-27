@@ -43,9 +43,7 @@ namespace EntitasVSGenerator.Logic
             if (_pathContainer.Contains(document.FullName))
             {
                 _reloader.IgnoreProjectFileChanges();
-                string csprojContent = File.ReadAllText(_project.FullName);
                 string[] generatedFiles = _codeGenerator.Generate();
-                File.WriteAllText(_project.FullName, csprojContent);
                 _reloader.AddItems(generatedFiles);
                 _reloader.UnignoreProjectFileChanges();
             }
