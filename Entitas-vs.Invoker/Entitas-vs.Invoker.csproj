@@ -60,4 +60,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)Entitas-vs.Main\DllToCopy\$(ProjectName).dll"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)Entitas-vs.Main\bin\Debug\DllToCopy\$(ProjectName).dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
