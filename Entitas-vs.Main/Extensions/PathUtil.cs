@@ -38,5 +38,10 @@ namespace EntitasVSGenerator.Extensions
                 throw new ArgumentNullException(nameof(fullPath));
             return fullPath.Replace($@"{subPath}\", "");
         }
+
+        public static IEnumerable<string> GetDeletedFileNames(this IEnumerable<string> oldFileNames, IEnumerable<string> allFileNames)
+        {
+            return oldFileNames.Except(allFileNames);
+        }
     }
 }

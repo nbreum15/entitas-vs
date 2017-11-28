@@ -57,7 +57,33 @@ namespace EntitasVSGenerator.Logic
             Model.ConfigureTabModel.GeneratorLoadClick += () => GeneratorLoadClick(projectItems);
             Model.ConfigureTabModel.IsGeneratorLoaded = _generatorLoaded;
         }
+        
+        private void LoadGeneratorLogic(string generatorPath, List<(Project, ProjectViewModel)> projectItems)
+        {
+            AssemblyExtensions.CopyDllsToGeneratorDirectory(generatorPath, _dte.Solution.GetDirectory());
+            foreach ((Project project, ProjectViewModel projectItem) in projectItems)
+            {
+                var reloader = new ProjectReloader(project, _vsFileChangeEx);
+                var pathContainer = new PathContainer(projectItem.Triggers, projectItem.Directory);
+                _pathContainers.Add(projectItem.Directory, pathContainer);
+                var codeGenerator = AssemblyExtensions.GetGenerator(_configFile.GeneratorPath, projectItem.Directory, _dte.Solution.GetDirectory());
+                var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGenerator, pathContainer, reloader, project);
+            }
+        }
 
+        private List<(Project, ProjectViewModel)> GetProjectItems()
+        {
+            var projectItems = new List<(Project, ProjectViewModel)>();
+            foreach (Project project in _dte.Solution.Projects)
+            {
+                var triggers = _configFile.GetTriggers(project.GetFileNameOnly());
+                ProjectViewModel viewModel = new ProjectViewModel(project.GetFileNameOnly(), triggers.ToList(), project.GetDirectory());
+                projectItems.Add((project, viewModel));
+            }
+            return projectItems;
+        }
+
+        #region UI Events
         private void GeneratorLoadClick(List<(Project, ProjectViewModel)> projectItems)
         {
             if (!_generatorLoaded)
@@ -72,35 +98,11 @@ namespace EntitasVSGenerator.Logic
             _configFile.GeneratorPath = path;
         }
 
-        private void LoadGeneratorLogic(string generatorPath, List<(Project, ProjectViewModel)> projectItems)
-        {
-            AssemblyExtensions.CopyDllsToGeneratorDirectory(generatorPath, _dte.Solution.GetDirectory());
-            foreach ((Project project, ProjectViewModel projectItem) in projectItems)
-            {
-                var reloader = new ProjectReloader(project, _vsFileChangeEx);
-                var pathContainer = new PathContainer(projectItem.Triggers, projectItem.Directory);
-                _pathContainers.Add(projectItem.Directory, pathContainer);
-                var codeGenerator = AssemblyExtensions.GetGenerator(_configFile.GeneratorPath, projectItem.Directory, _dte.Solution.GetDirectory());
-                var runGeneratorOnSave = new GeneratorRunner(_dte, _runningDocumentTable, codeGenerator, pathContainer, reloader, project);
-            }
-        }
-
         private void ProjectItem_Changed(ProjectViewModel viewModel)
         {
             _configFile.Refresh(viewModel);
             _pathContainers[viewModel.Directory].Triggers = viewModel.Triggers;
         }
-
-        private List<(Project, ProjectViewModel)> GetProjectItems()
-        {
-            var projectItems = new List<(Project, ProjectViewModel)>();
-            foreach (Project project in _dte.Solution.Projects)
-            {
-                var triggers = _configFile.GetTriggers(project.GetFileNameOnly());
-                ProjectViewModel viewModel = new ProjectViewModel(project.GetFileNameOnly(), triggers.ToList(), project.GetDirectory());
-                projectItems.Add((project, viewModel));
-            }
-            return projectItems;
-        }
+        #endregion
     }
 }

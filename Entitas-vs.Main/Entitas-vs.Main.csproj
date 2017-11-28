@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\DialogUtil.cs" />
+    <Compile Include="Extensions\SolutionExtensions.cs" />
     <Compile Include="Logic\ConfigFile.cs" />
     <Compile Include="Logic\GeneratorRunner.cs" />
     <Compile Include="Logic\LogicController.cs" />

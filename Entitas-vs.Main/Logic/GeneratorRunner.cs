@@ -4,7 +4,8 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Entitas_vs.Contract;
-using System.IO;
+using EntitasVSGenerator.Extensions;
+using Task = System.Threading.Tasks.Task;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -16,6 +17,7 @@ namespace EntitasVSGenerator.Logic
         private readonly Project _project;
         private readonly IGenerator _codeGenerator;
         private readonly PathContainer _pathContainer;
+        private string[] _oldGeneratedFiles;
 
         public GeneratorRunner(DTE dte, 
             RunningDocumentTable runningDocumentTable, 
@@ -42,13 +44,37 @@ namespace EntitasVSGenerator.Logic
 
             if (_pathContainer.Contains(document.FullName))
             {
-                _reloader.IgnoreProjectFileChanges();
-                string[] generatedFiles = _codeGenerator.Generate();
-                _reloader.AddItems(generatedFiles);
-                _reloader.UnignoreProjectFileChanges();
+                //_reloader.IgnoreProjectFileChanges();
+                Task.Run(() =>
+                {
+                    string[] generatedFiles = _codeGenerator.Generate();
+                    string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
+                    RemoveItems(deletedFiles);
+                    AddItems(generatedFiles);
+                });
+                
+                //_reloader.UnignoreProjectFileChanges();
             }
 
             return VSConstants.S_OK;
+        }
+
+        private string[] GetDeletedGeneratedFiles(string[] newGeneratedFiles)
+        {
+            if (_oldGeneratedFiles == null)
+                return new string[0];
+            return _oldGeneratedFiles.GetDeletedFileNames(newGeneratedFiles).ToArray();
+        }
+
+        private void RemoveItems(string[] deletedFileNames)
+        {
+            _dte.Solution.RemoveItems(deletedFileNames);
+        }
+
+        private void AddItems(string[] generatedFiles)
+        {
+            _oldGeneratedFiles = generatedFiles;
+            _reloader.AddItems(generatedFiles);
         }
 
         private Document FindDocument(uint docCookie)
