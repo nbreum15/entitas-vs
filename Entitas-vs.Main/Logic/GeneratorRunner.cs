@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Entitas_vs.Contract;
 using EntitasVSGenerator.Extensions;
 using Task = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -55,18 +56,22 @@ namespace EntitasVSGenerator.Logic
 
         private string[] GetDeletedGeneratedFiles(string[] newGeneratedFiles)
         {
-            if (_oldGeneratedFiles == null)
+            if (_oldGeneratedFiles == null || newGeneratedFiles == null)
                 return new string[0];
             return _oldGeneratedFiles.GetDeletedFileNames(newGeneratedFiles).ToArray();
         }
 
         private void RemoveItems(string[] deletedFileNames)
         {
+            if (deletedFileNames == null)
+                return;
             _dte.Solution.RemoveItems(deletedFileNames);
         }
 
         private void AddItems(string[] generatedFiles)
         {
+            if (generatedFiles == null)
+                return;
             _oldGeneratedFiles = generatedFiles;
             _project.AddItems(generatedFiles);
         }
