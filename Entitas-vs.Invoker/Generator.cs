@@ -8,16 +8,18 @@ namespace Entitas_vs.Invoker
     class Generator : IGenerator
     {
         private readonly CodeGenerator _codeGenerator;
-        private readonly string _targetPath;
 
         public Generator(string projectPath)
         {
-            _codeGenerator = EntitasExtensions.GetCodeGenerator(projectPath, out _targetPath);
+            _codeGenerator = EntitasExtensions.GetCodeGenerator(projectPath, out string _targetPath);
+            TargetDirectory = _targetPath;
         }
+
+        public string TargetDirectory { get; }
 
         public string[] Generate()
         {
-            return _codeGenerator.Generate().GetPaths().ToAbsolutePaths(_targetPath).ToArray();
+            return _codeGenerator.Generate().GetPaths().ToAbsolutePaths(TargetDirectory).ToArray();
         }
     }
 }

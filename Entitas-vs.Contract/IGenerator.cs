@@ -3,5 +3,6 @@
     public interface IGenerator
     {
         string[] Generate();
+        string TargetDirectory { get; }
     }
 }
