@@ -45,8 +45,6 @@ namespace EntitasVSGenerator
 
             try
             {
-                // edge case: no projects in solution
-                // edge case: user deletes project after ConfigFile instantiation
                 string solutionDirectory = dte.Solution.GetDirectory();
                 var configFile = new ConfigFile(solutionDirectory);
                 var logicController = new LogicController(configFile, dte, runningDocumentTable, vsFileChangeEx);

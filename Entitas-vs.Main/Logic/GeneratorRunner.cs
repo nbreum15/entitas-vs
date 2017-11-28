@@ -7,6 +7,7 @@ using Entitas_vs.Contract;
 using EntitasVSGenerator.Extensions;
 using Task = System.Threading.Tasks.Task;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -18,6 +19,7 @@ namespace EntitasVSGenerator.Logic
         private readonly IGenerator _codeGenerator;
         private readonly PathContainer _pathContainer;
         private string[] _oldGeneratedFiles;
+        private bool _firstGenerate = true;
 
         public GeneratorRunner(DTE dte, 
             RunningDocumentTable runningDocumentTable, 
@@ -31,6 +33,7 @@ namespace EntitasVSGenerator.Logic
             _project = project;
             _codeGenerator = codeGenerator;
             _runningDocumentTable.Advise(this);
+            
         }
         
         public int OnAfterSave(uint docCookie)
@@ -44,7 +47,7 @@ namespace EntitasVSGenerator.Logic
             {
                 Task.Run(() =>
                 {
-                    string[] generatedFiles = _codeGenerator.Generate();
+                    string[] generatedFiles = Generate();
                     string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
                     RemoveItems(deletedFiles);
                     AddItems(generatedFiles);
@@ -52,6 +55,16 @@ namespace EntitasVSGenerator.Logic
             }
 
             return VSConstants.S_OK;
+        }
+
+        private string[] Generate()
+        {
+            if (_firstGenerate)
+            {
+                _oldGeneratedFiles = GetCurrentGeneratedFileNames();
+                _firstGenerate = false;
+            }
+            return _codeGenerator.Generate();
         }
 
         private string[] GetDeletedGeneratedFiles(string[] newGeneratedFiles)
@@ -82,6 +95,11 @@ namespace EntitasVSGenerator.Logic
             var documentPath = documentInfo.Moniker;
             
             return _dte.Documents.Cast<Document>().FirstOrDefault(doc => doc.FullName == documentPath);
+        }
+
+        private string[] GetCurrentGeneratedFileNames()
+        {
+            return Directory.GetFiles(_codeGenerator.TargetDirectory, "*.cs", SearchOption.AllDirectories);
         }
 
         #region Other IVsRunningDocTableEvents3 inferface methods
