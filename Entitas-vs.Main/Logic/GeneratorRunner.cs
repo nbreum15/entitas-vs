@@ -13,7 +13,6 @@ namespace EntitasVSGenerator.Logic
     {
         private readonly DTE _dte;
         private readonly RunningDocumentTable _runningDocumentTable;
-        private readonly ProjectReloader _reloader;
         private readonly Project _project;
         private readonly IGenerator _codeGenerator;
         private readonly PathContainer _pathContainer;
@@ -22,14 +21,12 @@ namespace EntitasVSGenerator.Logic
         public GeneratorRunner(DTE dte, 
             RunningDocumentTable runningDocumentTable, 
             IGenerator codeGenerator, 
-            PathContainer fileTrigger, 
-            ProjectReloader reloader,
+            PathContainer fileTrigger,
             Project project)
         {
             _dte = dte;
             _runningDocumentTable = runningDocumentTable;
             _pathContainer = fileTrigger;
-            _reloader = reloader;
             _project = project;
             _codeGenerator = codeGenerator;
             _runningDocumentTable.Advise(this);
@@ -44,7 +41,6 @@ namespace EntitasVSGenerator.Logic
 
             if (_pathContainer.Contains(document.FullName))
             {
-                //_reloader.IgnoreProjectFileChanges();
                 Task.Run(() =>
                 {
                     string[] generatedFiles = _codeGenerator.Generate();
@@ -52,8 +48,6 @@ namespace EntitasVSGenerator.Logic
                     RemoveItems(deletedFiles);
                     AddItems(generatedFiles);
                 });
-                
-                //_reloader.UnignoreProjectFileChanges();
             }
 
             return VSConstants.S_OK;
@@ -74,7 +68,7 @@ namespace EntitasVSGenerator.Logic
         private void AddItems(string[] generatedFiles)
         {
             _oldGeneratedFiles = generatedFiles;
-            _reloader.AddItems(generatedFiles);
+            _project.AddItems(generatedFiles);
         }
 
         private Document FindDocument(uint docCookie)
