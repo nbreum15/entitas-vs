@@ -31,6 +31,12 @@
     group; your package should define its own command set in order to avoid collisions
     with command ids defined by other packages. -->
 
+    <Groups>
+      <Group guid="guidWindowPackageCmdSet" id="WindowCommandId" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+    </Groups>
+
     <!--Buttons section. -->
     <!--This section defines the elements the user can interact with, like a menu command or a button
         or combo box in a toolbar. -->
@@ -43,10 +49,9 @@
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
       <Button guid="guidWindowPackageCmdSet" id="WindowCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Parent guid="guidWindowPackageCmdSet" id="WindowCommandId" />
         <Strings>
-          <ButtonText>Entitas - Visual Studio</ButtonText>
+          <ButtonText>Entitas VS Options</ButtonText>
         </Strings>
       </Button>
     </Buttons>
