@@ -2,6 +2,7 @@
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using MoreLinq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -73,7 +74,7 @@ namespace EntitasVSGenerator.Logic
         private List<(Project, ProjectViewModel)> GetProjectItems()
         {
             var projectItems = new List<(Project, ProjectViewModel)>();
-            foreach (Project project in _dte.Solution.Projects)
+            foreach (Project project in _dte.Solution.GetAllProjects())
             {
                 var triggers = _configFile.GetTriggers(project.GetFileNameOnly());
                 ProjectViewModel viewModel = new ProjectViewModel(project.GetFileNameOnly(), triggers.ToList(), project.GetDirectory());

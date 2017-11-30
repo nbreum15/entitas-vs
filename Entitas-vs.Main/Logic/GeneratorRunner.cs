@@ -86,7 +86,7 @@ namespace EntitasVSGenerator.Logic
             if (generatedFiles == null)
                 return;
             _oldGeneratedFiles = generatedFiles;
-            _project.AddItems(generatedFiles);
+            _project.AddFilesToProject(_dte, generatedFiles);
         }
 
         private Document FindDocument(uint docCookie)
@@ -99,7 +99,9 @@ namespace EntitasVSGenerator.Logic
 
         private string[] GetCurrentGeneratedFileNames()
         {
-            return Directory.GetFiles(_codeGenerator.TargetDirectory, "*.cs", SearchOption.AllDirectories);
+            if (Directory.Exists(_codeGenerator.TargetDirectory))
+                return Directory.GetFiles(_codeGenerator.TargetDirectory, "*.cs", SearchOption.AllDirectories);
+            else return null;
         }
 
         #region Other IVsRunningDocTableEvents3 inferface methods
