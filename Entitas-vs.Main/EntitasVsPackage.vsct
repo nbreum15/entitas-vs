@@ -51,7 +51,7 @@
       <Button guid="guidWindowPackageCmdSet" id="WindowCommandId" priority="0x0100" type="Button">
         <Parent guid="guidWindowPackageCmdSet" id="WindowCommandId" />
         <Strings>
-          <ButtonText>Entitas VS Options</ButtonText>
+          <ButtonText>Entitas VS</ButtonText>
         </Strings>
       </Button>
     </Buttons>

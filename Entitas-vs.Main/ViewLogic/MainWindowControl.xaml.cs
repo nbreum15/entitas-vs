@@ -7,7 +7,7 @@
     /// <summary>
     /// Interaction logic for WindowControl.
     /// </summary>
-    public partial class MainWindowControl : UserControl
+    public partial class MainWindowControl : Window
     {
         private const int OverviewTab = 0;
         private const int ConfigureTab = 1;
@@ -40,7 +40,9 @@
         private void ShowTabAtIndex(int selectedIndex)
         {
             if (Model == null)
+            {
                 return;
+            }
             switch (selectedIndex)
             {
                 case OverviewTab: // overview

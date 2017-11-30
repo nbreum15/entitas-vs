@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="Entitas-vs.fcf8b3ce-7be2-4dc2-82e5-84d4f0612822" Version="1.1" Language="en-US" Publisher="Nicklas Breum" />
         <DisplayName>Entitas Visual Studio</DisplayName>
-        <Description xml:space="preserve">An extension for Visual Studio that makes all code generation with Entitas-CSharp purely automatic without any manual intervention from the user.
+        <Description xml:space="preserve">An extension for Visual Studio that makes all code generation with Entitas-CSharp purely automatic without any manual intervention from the user (except for saving a file of course).
 </Description>
         <MoreInfo>https://github.com/nbreum15/entitas-vs</MoreInfo>
         <GettingStartedGuide>https://github.com/nbreum15/entitas-vs/edit/master/README.md</GettingStartedGuide>
