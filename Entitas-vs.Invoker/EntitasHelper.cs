@@ -8,9 +8,17 @@ using System.Linq;
 
 namespace EntitasVSGenerator.Extensions
 {
-    static class EntitasExtensions
+    static class EntitasHelper
     {
-        public static CodeGenerator GetCodeGenerator(string projectPath, out string targetDir)
+        private const string SEARCH_PATHS = "CodeGenerator.SearchPaths";
+        private const string PROJECT_PATH = "Entitas.CodeGeneration.Plugins.ProjectPath";
+        private const string ASSEMBLIES = "Entitas.CodeGeneration.Plugins.Assemblies";
+        private const string TARGET_DIRECTORY = "Entitas.CodeGeneration.Plugins.TargetDirectory";
+        
+        private const string POSTPROCESSORS = "CodeGenerator.PostProcessors";
+        private const string CSPROJ_POSTPROCESSOR = "Entitas.CodeGeneration.Plugins.UpdateCSProjPostProcessor";
+
+        public static Preferences GetPreferences(string projectPath)
         {
             string propertiesPath = $@"{projectPath}\{Preferences.DEFAULT_PROPERTIES_PATH}";
             string userPropertiesPath = $@"{projectPath}\{Preferences.DEFAULT_USER_PROPERTIES_PATH}";
@@ -18,11 +26,31 @@ namespace EntitasVSGenerator.Extensions
                 throw new FileNotFoundException($"\"{Preferences.DEFAULT_PROPERTIES_PATH}\" or \"{Preferences.DEFAULT_USER_PROPERTIES_PATH}\" not found at directory \"{projectPath}\".");
             var preferences = new Preferences(propertiesPath, userPropertiesPath);
             preferences
-                .AppendProjectPath("CodeGenerator.SearchPaths", projectPath)
-                .AppendProjectPath("Entitas.CodeGeneration.Plugins.ProjectPath", projectPath)
-                .AppendProjectPath("Entitas.CodeGeneration.Plugins.Assemblies", projectPath)
-                .AppendProjectPath("Entitas.CodeGeneration.Plugins.TargetDirectory", projectPath);
-            targetDir = $"{preferences["Entitas.CodeGeneration.Plugins.TargetDirectory"]}/Generated".Replace("/","\\");
+                .AppendProjectPath(SEARCH_PATHS, projectPath)
+                .AppendProjectPath(PROJECT_PATH, projectPath)
+                .AppendProjectPath(ASSEMBLIES, projectPath)
+                .AppendProjectPath(TARGET_DIRECTORY, projectPath);
+            return preferences;
+        }
+
+        public static void RemoveCsprojPlugin(this Preferences preferences)
+        {
+            string[] values = preferences[POSTPROCESSORS].ArrayFromCSV();
+            int index = Array.IndexOf(values, CSPROJ_POSTPROCESSOR);
+            if(index != -1) // IndexOf returns -1 if it was not found
+            {
+                values[index] = null;
+            }
+            preferences[POSTPROCESSORS] = values.ToCSV();
+        }
+
+        public static string GetTargetDirectory(this Preferences preferences)
+        {
+            return $"{preferences[TARGET_DIRECTORY]}/Generated".Replace("/", "\\");
+        }
+
+        public static CodeGenerator GetCodeGenerator(Preferences preferences)
+        {
             return CodeGeneratorUtil.CodeGeneratorFromPreferences(preferences);
         }
 

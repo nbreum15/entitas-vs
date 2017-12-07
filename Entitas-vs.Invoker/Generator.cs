@@ -11,8 +11,10 @@ namespace Entitas_vs.Invoker
 
         public Generator(string projectPath)
         {
-            _codeGenerator = EntitasExtensions.GetCodeGenerator(projectPath, out string _targetPath);
-            TargetDirectory = _targetPath;
+            var preferences = EntitasHelper.GetPreferences(projectPath);
+            preferences.RemoveCsprojPlugin();
+            _codeGenerator = EntitasHelper.GetCodeGenerator(preferences);
+            TargetDirectory = preferences.GetTargetDirectory();
         }
 
         public string TargetDirectory { get; }

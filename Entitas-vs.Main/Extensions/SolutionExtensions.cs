@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EnvDTE;
 
 namespace EntitasVSGenerator.Extensions
@@ -12,6 +13,11 @@ namespace EntitasVSGenerator.Extensions
                 ProjectItem item = solution.FindProjectItem(fileName);
                 item.Remove();
             }
+        }
+
+        public static IEnumerable<string> UniqueNames(this IEnumerable<Project> projects)
+        {
+            return projects.Select(project => project.UniqueName);
         }
     }
 }

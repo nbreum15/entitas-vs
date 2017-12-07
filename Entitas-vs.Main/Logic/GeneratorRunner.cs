@@ -1,60 +1,36 @@
-﻿using System.Linq;
-using EnvDTE;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Entitas_vs.Contract;
+﻿using Entitas_vs.Contract;
 using EntitasVSGenerator.Extensions;
-using Task = System.Threading.Tasks.Task;
-using System.Threading.Tasks;
+using EnvDTE;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EntitasVSGenerator.Logic
 {
-    class GeneratorRunner : IVsRunningDocTableEvents3
+    class GeneratorRunner
     {
-        private readonly DTE _dte;
-        private readonly RunningDocumentTable _runningDocumentTable;
-        private readonly Project _project;
         private readonly IGenerator _codeGenerator;
-        private readonly PathContainer _pathContainer;
+        private readonly Project _project;
+        private readonly DTE _dte;
         private string[] _oldGeneratedFiles;
         private bool _firstGenerate = true;
 
-        public GeneratorRunner(DTE dte, 
-            RunningDocumentTable runningDocumentTable, 
-            IGenerator codeGenerator, 
-            PathContainer fileTrigger,
-            Project project)
+        public GeneratorRunner(string generatorPath, Project project, Solution solution)
         {
-            _dte = dte;
-            _runningDocumentTable = runningDocumentTable;
-            _pathContainer = fileTrigger;
+            _dte = EntitasVsPackage.DTE;
+            _codeGenerator = AssemblyExtensions.GetGenerator(generatorPath, project.GetDirectory(), solution.GetDirectory());
             _project = project;
-            _codeGenerator = codeGenerator;
-            _runningDocumentTable.Advise(this);
-            
         }
-        
-        public int OnAfterSave(uint docCookie)
+
+        public void Run()
         {
-            Document document = FindDocument(docCookie);
-            
-            if (document == null || document.ProjectItem.ContainingProject != _project)
-                return VSConstants.S_OK;
-
-            if (_pathContainer.Contains(document.FullName))
+            Task.Run(() =>
             {
-                Task.Run(() =>
-                {
-                    string[] generatedFiles = Generate();
-                    string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
-                    RemoveItems(deletedFiles);
-                    AddItems(generatedFiles);
-                });
-            }
-
-            return VSConstants.S_OK;
+                string[] generatedFiles = Generate();
+                string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
+                RemoveItems(deletedFiles);
+                AddItems(generatedFiles);
+            });
         }
 
         private string[] Generate()
@@ -89,56 +65,11 @@ namespace EntitasVSGenerator.Logic
             _project.AddFilesToProject(_dte, generatedFiles);
         }
 
-        private Document FindDocument(uint docCookie)
-        {
-            var documentInfo = _runningDocumentTable.GetDocumentInfo(docCookie);
-            var documentPath = documentInfo.Moniker;
-            
-            return _dte.Documents.Cast<Document>().FirstOrDefault(doc => doc.FullName == documentPath);
-        }
-
         private string[] GetCurrentGeneratedFileNames()
         {
             if (Directory.Exists(_codeGenerator.TargetDirectory))
                 return Directory.GetFiles(_codeGenerator.TargetDirectory, "*.cs", SearchOption.AllDirectories);
             else return null;
         }
-
-        #region Other IVsRunningDocTableEvents3 inferface methods
-        public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterAttributeChangeEx(uint docCookie, uint grfAttribs, IVsHierarchy pHierOld, uint itemidOld, string pszMkDocumentOld, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeSave(uint docCookie)
-        {
-            return VSConstants.S_OK;
-        }
-        #endregion
     }
 }

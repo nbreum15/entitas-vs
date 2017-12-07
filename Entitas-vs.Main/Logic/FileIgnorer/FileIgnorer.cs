@@ -2,7 +2,7 @@
 
 namespace EntitasVSGenerator.Logic
 {
-    class FileIgnorer
+    class FileIgnorer : IFileIgnorer
     {
         private IVsFileChangeEx _vsFileChangeEx;
 
