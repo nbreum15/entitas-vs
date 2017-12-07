@@ -1,22 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.ViewLogic.Commands;
+using EnvDTE;
 
 namespace EntitasVSGenerator.ViewLogic.ViewModels
 {
     class GeneralTabViewModel : BaseTabViewModel
     {
+        private readonly Solution _solution;
         private string _generatorPath;
         private string _selectedProjectName;
 
         public GeneralTabViewModel(string generatorPath, 
-            string solutionDirectory, 
+            Solution solution, 
             IEnumerable<string> projectNames)
         {
+            _solution = solution;
             GeneratorPath = generatorPath;
             ProjectNames = new ObservableCollection<string>(projectNames);
-            ChangeGeneratorPathCommand = new ChangeGeneratorPathCommand(this, solutionDirectory);
+            ChangeGeneratorPathCommand = new ChangeGeneratorPathCommand(this, solution.GetDirectory());
             AddProjectCommand = new AddProjectCommand(this);
         }
 
@@ -29,9 +33,10 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
 
         public ObservableCollection<string> ProjectNames { get; }
 
-        public void AddProjectTab(string name)
+        public void AddProjectTab(string name, string[] triggers = null)
         {
-            SettingsViewModel.TabViewModels.Add(new ProjectTabViewModel(name){SettingsViewModel = SettingsViewModel});
+            string projectDir = _solution.FindProject(name).GetDirectory();
+            SettingsViewModel.TabViewModels.Add(new ProjectTabViewModel(name, projectDir, triggers) {SettingsViewModel = SettingsViewModel});
         }
     }
 }

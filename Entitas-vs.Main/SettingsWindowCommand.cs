@@ -96,19 +96,17 @@ namespace EntitasVSGenerator
             var tabViewModels = new ObservableCollection<ITabViewModel>();
             var settingsViewModel = new SettingsViewModel(ConfigFile);
 
-            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath, Solution.GetDirectory(), unusuedProjects);
+            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath, Solution, unusuedProjects);
             generalTabViewModel.SettingsViewModel = settingsViewModel;
             tabViewModels.Add(generalTabViewModel);
-            
+            settingsViewModel.TabViewModels = tabViewModels;
+
             string[] projectNames = ConfigFile.GetProjectNames();
             foreach (var projectName in projectNames)
             {
-                var projectViewModel = new ProjectTabViewModel(projectName, ConfigFile.GetTriggers(projectName));
-                projectViewModel.SettingsViewModel = settingsViewModel;
-                tabViewModels.Add(projectViewModel);
+                generalTabViewModel.AddProjectTab(projectName, ConfigFile.GetTriggers(projectName));
             }
-
-            settingsViewModel.TabViewModels = tabViewModels;
+            
             var settingsView = new SettingsView { DataContext = settingsViewModel };
             settingsView.Show();
             settingsViewModel.PropertyChanged += (self, args) => { if ((self as SettingsViewModel).WindowClosed) settingsView.Close(); };

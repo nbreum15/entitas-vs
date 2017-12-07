@@ -28,7 +28,8 @@ namespace EntitasVSGenerator.ViewLogic.Commands
             var commonBrowser = new CommonOpenFileDialog
             {
                 Title = "Select generator folder",
-                IsFolderPicker = true
+                IsFolderPicker = true,
+                InitialDirectory = _solutionDirectory
             };
 
             if (commonBrowser.ShowDialog() == CommonFileDialogResult.Ok)

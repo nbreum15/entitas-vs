@@ -19,5 +19,10 @@ namespace EntitasVSGenerator.Extensions
         {
             return projects.Select(project => project.UniqueName);
         }
+
+        public static Project FindProject(this Solution solution, string uniqueName)
+        {
+            return solution.GetAllProjects().First(project => project.UniqueName == uniqueName);
+        }
     }
 }

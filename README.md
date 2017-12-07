@@ -50,4 +50,4 @@ To use Entitas VS you need to:
     
     ![](https://i.imgur.com/ABgIh5y.png)
     
-    5. That is all. Create a new component, save the file, and the generation will run automatically. All these settings are saved in Entitas VS.cfg, in the solution directory.
+    5. That is all. Create a new component, save the file, and the generation will run automatically. All these settings are saved in entitas-vs.cfg, in the solution directory.
