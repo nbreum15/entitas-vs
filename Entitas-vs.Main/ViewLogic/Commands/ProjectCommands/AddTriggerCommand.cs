@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.ViewLogic.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
@@ -20,7 +21,7 @@ namespace EntitasVSGenerator.ViewLogic.Commands
 
         public bool CanExecute(object parameter)
         {
-            return string.IsNullOrEmpty((string)parameter);
+            return true;
         }
 
         public void Execute(object parameter)
@@ -35,7 +36,7 @@ namespace EntitasVSGenerator.ViewLogic.Commands
             if (commonBrowser.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 string path = commonBrowser.FileName;
-                string relative = path.Replace(_projectDirectory, "");
+                string relative = PathUtil.AbsoluteToRelativePath(_projectDirectory, path);
                 _viewModel.Triggers.Add(relative);
             }
         }

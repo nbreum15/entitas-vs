@@ -17,12 +17,13 @@ namespace EntitasVSGenerator.ViewLogic.Commands
 
         public bool CanExecute(object parameter)
         {
-            return string.IsNullOrEmpty((string)parameter);
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            _viewModel.Triggers.Remove((string) parameter);
+            int selectedIndex = (int) parameter;
+            _viewModel.Triggers.RemoveAt(selectedIndex);
         }
     }
 }
