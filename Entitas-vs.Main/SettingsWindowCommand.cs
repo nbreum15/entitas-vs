@@ -89,15 +89,15 @@ namespace EntitasVSGenerator
                 MessageBox.Show("Solution not loaded. Load a solution to see settings.");
                 return;
             }
-
             ConfigFile.Load();
-
-            var unusuedProjects = ConfigFile.GetProjectNames().Except(Solution.GetAllProjects().UniqueNames());
+             
+            var unusuedProjects = Solution.GetAllProjects().UniqueNames().Except(ConfigFile.GetProjectNames());
 
             // Create all tabs
             var settingsViewModel = new SettingsViewModel(ConfigFile); // root tab
-            var projectGroupTabViewModel = new EmptyTabViewModel("Projects", settingsViewModel);
-            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath, Solution, unusuedProjects, projectGroupTabViewModel, settingsViewModel);
+            var projectGroupTabViewModel = new ProjectGroupTabViewModel(settingsViewModel);
+            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath, 
+                Solution, unusuedProjects, projectGroupTabViewModel, settingsViewModel);
             settingsViewModel.AddChild(generalTabViewModel);
             settingsViewModel.AddChild(projectGroupTabViewModel);
 
@@ -107,6 +107,7 @@ namespace EntitasVSGenerator
                 string[] triggers = ConfigFile.GetTriggers(projectName);
                 generalTabViewModel.AddProjectTab(projectName, triggers);
             }
+            settingsViewModel.AddedProjects = projectGroupTabViewModel.Children;
 
             var settingsView = new SettingsView { DataContext = settingsViewModel };
             settingsView.Show();

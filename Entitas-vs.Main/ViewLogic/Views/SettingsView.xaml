@@ -10,16 +10,19 @@
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModels:GeneralTabViewModel}">
-            <local:GeneralTabView />
+            <local:GeneralTabView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:ProjectTabViewModel}">
-            <local:ProjectTabView />
+            <local:ProjectTabView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ProjectGroupTabViewModel}">
+            <local:ProjectOverviewTabView/>
         </DataTemplate>
     </Window.Resources>
 
     <Grid VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>

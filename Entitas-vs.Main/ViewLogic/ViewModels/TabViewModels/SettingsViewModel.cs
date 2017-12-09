@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using EntitasVSGenerator.Logic;
 using EntitasVSGenerator.ViewLogic.Commands;
 
@@ -19,6 +20,7 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
         public ICommand SaveConfigFileAndCloseCommand { get; }
         public ITabViewModel CurrentTabViewModel { get => _currentTabViewModel; set => SetValue(ref _currentTabViewModel, value); }
         public bool WindowClosed { get => _windowClosed; set => SetValue(ref _windowClosed, value); }
+        public ObservableCollection<ITabViewModel> AddedProjects { get; set; }
 
         public void CloseWindow()
         {
