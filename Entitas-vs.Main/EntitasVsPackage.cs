@@ -1,15 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.Logic;
-using System.Linq;
-using EntitasVSGenerator.ViewLogic.Commands;
-using EntitasVSGenerator.ViewLogic.ViewModels;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace EntitasVSGenerator
 {
@@ -23,12 +19,15 @@ namespace EntitasVSGenerator
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     sealed class EntitasVsPackage : Package
     {
+        private bool _dllsCopied = false;
+        private IDirectoryChangeNotifier _directoryChangeNotifier;
+
         public const string PackageGuidString = "9f4d054c-8bcc-4a90-ab81-3e1d00ff8a08";
 
         /// <summary>
         /// Gets the running document table for the package.
         /// </summary>
-        public static RunningDocumentTable RunningDocumentTable { get; private set; }
+        public static IVsRunningDocumentTable RunningDocumentTable { get; private set; }
 
         /// <summary>
         /// Gets the top extensibility object for the package.
@@ -65,7 +64,7 @@ namespace EntitasVSGenerator
 
             // Get and set all services
             DTE = (DTE)GetService(typeof(SDTE));
-            RunningDocumentTable = new RunningDocumentTable(this);
+            RunningDocumentTable = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
             VsFileChangeEx = (IVsFileChangeEx)GetService(typeof(SVsFileChangeEx));
             VsSolution = (IVsSolution)GetService(typeof(SVsSolution));
 
@@ -73,26 +72,53 @@ namespace EntitasVSGenerator
             packageLoader.AfterOpenSolution += PackageLoader_AfterOpenSolution;
 
             SettingsWindowCommand.Initialize(this);
-            
         }
 
         private void PackageLoader_AfterOpenSolution()
         {
-            ConfigFile = new ConfigFile(DTE.Solution.GetDirectory());
-            ConfigFile.Load();
-            //AssemblyExtensions.CopyDllsToGeneratorDirectory(ConfigFile.GeneratorPath, DTE.Solution.GetDirectory());
-            
-            //foreach (Project project in DTE.Solution.GetAllProjects())
-            //{
-            //    string[] triggers = ConfigFile.GetTriggers(project.UniqueName);
-            //    if (triggers.Length == 0)
-            //        continue;
+            ConfigFile = new ConfigFile(Solution.GetDirectory());
+            ConfigFile.Saved += Load;
+            _directoryChangeNotifier = new DirectoryChangeNotifier(RunningDocumentTable);
 
-            //    var directoryChangeListener = FactoryMethods.GetRelativeDirectoryChangeListener(project.GetDirectory());
-            //    var generatorRunner = new GeneratorRunner(ConfigFile.GeneratorPath, project, DTE.Solution);
-            //    directoryChangeListener.Add(triggers);
-            //    directoryChangeListener.Changed += () => generatorRunner.Run();
-            //}
+            if (ConfigFile.IsOnDisk)
+            {
+                Load();
+            }
+        }
+
+        private void Load()
+        {
+            ConfigFile.Load();
+
+            if (!_dllsCopied)
+            {
+                AssemblyExtensions.CopyDllsToGeneratorDirectory(ConfigFile.GeneratorPath, Solution.GetDirectory());
+                _dllsCopied = true;
+            }
+
+            // Pre clean up 
+            CleanupDirectoryChangeListeners();
+
+            foreach (string uniqueProjectName in ConfigFile.GetProjectNames())
+            {
+                string[] triggers = ConfigFile.GetTriggers(uniqueProjectName);
+                if (triggers.Length == 0)
+                    continue;
+
+                Project project = Solution.FindProject(uniqueProjectName);
+                var directoryChangeListener = FactoryMethods.GetRelativeDirectoryChangeListener(project.GetDirectory());
+                var generatorRunner = new GeneratorRunner(ConfigFile.GeneratorPath, project, Solution);
+                directoryChangeListener.Add(triggers);
+                directoryChangeListener.Changed += () => generatorRunner.Run();
+
+                // add to cache (to delete it later)
+                _directoryChangeNotifier.Add(directoryChangeListener);
+            }
+        }
+
+        private void CleanupDirectoryChangeListeners()
+        {
+            _directoryChangeNotifier.Clear();
         }
     }
 }

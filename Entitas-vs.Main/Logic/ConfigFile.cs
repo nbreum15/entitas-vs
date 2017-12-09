@@ -21,14 +21,17 @@ $@"<{RootElement}>
 ";
         private readonly XmlDocument _document;
         public XmlNode SettingsNode => _document.FirstChild; // root node
+        public event Action Saved;
 
         public ConfigFile(string directory)
         {
             SettingsPath = PathUtil.GetSettingsPath(directory);
             _document = new XmlDocument();
+            IsOnDisk = File.Exists(SettingsPath);
         }
         
         public string SettingsPath { get; }
+        public bool IsOnDisk { get; private set; }
         public string GeneratorPath
         {
             get => SettingsNode.Attributes[GeneratorPathAttribute]?.Value;
@@ -65,7 +68,7 @@ $@"<{RootElement}>
                 {
                     XmlElement triggerElement = _document.CreateElement(TriggerElement);
                     XmlAttribute pathAttribute = _document.CreateAttribute(PathAttribute);
-                    pathAttribute.Value = trigger;
+                    pathAttribute.Value = trigger.ToLower();
                     triggerElement.Attributes.Append(pathAttribute);
                     projectElement.AppendChild(triggerElement);
                 }
@@ -111,6 +114,13 @@ $@"<{RootElement}>
         public void Save()
         {
             _document.Save(SettingsPath);
+            IsOnDisk = true;
+            OnSaved();
+        }
+
+        protected void OnSaved()
+        {
+            Saved?.Invoke();
         }
     }
 }

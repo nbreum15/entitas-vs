@@ -1,58 +1,36 @@
-﻿using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MoreLinq;
 
 namespace EntitasVSGenerator.Logic
 {
-    class DirectoryChangeListener : IVsFileChangeEvents, IDisposable, IDirectoryChangeListener
+    class DirectoryChangeListener : IDirectoryChangeListener
     {
         public event Action Changed;
 
-        private readonly IVsFileChangeEx _vsFileChangeEx;
-        private readonly Dictionary<string, uint> _cookies = new Dictionary<string, uint>();
-
-        public DirectoryChangeListener(IVsFileChangeEx vsFileChangeEx)
-        {
-            _vsFileChangeEx = vsFileChangeEx;
-        }
+        private readonly List<string> _paths = new List<string>();
 
         public virtual void Add(params string[] paths)
         {
-            foreach (string path in paths)
-            {
-                _vsFileChangeEx.AdviseDirChange(path, 1, this, out uint cookie);
-                if (!_cookies.ContainsKey(path))
-                    _cookies.Add(path, cookie);
-            }
+            _paths.AddRange(paths);
         }
 
         public virtual void Remove(params string[] paths)
         {
-            foreach (string path in paths)
-            {
-                if(_cookies.TryGetValue(path, out uint cookie))
-                    _vsFileChangeEx.UnadviseDirChange(cookie);
-            }
+            paths.ForEach(path => _paths.Remove(path));
         }
 
-        public int DirectoryChanged(string pszDirectory)
+        public IEnumerable<string> Paths => _paths;
+
+        public void RaiseEvent()
         {
             OnChanged();
-            return VSConstants.S_OK;
         }
 
-        public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
+        public void ClearEventListeners()
         {
-            return VSConstants.S_OK;
-        }
-
-        public void Dispose()
-        {
-            foreach (var cookie in _cookies.Values)
-            {
-                _vsFileChangeEx.UnadviseDirChange(cookie);
-            }
+            Changed = null;
+            _paths.Clear();
         }
 
         protected void OnChanged()

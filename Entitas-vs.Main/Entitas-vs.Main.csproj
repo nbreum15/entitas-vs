@@ -101,7 +101,10 @@
     <Compile Include="Extensions\DialogUtil.cs" />
     <Compile Include="Extensions\SolutionExtensions.cs" />
     <Compile Include="Logic\ConfigFile.cs" />
-    <Compile Include="Logic\DirectoryChangeListener\IDirectoryChangeListener.cs" />
+    <Compile Include="Logic\DirectoryChangeListener\DirectoryChangeNotifier.cs" />
+    <Compile Include="Logic\DirectoryChangeListener\Interfaces\IDirectoryChangeListener.cs" />
+    <Compile Include="Logic\DirectoryChangeListener\Interfaces\IDirectoryChangeNotifier.cs" />
+    <Compile Include="Logic\DirectoryChangeListener\Interfaces\IPathContainer.cs" />
     <Compile Include="Logic\DirectoryChangeListener\RelativeDirectoryChangeListener.cs" />
     <Compile Include="Logic\FactoryMethods.cs" />
     <Compile Include="Logic\FileIgnorer\FileIgnorer.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="SettingsWindowCommand.cs" />
     <Compile Include="Logic\PackageLoader\PackageLoader.cs" />
     <Compile Include="ViewLogic\ViewModels\TabViewModels\EmptyTabViewModel.cs" />
+    <Compile Include="ViewLogic\ViewModels\TabViewModels\ProjectGroupTabViewModel.cs" />
     <Compile Include="ViewLogic\ViewModels\Utilities\BaseTabViewModel.cs" />
     <Compile Include="ViewLogic\ViewModels\Utilities\BaseViewModel.cs" />
     <Compile Include="ViewLogic\ViewModels\Utilities\ITabViewModel.cs" />
@@ -132,6 +136,9 @@
     <Compile Include="ViewLogic\ViewModels\TabViewModels\ProjectTabViewModel.cs" />
     <Compile Include="ViewLogic\Views\GeneralTabView.xaml.cs">
       <DependentUpon>GeneralTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewLogic\Views\ProjectOverviewTabView.xaml.cs">
+      <DependentUpon>ProjectOverviewTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewLogic\Views\ProjectTabView.xaml.cs">
       <DependentUpon>ProjectTabView.xaml</DependentUpon>
@@ -310,6 +317,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="ViewLogic\Views\GeneralTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewLogic\Views\ProjectOverviewTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

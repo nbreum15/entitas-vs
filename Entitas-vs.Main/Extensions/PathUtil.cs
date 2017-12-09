@@ -43,5 +43,17 @@ namespace EntitasVSGenerator.Extensions
         {
             return oldFileNames.Except(allFileNames);
         }
+
+        public static bool IsSubpathOf(this string subPath, string fullPath)
+        {
+            if(subPath is null)
+                throw new ArgumentNullException(nameof(subPath));
+            if (fullPath is null)
+                throw new ArgumentNullException(nameof(fullPath));
+
+            int result = string.CompareOrdinal($@"{subPath}\", 0, fullPath, 0, subPath.Length + 1); // + 1 because of the added \
+            if (result == 0) return true;
+            else return false;
+        }
     }
 }

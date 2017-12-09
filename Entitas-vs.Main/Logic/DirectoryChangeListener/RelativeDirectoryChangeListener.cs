@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using EntitasVSGenerator.Extensions;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace EntitasVSGenerator.Logic
 {
@@ -11,11 +10,10 @@ namespace EntitasVSGenerator.Logic
         /// <summary>
         /// Creates an instance of a relative directory change listener using relative paths instead of absolute.
         /// </summary>
-        /// <param name="vsFileChangeEx">File change functionality object.</param>
         /// <param name="appendPath">Path that is appended to relative paths.</param>
-        public RelativeDirectoryChangeListener(IVsFileChangeEx vsFileChangeEx, string appendPath) : base(vsFileChangeEx)
+        public RelativeDirectoryChangeListener(string appendPath)
         {
-            _appendPath = appendPath;
+            _appendPath = appendPath.ToLower();
         }
 
         public override void Add(params string[] paths)

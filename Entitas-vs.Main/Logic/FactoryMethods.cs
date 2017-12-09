@@ -4,10 +4,7 @@
     {
         public static IDirectoryChangeListener GetRelativeDirectoryChangeListener(string projectDirectory)
         {
-            using (var directoryChangeListener = new RelativeDirectoryChangeListener(EntitasVsPackage.VsFileChangeEx, projectDirectory))
-            {
-                return directoryChangeListener;
-            }
+            return new RelativeDirectoryChangeListener(projectDirectory);
         }
 
         public static IFileIgnorer GetFileIgnorer()
@@ -18,10 +15,6 @@
         public static IPackageLoader GetPackageLoader()
         {
             return new PackageLoader(EntitasVsPackage.VsSolution);
-            //using (var packageLoader = new PackageLoader(EntitasVsPackage.VsSolution))
-            //{
-            //    return packageLoader;
-            //}
         }
     }
 }

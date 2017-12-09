@@ -1,8 +1,6 @@
-﻿using System.Windows.Input;
-
-namespace EntitasVSGenerator.ViewLogic.Notifications
+﻿namespace EntitasVSGenerator.ViewLogic.Notifications
 {
-    interface INotification : ICommand
+    interface INotification
     {
         string Message { get; }
     }

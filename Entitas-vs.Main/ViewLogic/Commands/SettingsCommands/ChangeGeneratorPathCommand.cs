@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using System;
+using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.ViewLogic.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
@@ -35,7 +36,7 @@ namespace EntitasVSGenerator.ViewLogic.Commands
             if (commonBrowser.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 string path = commonBrowser.FileName;
-                string relative = path.Replace(_solutionDirectory, "");
+                string relative = PathUtil.AbsoluteToRelativePath(_solutionDirectory, path);
                 _viewModel.GeneratorPath = relative;
             }
         }

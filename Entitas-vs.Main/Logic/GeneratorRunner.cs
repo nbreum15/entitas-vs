@@ -24,13 +24,10 @@ namespace EntitasVSGenerator.Logic
 
         public void Run()
         {
-            Task.Run(() =>
-            {
-                string[] generatedFiles = Generate();
-                string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
-                RemoveItems(deletedFiles);
-                AddItems(generatedFiles);
-            });
+            string[] generatedFiles = Generate();
+            string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
+            RemoveItems(deletedFiles);
+            AddItems(generatedFiles);
         }
 
         private string[] Generate()
