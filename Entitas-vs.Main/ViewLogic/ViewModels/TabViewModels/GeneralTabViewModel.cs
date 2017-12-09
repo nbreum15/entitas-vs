@@ -15,10 +15,13 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
 
         public GeneralTabViewModel(string generatorPath, 
             Solution solution, 
-            IEnumerable<string> projectNames)
+            IEnumerable<string> projectNames,
+            ITabViewModel projectGroupTab, 
+            SettingsViewModel settingsViewModel) : base(settingsViewModel)
         {
             _solution = solution;
             GeneratorPath = generatorPath;
+            ProjectGroupTab = projectGroupTab;
             ProjectNames = new ObservableCollection<string>(projectNames);
             ChangeGeneratorPathCommand = new ChangeGeneratorPathCommand(this, solution.GetDirectory());
             AddProjectCommand = new AddProjectCommand(this);
@@ -30,13 +33,15 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
 
         public string SelectedProjectName { get => _selectedProjectName; set => SetValue(ref _selectedProjectName, value); }
         public string GeneratorPath { get => _generatorPath; set => SetValue(ref _generatorPath, value); }
+        private ITabViewModel ProjectGroupTab { get; }
 
         public ObservableCollection<string> ProjectNames { get; }
 
         public void AddProjectTab(string name, string[] triggers = null)
         {
             string projectDir = _solution.FindProject(name).GetDirectory();
-            SettingsViewModel.TabViewModels.Add(new ProjectTabViewModel(name, projectDir, triggers) {SettingsViewModel = SettingsViewModel});
+            var projectTabViewModel = new ProjectTabViewModel(name, projectDir, SettingsViewModel, triggers);
+            ProjectGroupTab.AddChild(projectTabViewModel);
         }
     }
 }

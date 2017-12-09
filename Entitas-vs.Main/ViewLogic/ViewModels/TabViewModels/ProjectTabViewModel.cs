@@ -12,7 +12,9 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
         public ObservableCollection<string> Triggers { get; }
         public override string Name { get; }
 
-        public ProjectTabViewModel(string name, string projectDirectory, string[] triggers = null)
+        public ProjectTabViewModel(string name, 
+            string projectDirectory, SettingsViewModel settingsViewModel, 
+            string[] triggers = null) : base(settingsViewModel)
         {
             Name = name;
             Triggers = new ObservableCollection<string>(triggers ?? new string[0]);

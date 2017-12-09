@@ -25,10 +25,10 @@ namespace EntitasVSGenerator.ViewLogic.Commands
 
         public virtual void Execute(object parameter)
         {
-            var generalTab = ViewModel.TabViewModels.OfType<GeneralTabViewModel>().First();
+            var generalTab = ViewModel.Children.OfType<GeneralTabViewModel>().First();
             ConfigFile.GeneratorPath = generalTab.GeneratorPath;
 
-            var projectTabs = ViewModel.TabViewModels.OfType<ProjectTabViewModel>();
+            var projectTabs = ViewModel.Children.OfType<ProjectTabViewModel>();
             projectTabs.ForEach(model => ConfigFile.Refresh(model.Name, model.Triggers.ToArray()));
             ConfigFile.Save();
         }

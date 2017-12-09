@@ -24,25 +24,23 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TreeView Name="SettingsTree" Grid.Column="0" DockPanel.Dock="Left">
+        <TreeView Name="SettingsTree" Grid.Column="0" ItemsSource="{Binding Children}" DockPanel.Dock="Left">
             
-            <TreeViewItem ItemsSource="{Binding TabViewModels}"  Header="Settings">
-                <TreeViewItem.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TreeViewItem.ItemContainerStyle>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.ItemContainerStyle>
 
-                <TreeViewItem.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </TreeViewItem.ItemTemplate>
-            </TreeViewItem>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type viewModels:ITabViewModel}" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
         </TreeView>
 
         <GridSplitter Grid.Column="1" 
@@ -60,7 +58,6 @@
                         Content="Apply" 
                         Command="{Binding SaveConfigFileCommand}"/>
             </DockPanel>
-
             <ContentControl Content="{Binding CurrentTabViewModel}" />
         </DockPanel>
     </Grid>
