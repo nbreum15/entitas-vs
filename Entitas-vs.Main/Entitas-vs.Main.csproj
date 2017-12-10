@@ -107,8 +107,6 @@
     <Compile Include="Logic\DirectoryChangeListener\Interfaces\IPathContainer.cs" />
     <Compile Include="Logic\DirectoryChangeListener\RelativeDirectoryChangeListener.cs" />
     <Compile Include="Logic\FactoryMethods.cs" />
-    <Compile Include="Logic\FileIgnorer\FileIgnorer.cs" />
-    <Compile Include="Logic\FileIgnorer\IFileIgnorer.cs" />
     <Compile Include="Logic\GeneratorRunner.cs" />
     <Compile Include="Logic\PackageLoader\IPackageLoader.cs" />
     <Compile Include="Logic\DirectoryChangeListener\DirectoryChangeListener.cs" />
