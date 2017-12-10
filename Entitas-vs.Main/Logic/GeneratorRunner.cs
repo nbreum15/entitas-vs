@@ -4,22 +4,24 @@ using EnvDTE;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EnvDTE80;
 
 namespace EntitasVSGenerator.Logic
 {
     class GeneratorRunner
     {
+        private readonly string _uniqueProjectName;
         private readonly IGenerator _codeGenerator;
-        private readonly Project _project;
-        private readonly DTE _dte;
+        private readonly DTE2 _dte;
         private string[] _oldGeneratedFiles;
         private bool _firstGenerate = true;
 
-        public GeneratorRunner(string generatorPath, Project project, Solution solution)
+        public GeneratorRunner(string generatorPath, string uniqueProjectName)
         {
+            _uniqueProjectName = uniqueProjectName;
             _dte = EntitasVsPackage.DTE;
-            _codeGenerator = AssemblyExtensions.GetGenerator(generatorPath, project.GetDirectory(), solution.GetDirectory());
-            _project = project;
+            var project = _dte.Solution.FindProject(_uniqueProjectName);
+            _codeGenerator = AssemblyExtensions.GetGenerator(generatorPath, project.GetDirectory(), _dte.Solution.GetDirectory());
         }
 
         public void Run()
@@ -59,7 +61,8 @@ namespace EntitasVSGenerator.Logic
             if (generatedFiles == null)
                 return;
             _oldGeneratedFiles = generatedFiles;
-            _project.AddFilesToProject(_dte, generatedFiles);
+            var project = _dte.Solution.FindProject(_uniqueProjectName);
+            project.AddFilesToProject(_dte, generatedFiles);
         }
 
         private string[] GetCurrentGeneratedFileNames()

@@ -10,6 +10,7 @@ using IServiceProvider = System.IServiceProvider;
 using EntitasVSGenerator.ViewLogic.ViewModels;
 using EnvDTE;
 using EntitasVSGenerator.ViewLogic.Views;
+using EnvDTE80;
 
 namespace EntitasVSGenerator
 {
@@ -74,8 +75,7 @@ namespace EntitasVSGenerator
         }
 
         private ConfigFile ConfigFile => EntitasVsPackage.ConfigFile;
-
-        private Solution Solution => EntitasVsPackage.Solution;
+        private DTE2 DTE => EntitasVsPackage.DTE;
 
         /// <summary>
         /// Shows the tool window when the menu item is clicked.
@@ -91,13 +91,13 @@ namespace EntitasVSGenerator
             }
             ConfigFile.Load();
              
-            var unusuedProjects = Solution.GetAllProjects().UniqueNames().Except(ConfigFile.GetProjectNames());
+            var unusuedProjects = DTE.Solution.GetAllProjects().UniqueNames().Except(ConfigFile.GetProjectNames());
 
             // Create all tabs
             var settingsViewModel = new SettingsViewModel(ConfigFile); // root tab
             var projectGroupTabViewModel = new ProjectGroupTabViewModel(settingsViewModel);
-            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath, 
-                Solution, unusuedProjects, projectGroupTabViewModel, settingsViewModel);
+            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath,
+                DTE.Solution, unusuedProjects, projectGroupTabViewModel, settingsViewModel);
             settingsViewModel.AddChild(generalTabViewModel);
             settingsViewModel.AddChild(projectGroupTabViewModel);
 

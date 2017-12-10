@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.Logic;
+using EnvDTE80;
 
 namespace EntitasVSGenerator
 {
@@ -32,17 +33,7 @@ namespace EntitasVSGenerator
         /// <summary>
         /// Gets the top extensibility object for the package.
         /// </summary>
-        public static DTE DTE { get; private set; }
-
-        /// <summary>
-        /// Gets the currently running solution.
-        /// </summary>
-        public static Solution Solution => DTE.Solution;
-
-        /// <summary>
-        /// Gets the file change event handler.
-        /// </summary>
-        public static IVsFileChangeEx VsFileChangeEx { get; private set; }
+        public static DTE2 DTE { get; private set; }
 
         /// <summary>
         /// Gets the solution manager object.
@@ -54,18 +45,13 @@ namespace EntitasVSGenerator
         /// </summary>
         public static ConfigFile ConfigFile { get; set; }
 
-        public EntitasVsPackage()
-        {
-        }
-
         protected override void Initialize()
         {
             base.Initialize();
 
             // Get and set all services
-            DTE = (DTE)GetService(typeof(SDTE));
+            DTE = (DTE2)GetService(typeof(SDTE));
             RunningDocumentTable = (IVsRunningDocumentTable)GetService(typeof(SVsRunningDocumentTable));
-            VsFileChangeEx = (IVsFileChangeEx)GetService(typeof(SVsFileChangeEx));
             VsSolution = (IVsSolution)GetService(typeof(SVsSolution));
 
             var packageLoader = FactoryMethods.GetPackageLoader();
@@ -76,7 +62,7 @@ namespace EntitasVSGenerator
 
         private void PackageLoader_AfterOpenSolution()
         {
-            ConfigFile = new ConfigFile(Solution.GetDirectory());
+            ConfigFile = new ConfigFile(DTE.Solution.GetDirectory());
             ConfigFile.Saved += Load;
             _directoryChangeNotifier = new DirectoryChangeNotifier(RunningDocumentTable);
 
@@ -92,7 +78,7 @@ namespace EntitasVSGenerator
 
             if (!_dllsCopied)
             {
-                AssemblyExtensions.CopyDllsToGeneratorDirectory(ConfigFile.GeneratorPath, Solution.GetDirectory());
+                AssemblyExtensions.CopyDllsToGeneratorDirectory(ConfigFile.GeneratorPath, DTE.Solution.GetDirectory());
                 _dllsCopied = true;
             }
 
@@ -105,9 +91,9 @@ namespace EntitasVSGenerator
                 if (triggers.Length == 0)
                     continue;
 
-                Project project = Solution.FindProject(uniqueProjectName);
+                Project project = DTE.Solution.FindProject(uniqueProjectName);
                 var directoryChangeListener = FactoryMethods.GetRelativeDirectoryChangeListener(project.GetDirectory());
-                var generatorRunner = new GeneratorRunner(ConfigFile.GeneratorPath, project, Solution);
+                var generatorRunner = new GeneratorRunner(ConfigFile.GeneratorPath, uniqueProjectName);
                 directoryChangeListener.Add(triggers);
                 directoryChangeListener.Changed += () => generatorRunner.Run();
 
