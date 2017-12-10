@@ -1,6 +1,5 @@
 ﻿using Entitas_vs.Contract;
 using EntitasVSGenerator.Extensions;
-using EnvDTE;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,10 +25,13 @@ namespace EntitasVSGenerator.Logic
 
         public void Run()
         {
-            string[] generatedFiles = Generate();
-            string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
-            RemoveItems(deletedFiles);
-            AddItems(generatedFiles);
+            Task.Run(() =>
+            {
+                string[] generatedFiles = Generate();
+                string[] deletedFiles = GetDeletedGeneratedFiles(generatedFiles);
+                RemoveItems(deletedFiles);
+                AddItems(generatedFiles);
+            });
         }
 
         private string[] Generate()
