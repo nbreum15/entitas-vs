@@ -24,12 +24,6 @@ namespace EntitasVSGenerator.Extensions
             return paths.Select(path => Path.IsPathRooted(path) ? path : $@"{appendDirectory}\{path}");
         }
 
-        public static string GetDirectory(this Project project) => Path.GetDirectoryName(project.FullName);
-
-        public static string GetDirectory(this Solution solution) => Path.GetDirectoryName(solution.FullName);
-
-        public static string GetFileNameOnly(this Project project) => Path.GetFileName(project.FullName);
-
         public static string AbsoluteToRelativePath(string subPath, string fullPath)
         {
             if (subPath == null)

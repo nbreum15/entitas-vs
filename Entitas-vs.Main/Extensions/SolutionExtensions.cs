@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using EnvDTE;
 
@@ -31,6 +32,21 @@ namespace EntitasVSGenerator.Extensions
             {
                 project.AddFileToProject(fileName);
             }
+        }
+
+        public static string GetDirectory(this Project project)
+        {
+            return Path.GetDirectoryName(project.FullName);
+        }
+
+        public static string GetDirectory(this Solution solution)
+        {
+            return Path.GetDirectoryName(solution.FullName);
+        }
+
+        public static string GetFileNameOnly(this Project project)
+        {
+            return Path.GetFileName(project.FullName);
         }
     }
 }
