@@ -17,17 +17,17 @@ namespace EntitasVSGenerator.Logic
             _runningDocumentTable.AdviseRunningDocTableEvents(this, out _);
         }
 
-        public void Add(IDirectoryChangeListener listener)
+        public void AddListener(IDirectoryChangeListener listener)
         {
             _directoryChangeListeners.Add(listener);
         }
 
-        public void Remove(IDirectoryChangeListener listener)
+        public void RemoveListener(IDirectoryChangeListener listener)
         {
             _directoryChangeListeners.Remove(listener);
         }
 
-        public void Clear()
+        public void ClearListeners()
         {
             foreach (var listener in _directoryChangeListeners)
             {

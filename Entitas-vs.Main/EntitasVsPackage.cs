@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -83,7 +82,7 @@ namespace EntitasVSGenerator
             }
 
             // Pre clean up 
-            CleanupDirectoryChangeListeners();
+            _directoryChangeNotifier.ClearListeners();
 
             foreach (string uniqueProjectName in ConfigFile.GetProjectNames())
             {
@@ -96,15 +95,8 @@ namespace EntitasVSGenerator
                 var generatorRunner = new GeneratorRunner(ConfigFile.GeneratorPath, uniqueProjectName);
                 directoryChangeListener.Add(triggers);
                 directoryChangeListener.Changed += () => generatorRunner.Run();
-
-                // add to cache (to delete it later)
-                _directoryChangeNotifier.Add(directoryChangeListener);
+                _directoryChangeNotifier.AddListener(directoryChangeListener);
             }
-        }
-
-        private void CleanupDirectoryChangeListeners()
-        {
-            _directoryChangeNotifier.Clear();
         }
     }
 }

@@ -2,8 +2,8 @@
 {
     interface IDirectoryChangeNotifier
     {
-        void Add(IDirectoryChangeListener listener);
-        void Remove(IDirectoryChangeListener listener);
-        void Clear();
+        void AddListener(IDirectoryChangeListener listener);
+        void RemoveListener(IDirectoryChangeListener listener);
+        void ClearListeners();
     }
 }

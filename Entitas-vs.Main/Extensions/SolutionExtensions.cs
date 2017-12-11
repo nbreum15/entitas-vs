@@ -26,14 +26,6 @@ namespace EntitasVSGenerator.Extensions
             return solution.GetAllProjects().First(project => project.UniqueName == uniqueName);
         }
 
-        public static void AddFilesToProject(this Project project, IEnumerable<string> fileNames)
-        {
-            foreach (var fileName in fileNames)
-            {
-                project.AddFileToProject(fileName);
-            }
-        }
-
         public static string GetDirectory(this Project project)
         {
             return Path.GetDirectoryName(project.FullName);
