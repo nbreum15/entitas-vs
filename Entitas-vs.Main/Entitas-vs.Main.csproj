@@ -117,9 +117,6 @@
     <Compile Include="ViewLogic\Commands\ProjectCommands\DeleteTriggerCommand.cs" />
     <Compile Include="ViewLogic\Commands\SettingsCommands\SaveConfigFileAndCloseCommand.cs" />
     <Compile Include="ViewLogic\Commands\SettingsCommands\SaveConfigFileCommand.cs" />
-    <Compile Include="ViewLogic\Notifications\INotification.cs" />
-    <Compile Include="ViewLogic\Notifications\SolutionNotLoadedNotification.cs" />
-    <Compile Include="ViewLogic\Notifications\VisualStudioNeedsRestartNotification.cs" />
     <Compile Include="ThirdPartyCode\ProjectHelpers.cs" />
     <Compile Include="Extensions\PathUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
