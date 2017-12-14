@@ -1,0 +1,77 @@
+﻿<Window x:Class="EntitasVSGenerator.ViewLogic.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EntitasVSGenerator.ViewLogic.Views"
+             xmlns:viewModels="clr-namespace:EntitasVSGenerator.ViewLogic.ViewModels"
+             xmlns:converters="clr-namespace:EntitasVSGenerator.ViewLogic.Converters"
+             mc:Ignorable="d" 
+             Height="600" Width="800">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:GeneralTabViewModel}">
+            <local:GeneralTabView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ProjectTabViewModel}">
+            <local:ProjectTabView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ProjectGroupTabViewModel}">
+            <local:ProjectOverviewTabView/>
+        </DataTemplate>
+        <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TreeView Name="SettingsTree" Grid.Column="0" ItemsSource="{Binding Children}" DockPanel.Dock="Left">
+            
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.ItemContainerStyle>
+
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type viewModels:ITabViewModel}" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <GridSplitter Grid.Column="1" 
+                      Width="5" 
+                      Background="Transparent" 
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Center"/>
+
+        <DockPanel LastChildFill="True" Grid.Column="2">
+            <Grid VerticalAlignment="Bottom" HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
+                <TextBlock HorizontalAlignment="Stretch" 
+                           Background="PaleGoldenrod" 
+                           Text="{Binding NotificationMessage}" 
+                           Visibility="{Binding NotificationMessage, Converter={StaticResource EmptyStringToVisibilityConverter}}"/>
+                <DockPanel HorizontalAlignment="Right">
+                    <Button Width="100" 
+                            Content="OK" 
+                            Command="{Binding SaveConfigFileAndCloseCommand}"
+                            DockPanel.Dock="Right"/>
+                    <Button Width="100" 
+                            Content="Apply" 
+                            Command="{Binding SaveConfigFileCommand}"
+                            DockPanel.Dock="Right"/>
+                </DockPanel>
+            </Grid>
+            <ContentControl Content="{Binding CurrentTabViewModel}" />
+        </DockPanel>
+    </Grid>
+</Window>

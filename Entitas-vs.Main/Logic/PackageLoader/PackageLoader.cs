@@ -4,31 +4,45 @@ using System;
 
 namespace EntitasVSGenerator.Logic
 {
-    class PackageLoader : IVsSolutionEvents
+    class PackageLoader : IVsSolutionEvents, IPackageLoader, IDisposable
     {
-        private Action _solutionOpenCallback;
-        private bool _solutionOpened;
+        public event Action AfterOpenSolution;
 
-        public PackageLoader(Action solutionOpenCallback)
+        private bool _solutionOpened;
+        private readonly uint _cookie;
+        private readonly IVsSolution _vsSolution;
+
+        public PackageLoader(IVsSolution vsSolution)
         {
-            _solutionOpenCallback = solutionOpenCallback;
+            vsSolution.AdviseSolutionEvents(this, out _cookie);
+            _vsSolution = vsSolution;
         }
 
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
-            if(_solutionOpened)
+            if (_solutionOpened)
                 return VSConstants.S_OK;
-            _solutionOpenCallback?.Invoke();
+            OnAfterSolutionLoad();
             _solutionOpened = true;
             return VSConstants.S_OK;
         }
 
+        protected void OnAfterSolutionLoad()
+        {
+            AfterOpenSolution?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            _vsSolution.UnadviseSolutionEvents(_cookie);
+        }
+
+        #region Other IVsSolutionEvents inferface methods
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             return VSConstants.S_OK;
         }
 
-        #region Other IVsSolutionEvents inferface methods
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;

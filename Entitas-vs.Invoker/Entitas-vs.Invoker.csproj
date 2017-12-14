@@ -32,12 +32,15 @@
   <ItemGroup>
     <Reference Include="Entitas.CodeGeneration">
       <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Entitas.CodeGeneration.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Entitas.CodeGeneration.CodeGenerator">
       <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Entitas.CodeGeneration.CodeGenerator.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Entitas.Utils">
       <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Entitas.Utils.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntitasExtensions.cs" />
+    <Compile Include="EntitasHelper.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 # What it is
-[Download link.](https://marketplace.visualstudio.com/items?itemName=nbreum.entitas-vs)
+[Download link.](https://marketplace.visualstudio.com/items?itemName=nbreum.Entitas VS)
 
-Entitas-vs is an extension for Visual Studio that makes all code generation in [Entitas-CSharp](https://github.com/sschmid/Entitas-CSharp) purely automatic without any manual intervention from the user. 
+An extension for Visual Studio that makes the workflow with [Entitas-CSharp](https://github.com/sschmid/Entitas-CSharp) alot smoother.
 
 ## Motivation
 The current workflow with Visual Studio and Entitas is: 
@@ -17,20 +17,18 @@ Nice right?
 # Important: Requirements
 The [paid Roslyn Generator](https://www.assetstore.unity3d.com/en/#!/content/87638) is strongly recommand when using this extension because it is able to generate with compiler errors. The Normal Generator from [Entitas](https://github.com/sschmid/Entitas-CSharp/releases) will also work, but because the Normal Generator is reflection-based, compiler errors will block it from generating (which makes it very cumbersome to work with).
 
-# Setup
-To use Entitas-vs you need to:
+# Installation Guide
+To use Entitas VS you need to:
 1. Setup Entitas as you normally would (follow one of these guides by the author of Entitas: [video guide](https://www.youtube.com/watch?v=LGKsqSg5FHg), [text guide](https://github.com/sschmid/Entitas-CSharp/issues/476))
-1. Make sure that the commandline generator works correctly. Try generating some files before using Entitas-vs.
-1. Open Entitas.properties and delete the following from CodeGenerator.PostProcessors:
-Entitas.CodeGeneration.Plugins.UpdateCSProjPostProcessor
+1. Make sure that the commandline generator works correctly. Try generating some files before using Entitas VS.
 1. Download the extension here: https://marketplace.visualstudio.com/items?itemName=nbreum.entitas-vs
 1. Open up a solution in Visual Studio (otherwise the extension will not load).
 1. Fill out the generator path and the trigger paths.
-    1. Open Entitas-vs in View -> Other Windows -> Entitas - Visual Studio
+    1. Open Options -> Entitas VS
     
     ![](https://i.imgur.com/uzo4Ibn.png)
     
-    2. This shows all the settings (if it does not, select "Configure" in the drop down menu, or check "entitas-vs.log" in the solution directory). For example, here is a solution with two projects:
+    2. This shows all the solution-wide settings. For example, here is a solution with two projects:
     
     ![](https://i.imgur.com/n2P24ad.png)
     

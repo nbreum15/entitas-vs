@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using EnvDTE;
 
 namespace EntitasVSGenerator.Extensions
@@ -12,6 +14,31 @@ namespace EntitasVSGenerator.Extensions
                 ProjectItem item = solution.FindProjectItem(fileName);
                 item.Remove();
             }
+        }
+
+        public static IEnumerable<string> UniqueNames(this IEnumerable<Project> projects)
+        {
+            return projects.Select(project => project.UniqueName);
+        }
+
+        public static Project FindProject(this Solution solution, string uniqueName)
+        {
+            return solution.GetAllProjects().First(project => project.UniqueName == uniqueName);
+        }
+
+        public static string GetDirectory(this Project project)
+        {
+            return Path.GetDirectoryName(project.FullName);
+        }
+
+        public static string GetDirectory(this Solution solution)
+        {
+            return Path.GetDirectoryName(solution.FullName);
+        }
+
+        public static string GetFileNameOnly(this Project project)
+        {
+            return Path.GetFileName(project.FullName);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace EntitasVSGenerator.Extensions
             //}
         }
 
-        public static void AddFilesToProject(this Project project, DTE dte, IEnumerable<string> files)
+        public static void AddFilesToProject(this Project project, DTE2 dte, IEnumerable<string> files)
         {
             if (project == null || project.IsKind(ProjectTypes.ASPNET_5, ProjectTypes.DOTNET_Core))
                 return;
