@@ -39,6 +39,7 @@ namespace EntitasVSGenerator.ViewLogic.Commands
                 string relative = PathUtil.AbsoluteToRelativePath(_projectDirectory, path);
                 _viewModel.Triggers.Add(relative);
             }
+            SettingsWindowCommand.Instance.View.Activate();
         }
     }
 }

@@ -39,6 +39,7 @@ namespace EntitasVSGenerator.ViewLogic.Commands
                 string path = commonBrowser.FileName;
                 string relative = PathUtil.AbsoluteToRelativePath(_solutionDirectory, path);
                 _viewModel.GeneratorPath = relative;
+                _viewModel.SettingsViewModel.NotificationMessage = "New settings will be used when Visual Studio is restarted.";
             }
             SettingsWindowCommand.Instance.View.Activate();
         }

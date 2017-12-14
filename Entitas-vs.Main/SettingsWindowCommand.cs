@@ -77,6 +77,8 @@ namespace EntitasVSGenerator
         private ConfigFile ConfigFile => EntitasVsPackage.ConfigFile;
         private DTE2 DTE => EntitasVsPackage.DTE;
 
+        public SettingsView View { get; private set; }
+
         /// <summary>
         /// Shows the tool window when the menu item is clicked.
         /// </summary>
@@ -100,6 +102,7 @@ namespace EntitasVSGenerator
                 DTE.Solution, unusuedProjects, projectGroupTabViewModel, settingsViewModel);
             settingsViewModel.AddChild(generalTabViewModel);
             settingsViewModel.AddChild(projectGroupTabViewModel);
+            settingsViewModel.CurrentTabViewModel = generalTabViewModel;
 
             string[] projectNames = ConfigFile.GetProjectNames();
             foreach (var projectName in projectNames)
@@ -109,9 +112,10 @@ namespace EntitasVSGenerator
             }
             settingsViewModel.AddedProjects = projectGroupTabViewModel.Children;
 
-            var settingsView = new SettingsView { DataContext = settingsViewModel };
+            var settingsView = new SettingsView { DataContext = settingsViewModel, Title = "Entitas VS Settings"};
             settingsView.Show();
             settingsViewModel.PropertyChanged += (self, args) => { if ((self as SettingsViewModel).WindowClosed) settingsView.Close(); };
+            View = settingsView;
         }
     }
 }
