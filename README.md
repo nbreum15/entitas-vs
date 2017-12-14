@@ -27,18 +27,18 @@ To use Entitas VS you need to:
     
     ![](https://i.imgur.com/Kti0Qrl.png)
     
-    2. This shows all the solution-wide settings. For example, here is a solution with two projects:
-    
-    ![](https://i.imgur.com/cGKsRqS.png)
-    
-    Note: For each project you want to generate files for, the Entitas.properties and User.properties has to be placed in the project directory (beside the .csproj file). This allows for multiple project generation (though only one generator is supported for now).
-    
     3. Set the generator path. 
     
     ![](https://i.imgur.com/aE1czCv.png)
     
     Select the Generator folder by pressing the "..." button. If the Generator folder is in the solution directory the path will automatically be converted to a relative path (which is recommended). 
 
+    2. Click the drop down-menu to add a project.
+    
+    ![](https://i.imgur.com/EFwGHJq.png)
+    
+    Note: For each project you want to generate files for, the Entitas.properties and User.properties has to be placed in the project directory (beside the .csproj file). This allows for multiple project generation (though only one generator is supported for now).
+    
     4. Add the folders that trigger the code generation when files in the folder are saved. Here the code generator is triggered when changes occur in the Sources\Assets\Components folder. Like the Generator folder, if the Trigger folder is in the project directory, the path will be converted to a relative path.
     
     ![](https://i.imgur.com/jJDcFNY.png)
