@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using System;
+using System.Windows;
 using EntitasVSGenerator.Extensions;
 using EntitasVSGenerator.ViewLogic.ViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -39,6 +40,7 @@ namespace EntitasVSGenerator.ViewLogic.Commands
                 string relative = PathUtil.AbsoluteToRelativePath(_solutionDirectory, path);
                 _viewModel.GeneratorPath = relative;
             }
+            SettingsWindowCommand.Instance.View.Activate();
         }
     }
 }

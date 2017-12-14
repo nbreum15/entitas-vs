@@ -9,6 +9,7 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
     {
         private bool _windowClosed = false;
         private ITabViewModel _currentTabViewModel;
+        private string _notificationMessage;
 
         public SettingsViewModel(ConfigFile configFile) : base("Settings", null)
         {
@@ -21,6 +22,7 @@ namespace EntitasVSGenerator.ViewLogic.ViewModels
         public ITabViewModel CurrentTabViewModel { get => _currentTabViewModel; set => SetValue(ref _currentTabViewModel, value); }
         public bool WindowClosed { get => _windowClosed; set => SetValue(ref _windowClosed, value); }
         public ObservableCollection<ITabViewModel> AddedProjects { get; set; }
+        public string NotificationMessage { get => _notificationMessage; set => SetValue(ref _notificationMessage, value); }
 
         public void CloseWindow()
         {

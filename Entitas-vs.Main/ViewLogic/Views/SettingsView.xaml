@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EntitasVSGenerator.ViewLogic.Views"
              xmlns:viewModels="clr-namespace:EntitasVSGenerator.ViewLogic.ViewModels"
+             xmlns:converters="clr-namespace:EntitasVSGenerator.ViewLogic.Converters"
              mc:Ignorable="d" 
              Height="600" Width="800">
 
@@ -18,6 +19,7 @@
         <DataTemplate DataType="{x:Type viewModels:ProjectGroupTabViewModel}">
             <local:ProjectOverviewTabView/>
         </DataTemplate>
+        <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid VerticalAlignment="Stretch">
@@ -53,14 +55,22 @@
                       HorizontalAlignment="Center"/>
 
         <DockPanel LastChildFill="True" Grid.Column="2">
-            <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Dock="Bottom">
-                <Button Width="100" 
-                        Content="OK" 
-                        Command="{Binding SaveConfigFileAndCloseCommand}"/>
-                <Button Width="100" 
-                        Content="Apply" 
-                        Command="{Binding SaveConfigFileCommand}"/>
-            </DockPanel>
+            <Grid VerticalAlignment="Bottom" HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
+                <TextBlock HorizontalAlignment="Stretch" 
+                           Background="PaleGoldenrod" 
+                           Text="{Binding NotificationMessage}" 
+                           Visibility="{Binding NotificationMessage, Converter={StaticResource EmptyStringToVisibilityConverter}}"/>
+                <DockPanel HorizontalAlignment="Right">
+                    <Button Width="100" 
+                            Content="OK" 
+                            Command="{Binding SaveConfigFileAndCloseCommand}"
+                            DockPanel.Dock="Right"/>
+                    <Button Width="100" 
+                            Content="Apply" 
+                            Command="{Binding SaveConfigFileCommand}"
+                            DockPanel.Dock="Right"/>
+                </DockPanel>
+            </Grid>
             <ContentControl Content="{Binding CurrentTabViewModel}" />
         </DockPanel>
     </Grid>
