@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Entitas-vs.fcf8b3ce-7be2-4dc2-82e5-84d4f0612822" Version="1.1" Language="en-US" Publisher="Nicklas Breum" />
+        <Identity Id="Entitas-vs.fcf8b3ce-7be2-4dc2-82e5-84d4f0612822" Version="1.2" Language="en-US" Publisher="Nicklas Breum" />
         <DisplayName>Entitas VS</DisplayName>
         <Description xml:space="preserve">An extension for Visual Studio that makes the workflow with Entitas-CSharp alot smoother.</Description>
         <MoreInfo>https://github.com/nbreum15/entitas-vs</MoreInfo>

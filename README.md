@@ -1,5 +1,5 @@
 # What it is
-[Download link.](https://marketplace.visualstudio.com/items?itemName=nbreum.Entitas VS)
+[Download link.](https://marketplace.visualstudio.com/items?itemName=nbreum.entitas-vs)
 
 An extension for Visual Studio that makes the workflow with [Entitas-CSharp](https://github.com/sschmid/Entitas-CSharp) alot smoother.
 
@@ -22,32 +22,25 @@ To use Entitas VS you need to:
 1. Setup Entitas as you normally would (follow one of these guides by the author of Entitas: [video guide](https://www.youtube.com/watch?v=LGKsqSg5FHg), [text guide](https://github.com/sschmid/Entitas-CSharp/issues/476))
 1. Make sure that the commandline generator works correctly. Try generating some files before using Entitas VS.
 1. Download the extension here: https://marketplace.visualstudio.com/items?itemName=nbreum.entitas-vs
-1. Open up a solution in Visual Studio (otherwise the extension will not load).
 1. Fill out the generator path and the trigger paths.
-    1. Open Options -> Entitas VS
+    1. Open Tools -> Entitas VS
     
-    ![](https://i.imgur.com/uzo4Ibn.png)
+    ![](https://i.imgur.com/Kti0Qrl.png)
     
     2. This shows all the solution-wide settings. For example, here is a solution with two projects:
     
-    ![](https://i.imgur.com/n2P24ad.png)
+    ![](https://i.imgur.com/cGKsRqS.png)
     
-    Note: For each project you want to generate files for, the Entitas.properties and User.properties has to be placed in the project directory (beside the .csproj file). This allows for multiple project generation.
+    Note: For each project you want to generate files for, the Entitas.properties and User.properties has to be placed in the project directory (beside the .csproj file). This allows for multiple project generation (though only one generator is supported for now).
     
-    3. It will tell you that the Generator path has not been set. 
+    3. Set the generator path. 
     
-    ![](https://i.imgur.com/k8u6XHr.png)
+    ![](https://i.imgur.com/aE1czCv.png)
     
     Select the Generator folder by pressing the "..." button. If the Generator folder is in the solution directory the path will automatically be converted to a relative path (which is recommended). 
 
-    After this, it will prompt you asking if the generator should be loaded.
-    
-    ![](https://i.imgur.com/pfEdCIP.png)
-    
-    If the folder is correct press "Yes" otherwise set the folder again and press "Yes" when it is correct. 
-    
     4. Add the folders that trigger the code generation when files in the folder are saved. Here the code generator is triggered when changes occur in the Sources\Assets\Components folder. Like the Generator folder, if the Trigger folder is in the project directory, the path will be converted to a relative path.
     
-    ![](https://i.imgur.com/ABgIh5y.png)
+    ![](https://i.imgur.com/jJDcFNY.png)
     
     5. That is all. Create a new component, save the file, and the generation will run automatically. All these settings are saved in entitas-vs.cfg, in the solution directory.
