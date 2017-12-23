@@ -8,7 +8,11 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel Margin="2,2,2,2">
         <TextBlock Text="Generators"></TextBlock>
-        <ListView>
+        <StackPanel Orientation="Horizontal">
+            <Button Margin="2,2,2,2" Content="Add" Command="{Binding AddGeneratorCommand}"></Button>
+            <Button Margin="0,2,2,2" Content="Remove"></Button>
+        </StackPanel>
+        <ListView ItemsSource="{Binding Generators}">
             <ListView.ItemTemplate>
                 <DataTemplate >
                     <TextBlock Text="{Binding Name}"></TextBlock>

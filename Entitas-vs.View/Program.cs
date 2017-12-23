@@ -12,7 +12,7 @@ namespace Entitas_vs.View
             string solutionDirectory = "";
             ConfigData configData = Config.Load(solutionDirectory);
             var settingsViewModel = new SettingsViewModel(configData, solutionDirectory);
-            var generalTab = new GeneralTabViewModel(settingsViewModel);
+            var generalTab = new GeneralTabViewModel(settingsViewModel, solutionDirectory);
             settingsViewModel.AddChild(generalTab);
             settingsViewModel.CurrentTabViewModel = generalTab;
 

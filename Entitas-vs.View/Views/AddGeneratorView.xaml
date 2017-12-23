@@ -33,7 +33,7 @@
                     DockPanel.Dock="Right" 
                     Margin="2,2,0,0"
                     Command="{Binding AddFolderPathCommand}"/>
-                <TextBox Margin="0,2,0,0"></TextBox>
+                <TextBox Margin="0,2,0,0" Text="{Binding GeneratorPath}"></TextBox>
             </DockPanel>
         </Grid>
         
