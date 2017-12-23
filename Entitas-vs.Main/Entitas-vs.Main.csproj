@@ -100,7 +100,6 @@
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\DialogUtil.cs" />
     <Compile Include="Extensions\SolutionExtensions.cs" />
-    <Compile Include="Logic\ConfigFile.cs" />
     <Compile Include="Logic\DirectoryChangeListener\DirectoryChangeNotifier.cs" />
     <Compile Include="Logic\DirectoryChangeListener\Interfaces\IDirectoryChangeListener.cs" />
     <Compile Include="Logic\DirectoryChangeListener\Interfaces\IDirectoryChangeNotifier.cs" />
@@ -110,39 +109,10 @@
     <Compile Include="Logic\GeneratorRunner.cs" />
     <Compile Include="Logic\PackageLoader\IPackageLoader.cs" />
     <Compile Include="Logic\DirectoryChangeListener\DirectoryChangeListener.cs" />
-    <Compile Include="ViewLogic\Commands\SettingsCommands\AddProjectCommand.cs" />
-    <Compile Include="ViewLogic\Commands\ProjectCommands\AddTriggerCommand.cs" />
-    <Compile Include="ViewLogic\Commands\BaseCommand.cs" />
-    <Compile Include="ViewLogic\Commands\SettingsCommands\ChangeGeneratorPathCommand.cs" />
-    <Compile Include="ViewLogic\Commands\ProjectCommands\DeleteTriggerCommand.cs" />
-    <Compile Include="ViewLogic\Commands\SettingsCommands\SaveConfigFileAndCloseCommand.cs" />
-    <Compile Include="ViewLogic\Commands\SettingsCommands\SaveConfigFileCommand.cs" />
     <Compile Include="ThirdPartyCode\ProjectHelpers.cs" />
-    <Compile Include="Extensions\PathUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsWindowCommand.cs" />
     <Compile Include="Logic\PackageLoader\PackageLoader.cs" />
-    <Compile Include="ViewLogic\Converters\EmptyStringToVisibilityConverter.cs" />
-    <Compile Include="ViewLogic\ViewModels\TabViewModels\EmptyTabViewModel.cs" />
-    <Compile Include="ViewLogic\ViewModels\TabViewModels\ProjectGroupTabViewModel.cs" />
-    <Compile Include="ViewLogic\ViewModels\Utilities\BaseTabViewModel.cs" />
-    <Compile Include="ViewLogic\ViewModels\Utilities\BaseViewModel.cs" />
-    <Compile Include="ViewLogic\ViewModels\Utilities\ITabViewModel.cs" />
-    <Compile Include="ViewLogic\ViewModels\TabViewModels\GeneralTabViewModel.cs" />
-    <Compile Include="ViewLogic\ViewModels\TabViewModels\ProjectTabViewModel.cs" />
-    <Compile Include="ViewLogic\Views\GeneralTabView.xaml.cs">
-      <DependentUpon>GeneralTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewLogic\Views\ProjectOverviewTabView.xaml.cs">
-      <DependentUpon>ProjectOverviewTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewLogic\Views\ProjectTabView.xaml.cs">
-      <DependentUpon>ProjectTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewLogic\Views\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewLogic\ViewModels\TabViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -278,6 +248,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SharpConfig, Version=3.2.5.0, Culture=neutral, PublicKeyToken=c1deedac91bd7724, processorArchitecture=MSIL">
+      <HintPath>..\packages\sharpconfig.3.2.5\lib\net20\SharpConfig.dll</HintPath>
+    </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -290,6 +263,7 @@
       <HintPath>..\packages\System.Management.Automation.dll.10.0.10586.0\lib\net40\System.Management.Automation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -305,30 +279,20 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Entitas-vs.Common\Entitas-vs.Common.csproj">
+      <Project>{28a27840-4ebb-4922-80e0-53abc5d7d81f}</Project>
+      <Name>Entitas-vs.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Entitas-vs.Contract\Entitas-vs.Contract.csproj">
       <Project>{a4288a2c-f306-47d6-a251-8bb2ff881195}</Project>
       <Name>Entitas-vs.Contract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Entitas-vs.View\Entitas-vs.View.csproj">
+      <Project>{29b20238-1bf5-4ee1-a7a1-6c02d9685590}</Project>
+      <Name>Entitas-vs.View</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Page Include="ViewLogic\Views\GeneralTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ViewLogic\Views\ProjectOverviewTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ViewLogic\Views\ProjectTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ViewLogic\Views\SettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.9\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.9\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets')" />

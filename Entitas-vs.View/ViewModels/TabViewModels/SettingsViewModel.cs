@@ -1,27 +1,29 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using EntitasVSGenerator.Logic;
-using EntitasVSGenerator.ViewLogic.Commands;
+﻿using System.Windows.Input;
+using Entitas_vs.View.Commands;
 
-namespace EntitasVSGenerator.ViewLogic.ViewModels
+namespace Entitas_vs.View.ViewModels
 {
-    class SettingsViewModel : EmptyTabViewModel
+    class SettingsViewModel : BaseTabViewModel
     {
         private bool _windowClosed = false;
         private ITabViewModel _currentTabViewModel;
         private string _notificationMessage;
 
-        public SettingsViewModel(ConfigFile configFile) : base("Settings", null)
+        public SettingsViewModel(ConfigData configData, string solutionDirectory) : base(null)
         {
-            SaveConfigFileCommand = new SaveConfigFileCommand(this, configFile);
-            SaveConfigFileAndCloseCommand = new SaveConfigFileAndCloseCommand(this, configFile);
+            ConfigData = configData;
+            SaveConfigFileCommand = new SaveConfigFileCommand(this, solutionDirectory);
+            SaveConfigFileAndCloseCommand = new SaveConfigFileAndCloseCommand(this, solutionDirectory);
         }
+
+        public ConfigData ConfigData { get; }
+
+        public override string Name => "Settings";
 
         public ICommand SaveConfigFileCommand { get; }
         public ICommand SaveConfigFileAndCloseCommand { get; }
         public ITabViewModel CurrentTabViewModel { get => _currentTabViewModel; set => SetValue(ref _currentTabViewModel, value); }
         public bool WindowClosed { get => _windowClosed; set => SetValue(ref _windowClosed, value); }
-        public ObservableCollection<ITabViewModel> AddedProjects { get; set; }
         public string NotificationMessage { get => _notificationMessage; set => SetValue(ref _notificationMessage, value); }
 
         public void CloseWindow()

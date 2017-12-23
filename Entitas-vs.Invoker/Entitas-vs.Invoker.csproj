@@ -30,17 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Entitas.CodeGeneration">
-      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Entitas.CodeGeneration.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DesperateDevs.CodeGeneration">
+      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.CodeGeneration.dll</HintPath>
     </Reference>
-    <Reference Include="Entitas.CodeGeneration.CodeGenerator">
-      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Entitas.CodeGeneration.CodeGenerator.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DesperateDevs.CodeGeneration.CodeGenerator">
+      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.CodeGeneration.CodeGenerator.dll</HintPath>
     </Reference>
-    <Reference Include="Entitas.Utils">
-      <HintPath>C:\Users\nickl\Desktop\entitas-test\CodeGenerator\Entitas.Utils.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DesperateDevs.Serialization">
+      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="DesperateDevs.Utils">
+      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.Utils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,6 +57,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Entitas-vs.Common\Entitas-vs.Common.csproj">
+      <Project>{28a27840-4ebb-4922-80e0-53abc5d7d81f}</Project>
+      <Name>Entitas-vs.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Entitas-vs.Contract\Entitas-vs.Contract.csproj">
       <Project>{a4288a2c-f306-47d6-a251-8bb2ff881195}</Project>
       <Name>Entitas-vs.Contract</Name>

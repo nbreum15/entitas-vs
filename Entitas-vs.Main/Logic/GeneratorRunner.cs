@@ -1,11 +1,12 @@
 ﻿using Entitas_vs.Contract;
-using EntitasVSGenerator.Extensions;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Entitas_vs.Common;
+using Entitas_vs.Main.Extensions;
 using EnvDTE80;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     class GeneratorRunner
     {
@@ -15,12 +16,13 @@ namespace EntitasVSGenerator.Logic
         private string[] _oldGeneratedFiles;
         private bool _firstGenerate = true;
 
-        public GeneratorRunner(string generatorPath, string uniqueProjectName)
+        public GeneratorRunner(string generatorPath, string uniqueProjectName, string propertiesName, string userPropertiesName)
         {
             _uniqueProjectName = uniqueProjectName;
             _dte = EntitasVsPackage.DTE;
             var project = _dte.Solution.FindProject(_uniqueProjectName);
-            _codeGenerator = AssemblyExtensions.GetGenerator(generatorPath, project.GetDirectory(), _dte.Solution.GetDirectory());
+            _codeGenerator = AssemblyExtensions.GetGenerator(generatorPath, 
+                project.GetDirectory(), _dte.Solution.GetDirectory(), propertiesName, userPropertiesName);
         }
 
         public void Run()

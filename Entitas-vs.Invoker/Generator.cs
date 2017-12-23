@@ -1,7 +1,8 @@
-﻿using Entitas.CodeGeneration.CodeGenerator;
+﻿using DesperateDevs.CodeGeneration.CodeGenerator;
 using Entitas_vs.Contract;
-using EntitasVSGenerator.Extensions;
+using Entitas_vs.Main.Extensions;
 using System.Linq;
+using Entitas_vs.Common;
 
 namespace Entitas_vs.Invoker
 {
@@ -9,9 +10,9 @@ namespace Entitas_vs.Invoker
     {
         private readonly CodeGenerator _codeGenerator;
 
-        public Generator(string projectPath)
+        public Generator(string projectPath, string propertiesName, string userPropertiesName)
         {
-            var preferences = EntitasHelper.GetPreferences(projectPath);
+            var preferences = EntitasHelper.GetPreferences(projectPath, propertiesName, userPropertiesName);
             preferences.RemoveCsprojPlugin();
             _codeGenerator = EntitasHelper.GetCodeGenerator(preferences);
             TargetDirectory = preferences.GetTargetDirectory();

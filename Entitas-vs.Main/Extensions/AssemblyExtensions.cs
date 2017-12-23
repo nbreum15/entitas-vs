@@ -4,22 +4,27 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace EntitasVSGenerator.Extensions
+namespace Entitas_vs.Main.Extensions
 {
     static class AssemblyExtensions
     {
         private const string DllsFolder = "DllToCopy";
 
-        public static IGenerator GetGenerator(string generatorAssemblyPath, string projectPath, string solutionDirectory)
+        public static IGenerator GetGenerator(
+            string generatorAssemblyPath, 
+            string projectPath, 
+            string solutionDirectory, 
+            string propertiesName, 
+            string userPropertiesName)
         {
             string dllPath = $@"{solutionDirectory}\{generatorAssemblyPath}\Entitas-vs.Invoker.dll";
             Assembly asm = Assembly.LoadFrom(dllPath);
             Type type = asm.GetType("Entitas_vs.Invoker.Generator");
-            IGenerator generator = (IGenerator)Activator.CreateInstance(type, projectPath);
+            IGenerator generator = (IGenerator)Activator.CreateInstance(type, projectPath, propertiesName, userPropertiesName);
             return generator;
         }
         
-        public static void CopyDllsToGeneratorDirectory(string codeGeneratorPath, string solutionDirectory)
+        public static void CopyDlls(string codeGeneratorPath, string solutionDirectory)
         {
             string fullGeneratorPath = $@"{solutionDirectory}\{codeGeneratorPath}";
             string dllToCopyFolder = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\{DllsFolder}";

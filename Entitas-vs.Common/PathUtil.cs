@@ -1,12 +1,11 @@
-﻿using EnvDTE;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace EntitasVSGenerator.Extensions
+namespace Entitas_vs.Common
 {
-    static class PathUtil
+    public static class PathUtil
     {
         public const string SettingsName = "entitas-vs.cfg";
 
@@ -40,7 +39,7 @@ namespace EntitasVSGenerator.Extensions
 
         public static bool IsSubpathOf(this string subPath, string fullPath)
         {
-            if(subPath is null)
+            if (subPath is null)
                 throw new ArgumentNullException(nameof(subPath));
             if (fullPath is null)
                 throw new ArgumentNullException(nameof(fullPath));

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace EntitasVSGenerator.ViewLogic.ViewModels
+namespace Entitas_vs.View.ViewModels
 {
     abstract class BaseViewModel : INotifyPropertyChanged
     {

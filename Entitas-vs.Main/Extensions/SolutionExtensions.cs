@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using EnvDTE;
 
-namespace EntitasVSGenerator.Extensions
+namespace Entitas_vs.Main.Extensions
 {
     static class SolutionExtensions
     {

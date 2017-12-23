@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace EntitasVSGenerator.ViewLogic.Views
+namespace Entitas_vs.View.Views
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml

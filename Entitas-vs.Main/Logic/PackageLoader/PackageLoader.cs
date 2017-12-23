@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     class PackageLoader : IVsSolutionEvents, IPackageLoader, IDisposable
     {

@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
-using System.Linq;
 using System.Windows.Forms;
-using EntitasVSGenerator.Extensions;
-using EntitasVSGenerator.Logic;
+using Entitas_vs.Main.Extensions;
 using Microsoft.VisualStudio.Shell;
 using IServiceProvider = System.IServiceProvider;
-using EntitasVSGenerator.ViewLogic.ViewModels;
-using EnvDTE;
-using EntitasVSGenerator.ViewLogic.Views;
+using Entitas_vs.View;
+using Entitas_vs.View.ViewModels;
 using EnvDTE80;
+using Entitas_vs.View.Views;
 
-namespace EntitasVSGenerator
+namespace Entitas_vs.Main
 {
     /// <summary>
     /// Command handler
@@ -73,11 +70,8 @@ namespace EntitasVSGenerator
         {
             Instance = new SettingsWindowCommand(package);
         }
-
-        private ConfigFile ConfigFile => EntitasVsPackage.ConfigFile;
+        
         private DTE2 DTE => EntitasVsPackage.DTE;
-
-        public SettingsView View { get; private set; }
 
         /// <summary>
         /// Shows the tool window when the menu item is clicked.
@@ -86,36 +80,19 @@ namespace EntitasVSGenerator
         /// <param name="e">The event args.</param>
         private void ShowWindow(object sender, EventArgs e)
         {
-            if (ConfigFile == null)
+            if (!EntitasVsPackage.IsSolutionLoaded)
             {
                 MessageBox.Show("Solution not loaded. Load a solution to see settings.");
                 return;
             }
-            ConfigFile.Load();
-             
-            var unusuedProjects = DTE.Solution.GetAllProjects().UniqueNames().Except(ConfigFile.GetProjectNames());
 
-            // Create all tabs
-            var settingsViewModel = new SettingsViewModel(ConfigFile); // root tab
-            var projectGroupTabViewModel = new ProjectGroupTabViewModel(settingsViewModel);
-            var generalTabViewModel = new GeneralTabViewModel(ConfigFile.GeneratorPath,
-                DTE.Solution, unusuedProjects, projectGroupTabViewModel, settingsViewModel);
-            settingsViewModel.AddChild(generalTabViewModel);
-            settingsViewModel.AddChild(projectGroupTabViewModel);
-            settingsViewModel.CurrentTabViewModel = generalTabViewModel;
-
-            string[] projectNames = ConfigFile.GetProjectNames();
-            foreach (var projectName in projectNames)
-            {
-                string[] triggers = ConfigFile.GetTriggers(projectName);
-                generalTabViewModel.AddProjectTab(projectName, triggers);
-            }
-            settingsViewModel.AddedProjects = projectGroupTabViewModel.Children;
+            string solutionDirectory = DTE.Solution.GetDirectory();
+            ConfigData configData = Config.Load(solutionDirectory);
+            var settingsViewModel = new SettingsViewModel(configData, solutionDirectory);
 
             var settingsView = new SettingsView { DataContext = settingsViewModel, Title = "Entitas VS Settings"};
             settingsView.Show();
             settingsViewModel.PropertyChanged += (self, args) => { if ((self as SettingsViewModel).WindowClosed) settingsView.Close(); };
-            View = settingsView;
         }
     }
 }

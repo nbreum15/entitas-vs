@@ -1,4 +1,4 @@
-﻿namespace EntitasVSGenerator.Logic
+﻿namespace Entitas_vs.Main.Logic
 {
     interface IDirectoryChangeNotifier
     {

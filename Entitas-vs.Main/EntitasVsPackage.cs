@@ -1,13 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using EntitasVSGenerator.Extensions;
-using EntitasVSGenerator.Logic;
+using Entitas_vs.Main.Extensions;
+using Entitas_vs.Main.Logic;
 using EnvDTE80;
+using Entitas_vs.View;
 
-namespace EntitasVSGenerator
+namespace Entitas_vs.Main
 {
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
@@ -19,7 +21,6 @@ namespace EntitasVSGenerator
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     sealed class EntitasVsPackage : Package
     {
-        private bool _dllsCopied = false;
         private IDirectoryChangeNotifier _directoryChangeNotifier;
 
         public const string PackageGuidString = "9f4d054c-8bcc-4a90-ab81-3e1d00ff8a08";
@@ -39,10 +40,7 @@ namespace EntitasVSGenerator
         /// </summary>
         public static IVsSolution VsSolution { get; private set; }
 
-        /// <summary>
-        /// Gets the config file object that holds all config functionality.
-        /// </summary>
-        public static ConfigFile ConfigFile { get; set; }
+        public static bool IsSolutionLoaded { get; private set; }
 
         protected override void Initialize()
         {
@@ -61,39 +59,31 @@ namespace EntitasVSGenerator
 
         private void PackageLoader_AfterOpenSolution()
         {
-            ConfigFile = new ConfigFile(DTE.Solution.GetDirectory());
-            ConfigFile.Saved += Load;
+            Config.Saved += Load;
             _directoryChangeNotifier = new DirectoryChangeNotifier(RunningDocumentTable);
-
-            if (ConfigFile.IsOnDisk)
-            {
-                Load();
-            }
+            IsSolutionLoaded = true;
         }
 
         private void Load()
         {
-            ConfigFile.Load();
-
-            if (!_dllsCopied)
-            {
-                AssemblyExtensions.CopyDllsToGeneratorDirectory(ConfigFile.GeneratorPath, DTE.Solution.GetDirectory());
-                _dllsCopied = true;
-            }
-
             // Pre clean up 
             _directoryChangeNotifier.ClearListeners();
 
-            foreach (string uniqueProjectName in ConfigFile.GetProjectNames())
+            var configData = Config.Load(DTE.Solution.GetDirectory());
+
+            foreach (var settingData in configData?.TriggerGroups)
             {
-                string[] triggers = ConfigFile.GetTriggers(uniqueProjectName);
-                if (triggers.Length == 0)
+                string generatorPath = configData.GetGeneratorPath(settingData.GeneratorName);
+                AssemblyExtensions.CopyDlls(generatorPath, DTE.Solution.GetDirectory());
+
+                if (settingData.Triggers.Count == 0)
                     continue;
 
-                Project project = DTE.Solution.FindProject(uniqueProjectName);
+                Project project = DTE.Solution.FindProject(settingData.UniqueName);
                 var directoryChangeListener = FactoryMethods.GetRelativeDirectoryChangeListener(project.GetDirectory());
-                var generatorRunner = new GeneratorRunner(ConfigFile.GeneratorPath, uniqueProjectName);
-                directoryChangeListener.Add(triggers);
+                var generatorRunner = new GeneratorRunner(generatorPath, 
+                    settingData.UniqueName, settingData.EntitasCfgPath, settingData.EntitasUserCfgPath);
+                directoryChangeListener.Add(settingData.Triggers.ToArray());
                 directoryChangeListener.Changed += () => generatorRunner.Run();
                 _directoryChangeNotifier.AddListener(directoryChangeListener);
             }

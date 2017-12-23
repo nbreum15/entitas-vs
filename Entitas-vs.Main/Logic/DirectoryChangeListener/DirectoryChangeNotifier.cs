@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using EntitasVSGenerator.Extensions;
+using Entitas_vs.Common;
+using Entitas_vs.Main.Extensions;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     class DirectoryChangeNotifier : IDirectoryChangeNotifier, IVsRunningDocTableEvents
     {

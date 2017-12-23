@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using EntitasVSGenerator.Extensions;
+using Entitas_vs.Common;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     class RelativeDirectoryChangeListener : DirectoryChangeListener
     {

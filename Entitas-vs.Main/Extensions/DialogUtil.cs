@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 
-namespace EntitasVSGenerator.Extensions
+namespace Entitas_vs.Main.Extensions
 {
     static class DialogUtil
     {

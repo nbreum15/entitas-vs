@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MoreLinq;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     class DirectoryChangeListener : IDirectoryChangeListener
     {

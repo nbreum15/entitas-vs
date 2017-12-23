@@ -44,7 +44,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace EntitasVSGenerator.Extensions
+namespace Entitas_vs.Main.Extensions
 {
     public static class ProjectHelpers
     {

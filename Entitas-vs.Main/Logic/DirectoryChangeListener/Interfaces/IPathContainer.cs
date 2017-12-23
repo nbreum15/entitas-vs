@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     interface IPathContainer
     {

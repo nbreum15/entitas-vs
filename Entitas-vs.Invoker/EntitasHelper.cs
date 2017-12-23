@@ -1,34 +1,33 @@
-﻿using Entitas.CodeGeneration;
-using Entitas.CodeGeneration.CodeGenerator;
-using Entitas.Utils;
+﻿using DesperateDevs.CodeGeneration;
+using DesperateDevs.CodeGeneration.CodeGenerator;
+using DesperateDevs.Serialization;
+using DesperateDevs.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace EntitasVSGenerator.Extensions
+namespace Entitas_vs.Main.Extensions
 {
     static class EntitasHelper
     {
         private const string SEARCH_PATHS = "CodeGenerator.SearchPaths";
-        private const string PROJECT_PATH = "Entitas.CodeGeneration.Plugins.ProjectPath";
-        private const string ASSEMBLIES = "Entitas.CodeGeneration.Plugins.Assemblies";
-        private const string TARGET_DIRECTORY = "Entitas.CodeGeneration.Plugins.TargetDirectory";
+        private const string PROJECT_PATH = "DesperateDevs.CodeGeneration.Plugins.ProjectPath";
+        private const string TARGET_DIRECTORY = "DesperateDevs.CodeGeneration.Plugins.TargetDirectory";
         
         private const string POSTPROCESSORS = "CodeGenerator.PostProcessors";
-        private const string CSPROJ_POSTPROCESSOR = "Entitas.CodeGeneration.Plugins.UpdateCSProjPostProcessor";
+        private const string CSPROJ_POSTPROCESSOR = "DesperateDevs.CodeGeneration.Plugins.UpdateCSProjPostProcessor";
 
-        public static Preferences GetPreferences(string projectPath)
+        public static Preferences GetPreferences(string projectPath, string propertiesName, string userPropertiesName)
         {
-            string propertiesPath = $@"{projectPath}\{Preferences.DEFAULT_PROPERTIES_PATH}";
-            string userPropertiesPath = $@"{projectPath}\{Preferences.DEFAULT_USER_PROPERTIES_PATH}";
+            string propertiesPath = $@"{projectPath}\{propertiesName}";
+            string userPropertiesPath = $@"{projectPath}\{userPropertiesName}";
             if (!File.Exists(propertiesPath) || !File.Exists(userPropertiesPath))
-                throw new FileNotFoundException($"\"{Preferences.DEFAULT_PROPERTIES_PATH}\" or \"{Preferences.DEFAULT_USER_PROPERTIES_PATH}\" not found at directory \"{projectPath}\".");
+                throw new FileNotFoundException($"Could not find \"{propertiesPath}\" or \"{userPropertiesPath}\".");
             var preferences = new Preferences(propertiesPath, userPropertiesPath);
             preferences
                 .AppendProjectPath(SEARCH_PATHS, projectPath)
                 .AppendProjectPath(PROJECT_PATH, projectPath)
-                .AppendProjectPath(ASSEMBLIES, projectPath)
                 .AppendProjectPath(TARGET_DIRECTORY, projectPath);
             return preferences;
         }
@@ -68,15 +67,6 @@ namespace EntitasVSGenerator.Extensions
             }
             preferences[preferenceKey] = value.ToCSV();
             return preferences;
-        }
-
-        public static IEnumerable<string> ToAbsolutePaths(this IEnumerable<string> paths, string appendDirectory)
-        {
-            if (appendDirectory == null)
-                throw new ArgumentNullException(nameof(appendDirectory));
-            if (paths == null)
-                throw new ArgumentNullException(nameof(paths));
-            return paths.Select(path => Path.IsPathRooted(path) ? path : $@"{appendDirectory}\{path}");
         }
     }
 }

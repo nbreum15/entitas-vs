@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace EntitasVSGenerator.ViewLogic.ViewModels
+namespace Entitas_vs.View.ViewModels
 {
     interface ITabViewModel
     {

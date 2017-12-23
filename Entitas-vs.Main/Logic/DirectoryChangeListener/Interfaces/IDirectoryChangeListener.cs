@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntitasVSGenerator.Logic
+namespace Entitas_vs.Main.Logic
 {
     interface IDirectoryChangeListener : IPathContainer
     {
