@@ -7,8 +7,8 @@ namespace Entitas_vs.View.ViewModels
     [DataContract]
     class ConfigData
     {
-        [DataMember] public ObservableCollection<TriggerGroup> TriggerGroups { get; set; }
-        [DataMember] public ObservableCollection<GeneratorData> Generators { get; set; }
+        [DataMember] public ObservableCollection<TriggerGroup> TriggerGroups { get; set; } = new ObservableCollection<TriggerGroup>();
+        [DataMember] public ObservableCollection<GeneratorData> Generators { get; set; } = new ObservableCollection<GeneratorData>();
 
         public string GetGeneratorPath(string generatorName)
         {

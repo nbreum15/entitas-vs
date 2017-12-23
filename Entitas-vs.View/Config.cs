@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
@@ -14,9 +15,15 @@ namespace Entitas_vs.View
         {
             DataContractSerializer serializer = new DataContractSerializer(typeof(ConfigData));
             string fileToLoad = Path.Combine(folderPath, "entitas-vs.xml");
+            if(!File.Exists(fileToLoad))
+                return new ConfigData();
+
             using (FileStream fileStream = new FileStream(fileToLoad, FileMode.Open))
             {
-                return (ConfigData)serializer.ReadObject(fileStream);
+                ConfigData data = (ConfigData)serializer.ReadObject(fileStream);
+                data.Generators = data.Generators ?? new ObservableCollection<GeneratorData>();
+                data.TriggerGroups = data.TriggerGroups ?? new ObservableCollection<TriggerGroup>();
+                return data;
             }
         }
 
