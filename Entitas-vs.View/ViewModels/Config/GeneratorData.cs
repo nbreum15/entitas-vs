@@ -4,6 +4,7 @@ using Entitas_vs.View.Commands;
 
 namespace Entitas_vs.View.ViewModels
 {
+    [DataContract]
     class GeneratorData : BaseViewModel
     {
         private string _name;

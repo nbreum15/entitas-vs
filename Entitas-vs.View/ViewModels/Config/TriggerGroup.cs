@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Entitas_vs.View.ViewModels
 {
+    [DataContract]
     class TriggerGroup : BaseViewModel
     {
         private string _generatorName;
