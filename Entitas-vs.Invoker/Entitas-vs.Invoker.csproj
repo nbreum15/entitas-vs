@@ -31,16 +31,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DesperateDevs.CodeGeneration">
-      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.CodeGeneration.dll</HintPath>
+      <HintPath>..\CodeGenerator\DesperateDevs.CodeGeneration.dll</HintPath>
     </Reference>
     <Reference Include="DesperateDevs.CodeGeneration.CodeGenerator">
-      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.CodeGeneration.CodeGenerator.dll</HintPath>
+      <HintPath>..\CodeGenerator\DesperateDevs.CodeGeneration.CodeGenerator.dll</HintPath>
     </Reference>
     <Reference Include="DesperateDevs.Serialization">
-      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.Serialization.dll</HintPath>
+      <HintPath>..\CodeGenerator\DesperateDevs.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="DesperateDevs.Utils">
-      <HintPath>C:\Users\nickl\Desktop\MassEntitas\CodeGenerator\DesperateDevs.Utils.dll</HintPath>
+      <HintPath>..\CodeGenerator\DesperateDevs.Utils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
