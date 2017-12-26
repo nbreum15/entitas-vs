@@ -13,9 +13,9 @@
         <StackPanel Margin="10,12,0,0">
             <StackPanel Orientation="Horizontal">
                 <Button Margin="0,0,2,2" Content="Add" Command="{Binding AddGeneratorCommand}"></Button>
-                <Button Margin="0,0,2,2" Content="Remove"></Button>
+                <Button Margin="0,0,2,2" Content="Remove" Command="{Binding RemoveGeneratorCommand}" CommandParameter="{Binding ElementName=GeneratorsList, Path=SelectedIndex}"></Button>
             </StackPanel>
-            <ListView ItemsSource="{Binding Generators}">
+            <ListView Name="GeneratorsList" ItemsSource="{Binding Generators}" MinHeight="20">
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <TextBlock Text="{Binding Name}"></TextBlock>

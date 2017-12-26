@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Commands\AddFolderPathCommand.cs" />
     <Compile Include="Commands\AddGeneratorCommand.cs" />
+    <Compile Include="Commands\RemoveAtIndexCommand.cs" />
     <Compile Include="Commands\SaveConfigFileAndCloseCommand.cs" />
     <Compile Include="Commands\SaveConfigFileCommand.cs" />
     <Compile Include="Config.cs" />

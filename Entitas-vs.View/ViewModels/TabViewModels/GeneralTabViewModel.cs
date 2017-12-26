@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Entitas_vs.View.Commands;
 
@@ -10,10 +12,12 @@ namespace Entitas_vs.View.ViewModels
         {
             Generators = settingsViewModel.ConfigData.Generators;
             AddGeneratorCommand = new AddGeneratorCommand(this, solutionDirectory);
+            RemoveGeneratorCommand = new RemoveAtIndexCommand(Generators);
         }
 
         public override string Name => "General";
         public ObservableCollection<GeneratorData> Generators { get; }
         public ICommand AddGeneratorCommand { get; }
+        public ICommand RemoveGeneratorCommand { get; set; }
     }
 }
