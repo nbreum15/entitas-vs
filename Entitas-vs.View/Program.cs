@@ -17,8 +17,8 @@ namespace Entitas_vs.View
             settingsViewModel.CurrentTabViewModel = generalTab;
 
             var settingsView = new SettingsView { DataContext = settingsViewModel, Title = "Entitas VS Settings" };
-            settingsView.ShowDialog();
             settingsViewModel.PropertyChanged += (self, args) => { if ((self as SettingsViewModel).WindowClosed) settingsView.Close(); };
+            settingsView.ShowDialog();
         }
     }
 }
