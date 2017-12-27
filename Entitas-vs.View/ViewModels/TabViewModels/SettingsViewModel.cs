@@ -13,7 +13,7 @@ namespace Entitas_vs.View.ViewModels
         {
             ConfigData = configData;
             SaveConfigFileCommand = new SaveConfigFileCommand(this, solutionDirectory);
-            SaveConfigFileAndCloseCommand = new SaveConfigFileAndCloseCommand(this, solutionDirectory);
+            SaveConfigFileAndCloseCommand = new SaveConfigFileAndCloseWindowCommand(this, solutionDirectory);
         }
 
         public ConfigData ConfigData { get; }
