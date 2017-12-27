@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MoreLinq;
 
 namespace Entitas_vs.Main.Logic
@@ -12,7 +13,7 @@ namespace Entitas_vs.Main.Logic
 
         public virtual void Add(params string[] paths)
         {
-            _paths.AddRange(paths);
+            _paths.AddRange(paths.Select(path => path.ToLower()));
         }
 
         public virtual void Remove(params string[] paths)
