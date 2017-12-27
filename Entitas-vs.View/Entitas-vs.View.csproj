@@ -32,11 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Core.1.1.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.1.1.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -54,9 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AddFolderPathCommand.cs" />
+    <Compile Include="Commands\AddTriggerGroupCommand.cs" />
     <Compile Include="Commands\AddGeneratorCommand.cs" />
+    <Compile Include="Commands\ModifyAtIndexCommand.cs" />
     <Compile Include="Commands\RemoveAtIndexCommand.cs" />
-    <Compile Include="Commands\SaveConfigFileAndCloseCommand.cs" />
+    <Compile Include="Commands\SaveConfigFileAndCloseWindowCommand.cs" />
     <Compile Include="Commands\SaveConfigFileCommand.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Converters\EmptyStringToVisibilityConverter.cs" />
@@ -65,19 +67,26 @@
     <Compile Include="ViewModels\Config\ConfigData.cs" />
     <Compile Include="ViewModels\Config\GeneratorData.cs" />
     <Compile Include="ViewModels\Config\TriggerGroup.cs" />
-    <Compile Include="ViewModels\TabViewModels\GeneralTabViewModel.cs" />
+    <Compile Include="ViewModels\TabViewModels\GeneratorsTabViewModel.cs" />
     <Compile Include="ViewModels\TabViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\TabViewModels\TriggersTabViewModel.cs" />
     <Compile Include="ViewModels\Utilities\BaseTabViewModel.cs" />
     <Compile Include="ViewModels\Utilities\BaseViewModel.cs" />
     <Compile Include="ViewModels\Utilities\ITabViewModel.cs" />
     <Compile Include="Views\AddGeneratorView.xaml.cs">
       <DependentUpon>AddGeneratorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GeneralTabView.xaml.cs">
-      <DependentUpon>GeneralTabView.xaml</DependentUpon>
+    <Compile Include="Views\AddTriggerGroupView.xaml.cs">
+      <DependentUpon>AddTriggerGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GeneratorsTabView.xaml.cs">
+      <DependentUpon>GeneratorsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TriggerGroupsTabView.xaml.cs">
+      <DependentUpon>TriggerGroupsTabView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -85,11 +94,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddGeneratorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\GeneralTabView.xaml">
+    <Page Include="Views\AddTriggerGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GeneratorsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -97,10 +114,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\TriggerGroupsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entitas-vs.Common\Entitas-vs.Common.csproj">
-      <Project>{28a27840-4ebb-4922-80e0-53abc5d7d81f}</Project>
+      <Project>{BD2A3C53-11BE-4D65-927A-AF074F37CD6B}</Project>
       <Name>Entitas-vs.Common</Name>
     </ProjectReference>
   </ItemGroup>
