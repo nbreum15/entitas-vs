@@ -9,12 +9,14 @@ namespace Entitas_vs.View.Commands
     {
         private readonly Action<string> _setFolderValue;
         private readonly string _baseDirectory;
+        private readonly bool _isFolderPicker;
         private readonly string _title;
 
-        public AddFolderPathCommand(Action<string> setFolderValue, string baseDirectory, string title = "Select a folder")
+        public AddFolderPathCommand(Action<string> setFolderValue, string baseDirectory, bool isFolderPicker = true, string title = "Select a folder")
         {
             _setFolderValue = setFolderValue;
             _baseDirectory = baseDirectory;
+            _isFolderPicker = isFolderPicker;
             _title = title;
         }
 
@@ -31,7 +33,7 @@ namespace Entitas_vs.View.Commands
             var commonBrowser = new CommonOpenFileDialog
             {
                 Title = _title,
-                IsFolderPicker = true,
+                IsFolderPicker = _isFolderPicker,
                 InitialDirectory = _baseDirectory
             };
 
