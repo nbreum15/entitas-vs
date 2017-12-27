@@ -18,13 +18,14 @@ namespace Entitas_vs.View
             if(!File.Exists(fileToLoad))
                 return new ConfigData();
 
+            ConfigData data;
             using (FileStream fileStream = new FileStream(fileToLoad, FileMode.Open))
             {
-                ConfigData data = (ConfigData)serializer.ReadObject(fileStream);
-                data.Generators = data.Generators ?? new ObservableCollection<GeneratorData>();
-                data.TriggerGroups = data.TriggerGroups ?? new ObservableCollection<TriggerGroup>();
-                return data;
+                data = (ConfigData)serializer.ReadObject(fileStream);
             }
+            data.Generators = data.Generators ?? new ObservableCollection<GeneratorData>();
+            data.TriggerGroups = data.TriggerGroups ?? new ObservableCollection<TriggerGroup>();
+            return data;
         }
 
         public static void Save(ConfigData data, string folderPath)
@@ -36,9 +37,9 @@ namespace Entitas_vs.View
                 using (XmlWriter writer = XmlWriter.Create(fileStream, writerSettings))
                 {
                     serializer.WriteObject(writer, data);
-                    Saved?.Invoke();
                 }
             }
+            Saved?.Invoke();
         }
     }
 }
