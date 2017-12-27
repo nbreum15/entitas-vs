@@ -25,10 +25,10 @@ namespace Entitas_vs.Common
 
         public static string AbsoluteToRelativePath(string subPath, string fullPath)
         {
-            if (subPath == null)
-                throw new ArgumentNullException(nameof(subPath));
-            if (fullPath == null)
-                throw new ArgumentNullException(nameof(fullPath));
+            if (string.IsNullOrWhiteSpace(subPath))
+                throw new ArgumentException("Cannot be null or empty/whitespace", nameof(subPath));
+            if (string.IsNullOrWhiteSpace(fullPath))
+                throw new ArgumentException("Cannot be null or empty/whitespace", nameof(fullPath));
             return fullPath.Replace($@"{subPath}\", "");
         }
 
