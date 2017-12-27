@@ -280,7 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entitas-vs.Common\Entitas-vs.Common.csproj">
-      <Project>{28a27840-4ebb-4922-80e0-53abc5d7d81f}</Project>
+      <Project>{BD2A3C53-11BE-4D65-927A-AF074F37CD6B}</Project>
       <Name>Entitas-vs.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entitas-vs.Contract\Entitas-vs.Contract.csproj">

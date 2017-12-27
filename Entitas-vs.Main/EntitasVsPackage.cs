@@ -62,6 +62,7 @@ namespace Entitas_vs.Main
             Config.Saved += Load;
             _directoryChangeNotifier = new DirectoryChangeNotifier(RunningDocumentTable);
             IsSolutionLoaded = true;
+            Load();
         }
 
         private void Load()
@@ -79,10 +80,10 @@ namespace Entitas_vs.Main
                 if (settingData.Triggers.Count == 0)
                     continue;
 
-                Project project = DTE.Solution.FindProject(settingData.UniqueName);
+                Project project = DTE.Solution.FindProject(settingData.UniqueProjectName);
                 var directoryChangeListener = FactoryMethods.GetRelativeDirectoryChangeListener(project.GetDirectory());
                 var generatorRunner = new GeneratorRunner(generatorPath, 
-                    settingData.UniqueName, settingData.EntitasCfgPath, settingData.EntitasUserCfgPath);
+                    settingData.UniqueProjectName, settingData.EntitasCfgPath, settingData.EntitasUserCfgPath);
                 directoryChangeListener.Add(settingData.Triggers.ToArray());
                 directoryChangeListener.Changed += () => generatorRunner.Run();
                 _directoryChangeNotifier.AddListener(directoryChangeListener);

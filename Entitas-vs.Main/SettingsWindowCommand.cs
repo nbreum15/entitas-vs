@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Linq;
 using System.Windows.Forms;
 using Entitas_vs.Main.Extensions;
 using Microsoft.VisualStudio.Shell;
@@ -87,12 +88,18 @@ namespace Entitas_vs.Main
             }
 
             string solutionDirectory = DTE.Solution.GetDirectory();
+            string[] uniqueProjectNames = DTE.Solution.GetAllProjects().UniqueNames().ToArray();
             ConfigData configData = Config.Load(solutionDirectory);
             var settingsViewModel = new SettingsViewModel(configData, solutionDirectory);
+            var generalTab = new GeneralTabViewModel(settingsViewModel, solutionDirectory);
+            var triggersTab = new TriggersTabViewModel(settingsViewModel, solutionDirectory, uniqueProjectNames);
+            settingsViewModel.AddChild(generalTab);
+            settingsViewModel.AddChild(triggersTab);
+            settingsViewModel.CurrentTabViewModel = generalTab;
 
-            var settingsView = new SettingsView { DataContext = settingsViewModel, Title = "Entitas VS Settings"};
-            settingsView.Show();
+            var settingsView = new SettingsView { DataContext = settingsViewModel, Title = "Entitas VS Settings" };
             settingsViewModel.PropertyChanged += (self, args) => { if ((self as SettingsViewModel).WindowClosed) settingsView.Close(); };
+            settingsView.ShowDialog();
         }
     }
 }
