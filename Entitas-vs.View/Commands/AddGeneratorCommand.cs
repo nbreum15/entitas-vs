@@ -7,10 +7,10 @@ namespace Entitas_vs.View.Commands
 {
     class AddGeneratorCommand : ICommand
     {
-        private readonly GeneralTabViewModel _viewModel;
+        private readonly SettingsViewModel _viewModel;
         private readonly string _solutionDirectory;
 
-        public AddGeneratorCommand(GeneralTabViewModel viewModel, string solutionDirectory)
+        public AddGeneratorCommand(SettingsViewModel viewModel, string solutionDirectory)
         {
             _viewModel = viewModel;
             _solutionDirectory = solutionDirectory;
@@ -24,12 +24,12 @@ namespace Entitas_vs.View.Commands
         public void Execute(object parameter)
         {
             AddGeneratorView view = new AddGeneratorView();
-            var data = new GeneratorData(_solutionDirectory);
-            view.DataContext = data;
+            var dataContext = new GeneratorData(_solutionDirectory);
+            view.DataContext = dataContext;
             
             if (view.ShowDialog() == true)
             {
-                _viewModel.SettingsViewModel.ConfigData.Generators.Add(data);
+                _viewModel.ConfigData.Generators.Add(dataContext);
             }
         }
 
