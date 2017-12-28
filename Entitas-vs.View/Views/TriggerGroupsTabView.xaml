@@ -17,7 +17,7 @@
                 <Button Margin="0,0,2,2" Content="Remove" Command="{Binding RemoveTriggerGroupCommand}" CommandParameter="{Binding ElementName=TriggerGroupList, Path=SelectedIndex}"></Button>
                 <Button Margin="0,0,0,2" Content="Modify" Command="{Binding ModifyTriggerGroupCommand}" CommandParameter="{Binding ElementName=TriggerGroupList, Path=SelectedIndex}"/>
             </StackPanel>
-            <ListView Name="TriggerGroupList" ItemsSource="{Binding TriggerGroups}" MinHeight="125">
+            <ListView Name="TriggerGroupList" ItemsSource="{Binding TriggerGroups}">
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <TextBlock Text="{Binding DisplayName}"></TextBlock>
