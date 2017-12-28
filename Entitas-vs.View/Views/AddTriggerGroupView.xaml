@@ -58,7 +58,7 @@
                 <Button Margin="0,0,2,0" Content="Add" Command="{Binding AddTriggerCommand}"/>
                 <Button Content="Remove" Command="{Binding RemoveTriggerCommand}"/>
             </StackPanel>
-            <ListView MinHeight="25" ItemsSource="{Binding Triggers}"></ListView>
+            <ListView MinHeight="125" ItemsSource="{Binding Triggers}"></ListView>
         </StackPanel>
 
         <DockPanel HorizontalAlignment="Right" Margin="0,6,0,0" VerticalAlignment="Bottom">

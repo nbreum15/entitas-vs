@@ -28,7 +28,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TreeView Name="SettingsTree" Grid.Column="0" ItemsSource="{Binding Children}" DockPanel.Dock="Left">
+        <TreeView Margin="4,8,4,4" Name="SettingsTree" Grid.Column="0" ItemsSource="{Binding Children}" DockPanel.Dock="Left">
             
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type av:TreeViewItem}">
@@ -53,24 +53,30 @@
                       VerticalAlignment="Stretch"
                       HorizontalAlignment="Center"/>
 
-        <DockPanel LastChildFill="True" Grid.Column="2">
+        <DockPanel Margin="4,4,4,6" LastChildFill="True" Grid.Column="2">
             <Grid VerticalAlignment="Bottom" HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
-                <TextBlock HorizontalAlignment="Stretch" 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" Margin="0,0,4,0" HorizontalAlignment="Stretch" 
                            Background="PaleGoldenrod" 
                            Text="{Binding NotificationMessage}" 
                            Visibility="{Binding NotificationMessage, Converter={StaticResource EmptyStringToVisibilityConverter}}"/>
-                <DockPanel HorizontalAlignment="Right">
+                <DockPanel Grid.Column="1" HorizontalAlignment="Right">
                     <Button Width="100" 
                             Content="OK" 
                             Command="{Binding SaveConfigFileAndCloseCommand}"
-                            DockPanel.Dock="Right"/>
+                            DockPanel.Dock="Right"
+                            Margin="4,0,0,0"/>
                     <Button Width="100" 
                             Content="Apply" 
                             Command="{Binding SaveConfigFileCommand}"
                             DockPanel.Dock="Right"/>
                 </DockPanel>
             </Grid>
-            <ContentControl Content="{Binding CurrentTabViewModel}" />
+            <ContentControl Margin="0,0,0,10" Content="{Binding CurrentTabViewModel}" />
         </DockPanel>
     </Grid>
 </Window>
