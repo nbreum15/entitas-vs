@@ -6,23 +6,24 @@
              xmlns:local="clr-namespace:Entitas_vs.View.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Margin="2,2,2,2">
-        <TextBlock>
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top">
             <Bold FontSize="15">Trigger Groups</Bold>
         </TextBlock>
-        <StackPanel Margin="10,12,0,0">
-            <StackPanel Orientation="Horizontal">
+        
+        <DockPanel Margin="10,12,0,0">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Button Margin="0,0,2,2" Content="Add" Command="{Binding AddTriggerGroupCommand}"></Button>
                 <Button Margin="0,0,2,2" Content="Remove" Command="{Binding RemoveTriggerGroupCommand}" CommandParameter="{Binding ElementName=TriggerGroupList, Path=SelectedIndex}"></Button>
                 <Button Margin="0,0,0,2" Content="Modify" Command="{Binding ModifyTriggerGroupCommand}" CommandParameter="{Binding ElementName=TriggerGroupList, Path=SelectedIndex}"/>
             </StackPanel>
-            <ListView Name="TriggerGroupList" ItemsSource="{Binding TriggerGroups}" MinHeight="20">
+            <ListView Name="TriggerGroupList" ItemsSource="{Binding TriggerGroups}" MinHeight="125">
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <TextBlock Text="{Binding DisplayName}"></TextBlock>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackPanel>
-    </StackPanel>
+        </DockPanel>
+    </DockPanel>
 </UserControl>
