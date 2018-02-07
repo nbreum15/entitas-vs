@@ -1,3 +1,8 @@
+# Recent update to Visual Studio Tools for Unity
+Thanks to everyone trying out the extension. After a new update Unity the Visual Studio Tools for Unity automatically add new items to Visual Studio that is added inside the Assets directory without showing the "Reload Solution" dialog (The Unity Tools also adds the items significantly faster than Entitas-vs). 
+
+Therefore I recommend updating to the latest Visual Studio Tools for Unity and bind the code generation inside Visual Studio as described [here](https://github.com/sschmid/Entitas-CSharp/wiki/Code-generation-shortcut-for-Visual-Studio) and not use Entitas-vs as it will not be maintained anymore.
+
 # What it is
 [Download link.](https://marketplace.visualstudio.com/items?itemName=nbreum.entitas-vs)
 
